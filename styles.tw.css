@@ -1,0 +1,97 @@
+@import "tailwindcss";
+
+@layer theme {
+  :root, :host {
+    /* Brand colors (gold/yellow theme) */
+    --color-brand-50: #f9f5e8;
+    --color-brand-100: #f3e8c7;
+    --color-brand-200: #ead189;
+    --color-brand-300: #e0bb5e;
+    --color-brand-400: #d7ae4d;
+    --color-brand-500: #d0ad4f;
+    --color-brand-600: #b69141;
+    --color-brand-700: #967436;
+    --color-brand-800: #7a5c2c;
+    --color-brand-900: #644b24;
+
+    /* Brand-charcoal colors (blue theme) */
+    --color-brand-charcoal-100: #c2dcea;
+    --color-brand-charcoal-200: #85b8d5;
+    --color-brand-charcoal-300: #4995c1;
+    --color-brand-charcoal-400: #2f6889;
+    --color-brand-charcoal-500: #1a3a4c;
+    --color-brand-charcoal-600: #152e3d;
+    --color-brand-charcoal-700: #10232e;
+    --color-brand-charcoal-800: #0a171e;
+    --color-brand-charcoal-900: #050c0f;
+
+    /* Standard Tailwind colors (subset for testing) */
+    --color-red-500: #ef4444;
+    --color-blue-500: #3b82f6;
+    --color-green-500: #22c55e;
+    --color-yellow-500: #eab308;
+    --color-purple-500: #a855f7;
+    --color-pink-500: #ec4899;
+  }
+}
+
+@layer utilities {
+  /* Brand color utilities */
+  .bg-brand-50 { background-color: var(--color-brand-50); }
+  .bg-brand-100 { background-color: var(--color-brand-100); }
+  .bg-brand-200 { background-color: var(--color-brand-200); }
+  .bg-brand-300 { background-color: var(--color-brand-300); }
+  .bg-brand-400 { background-color: var(--color-brand-400); }
+  .bg-brand-500 { background-color: var(--color-brand-500); }
+  .bg-brand-600 { background-color: var(--color-brand-600); }
+  .bg-brand-700 { background-color: var(--color-brand-700); }
+  .bg-brand-800 { background-color: var(--color-brand-800); }
+  .bg-brand-900 { background-color: var(--color-brand-900); }
+
+  .text-brand-50 { color: var(--color-brand-50); }
+  .text-brand-100 { color: var(--color-brand-100); }
+  .text-brand-200 { color: var(--color-brand-200); }
+  .text-brand-300 { color: var(--color-brand-300); }
+  .text-brand-400 { color: var(--color-brand-400); }
+  .text-brand-500 { color: var(--color-brand-500); }
+  .text-brand-600 { color: var(--color-brand-600); }
+  .text-brand-700 { color: var(--color-brand-700); }
+  .text-brand-800 { color: var(--color-brand-800); }
+  .text-brand-900 { color: var(--color-brand-900); }
+
+  /* Brand-charcoal color utilities */
+  .bg-brand-charcoal-100 { background-color: var(--color-brand-charcoal-100); }
+  .bg-brand-charcoal-200 { background-color: var(--color-brand-charcoal-200); }
+  .bg-brand-charcoal-300 { background-color: var(--color-brand-charcoal-300); }
+  .bg-brand-charcoal-400 { background-color: var(--color-brand-charcoal-400); }
+  .bg-brand-charcoal-500 { background-color: var(--color-brand-charcoal-500); }
+  .bg-brand-charcoal-600 { background-color: var(--color-brand-charcoal-600); }
+  .bg-brand-charcoal-700 { background-color: var(--color-brand-charcoal-700); }
+  .bg-brand-charcoal-800 { background-color: var(--color-brand-charcoal-800); }
+  .bg-brand-charcoal-900 { background-color: var(--color-brand-charcoal-900); }
+
+  .text-brand-charcoal-100 { color: var(--color-brand-charcoal-100); }
+  .text-brand-charcoal-200 { color: var(--color-brand-charcoal-200); }
+  .text-brand-charcoal-300 { color: var(--color-brand-charcoal-300); }
+  .text-brand-charcoal-400 { color: var(--color-brand-charcoal-400); }
+  .text-brand-charcoal-500 { color: var(--color-brand-charcoal-500); }
+  .text-brand-charcoal-600 { color: var(--color-brand-charcoal-600); }
+  .text-brand-charcoal-700 { color: var(--color-brand-charcoal-700); }
+  .text-brand-charcoal-800 { color: var(--color-brand-charcoal-800); }
+  .text-brand-charcoal-900 { color: var(--color-brand-charcoal-900); }
+
+  /* Standard Tailwind color utilities (500 shade) */
+  .bg-red-500 { background-color: var(--color-red-500); }
+  .bg-blue-500 { background-color: var(--color-blue-500); }
+  .bg-green-500 { background-color: var(--color-green-500); }
+  .bg-yellow-500 { background-color: var(--color-yellow-500); }
+  .bg-purple-500 { background-color: var(--color-purple-500); }
+  .bg-pink-500 { background-color: var(--color-pink-500); }
+
+  .text-red-500 { color: var(--color-red-500); }
+  .text-blue-500 { color: var(--color-blue-500); }
+  .text-green-500 { color: var(--color-green-500); }
+  .text-yellow-500 { color: var(--color-yellow-500); }
+  .text-purple-500 { color: var(--color-purple-500); }
+  .text-pink-500 { color: var(--color-pink-500); }
+}

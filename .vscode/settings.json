@@ -1,0 +1,13 @@
+{
+  "dart.sdkPath": "/Users/tomwyr/dev/tools/flutter/bin/cache/dart-sdk",
+  "tailwindCSS.includeLanguages": {
+    "dart": "html"
+  },
+  "tailwindCSS.experimental.classRegex": [
+    ["classes:[\\s]*['\"]([^'\"]*)['\"]", "([^'\"]*)"]
+  ],
+  "files.associations": {
+    "*.dart": "dart"
+  },
+  "tailwindCSS.experimental.configFile": "./tailwind.config.js"
+}

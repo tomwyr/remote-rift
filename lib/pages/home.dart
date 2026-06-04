@@ -39,6 +39,13 @@ class HomeState extends State<Home> {
       h1([.text('Welcome')]),
       p([.text('You successfully create a new Jaspr site.')]),
       div(styles: Styles(height: 100.px), []),
+      // Test Tailwind classes with brand colors
+      div(classes: 'bg-brand-500 text-white p-4 rounded mb-4', [
+        .text('Tailwind Brand Color Test - This should use brand-500 color'),
+      ]),
+      div(classes: 'bg-brand-charcoal-500 text-white p-4 rounded', [
+        .text('Tailwind Brand Charcoal Color Test - This should use brand-charcoal-500 color'),
+      ]),
       const Counter(),
     ]);
   }
