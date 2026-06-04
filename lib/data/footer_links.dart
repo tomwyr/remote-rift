@@ -7,8 +7,8 @@ const footerLinks = [
     urlDisplay: "GitHub",
   ),
   FooterLink(
-    title: "Website template",
-    url: "https://ttntm.me",
-    urlDisplay: "ttntm.me",
+    title: "Built with Jaspr",
+    url: "https://jaspr.dev",
+    urlDisplay: "Jaspr",
   ),
 ];
