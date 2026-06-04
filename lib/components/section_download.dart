@@ -10,63 +10,61 @@ class SectionDownload extends StatelessComponent {
   Component build(BuildContext context) {
     return section(
       id: siteContent.sectionIdDownload,
-      classes: 'w-full min-h-screen flex flex-col justify-center items-center bg-gray-800 py-16 px-4 md:px-8 lg:px-12',
+      classes: 'w-full min-h-screen flex flex-col justify-center items-center bg-gray-800 pb-12 px-4 md:px-8 lg:px-12 gap-8 md:gap-12 lg:gap-16',
       [
         // Section header
-        div(classes: 'text-center max-w-2xl mb-12', [
-          h2(classes: 'text-3xl md:text-4xl font-bold mb-4 text-white', [
+        div(classes: 'self-center text-center w-full sm:w-2/3 xl:w-1/2 px-4 sm:px-0', [
+          h2(classes: 'font-bold tracking-widest text-gray-100 text-4xl mb-4', [
             .text(siteContent.downloadTitle),
           ]),
-          p(classes: 'text-lg text-gray-300', [
+          p(classes: 'font-light text-gray-300 text-xl', [
             .text(siteContent.downloadContent),
           ]),
         ]),
         // Download cards
-        div(classes: 'grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl w-full', [
+        div(classes: 'flex flex-col sm:flex-row gap-4 md:gap-8 lg:gap-12 text-gray-100', [
           for (var download in downloads)
             div(
-              classes: 'bg-gray-700 rounded-lg shadow-lg p-8 hover:shadow-xl transition-shadow duration-300',
+              classes: 'flex flex-col max-w-[420px] items-center p-4 md:p-8 lg:p-12 rounded-xl bg-gray-700/30 shadow-lg',
               [
                 // Download title and description
-                h3(classes: 'text-2xl font-semibold mb-4 text-white', [
+                p(classes: 'font-bold text-2xl mb-2', [
                   .text(download.title),
                 ]),
-                p(classes: 'text-gray-300 mb-6', [
+                p(classes: 'text-center mt-2 mb-6 text-gray-300', [
                   .text(download.description),
                 ]),
                 // Download links
-                div(classes: 'flex flex-wrap gap-4', [
-                  for (var link in download.links)
-                    if (link.icon != null)
-                      // Icon link (app store, play store)
-                      div(classes: 'relative group', [
-                        a(
-                          href: '#', // Placeholder URL
-                          classes: 'inline-block opacity-100 hover:opacity-80 transition-opacity',
-                          [
+                for (var link in download.links)
+                  div(classes: 'relative inline-block mt-2', [
+                    if (link.label != null)
+                      // Label link (Windows, macOS) with "Coming soon" badge
+                      div(
+                        classes: 'flex flex-row w-40 px-4 py-2 my-1 bg-brand-600 border border-transparent hover:border-brand-500 rounded-full justify-center cursor-default opacity-50',
+                        [
+                          if (link.icon != null)
                             img(
                               src: '/images/${link.icon}',
                               alt: download.title,
-                              classes: 'h-12 w-auto',
+                              classes: 'h-10 my-1 cursor-default opacity-50',
                             ),
-                          ],
-                        ),
-                      ])
-                    else if (link.label != null)
-                      // Label link (Windows, macOS) with "Coming soon" badge
-                      div(classes: 'relative inline-block', [
-                        button(
-                          classes: 'bg-gray-600 text-gray-400 font-semibold py-2 px-6 rounded cursor-not-allowed',
-                          [
-                            .text(link.label!),
-                          ],
-                        ),
-                        div(
-                          classes: 'absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded',
-                          [.text('Coming soon')],
-                        ),
-                      ]),
-                ]),
+                          if (link.label != null)
+                            span(classes: '', [.text(link.label!)]),
+                        ],
+                      )
+                    else if (link.icon != null)
+                      // Icon link (app store, play store)
+                      img(
+                        src: '/images/${link.icon}',
+                        alt: download.title,
+                        classes: 'h-10 my-1 cursor-default opacity-50',
+                      ),
+                    // "Coming soon" badge
+                    span(
+                      classes: 'absolute -top-1 -right-2 text-[10px] bg-brand-600 text-white px-2 py-0.5 rounded-full shadow-md border border-white cursor-default',
+                      [.text('Coming soon')],
+                    ),
+                  ]),
               ],
             ),
         ]),

@@ -16,7 +16,7 @@ class App extends StatelessComponent {
 
   @override
   Component build(BuildContext context) {
-    return div([
+    return div(id: 'top', [
       const Navbar(),
       const SectionAbout(),
       const SectionFeatures(),
