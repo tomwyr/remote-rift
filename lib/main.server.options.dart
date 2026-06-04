@@ -5,12 +5,10 @@
 // Generated with jaspr_builder
 
 import 'package:jaspr/server.dart';
-import 'package:remote_rift_website/components/counter.dart' as _counter;
-import 'package:remote_rift_website/components/header.dart' as _header;
+import 'package:remote_rift_website/components/back_to_top.dart'
+    as _back_to_top;
+import 'package:remote_rift_website/components/navbar.dart' as _navbar;
 import 'package:remote_rift_website/constants/theme.dart' as _theme;
-import 'package:remote_rift_website/pages/about.dart' as _about;
-import 'package:remote_rift_website/pages/home.dart' as _home;
-import 'package:remote_rift_website/app.dart' as _app;
 
 /// Default [ServerOptions] for use with your Jaspr project.
 ///
@@ -31,14 +29,8 @@ import 'package:remote_rift_website/app.dart' as _app;
 ServerOptions get defaultServerOptions => ServerOptions(
   clientId: 'main.client.dart.js',
   clients: {
-    _about.About: ClientTarget<_about.About>('about'),
-    _home.Home: ClientTarget<_home.Home>('home'),
+    _back_to_top.BackToTop: ClientTarget<_back_to_top.BackToTop>('back_to_top'),
+    _navbar.Navbar: ClientTarget<_navbar.Navbar>('navbar'),
   },
-  styles: () => [
-    ..._theme.styles,
-    ..._app.App.styles,
-    ..._counter.CounterState.styles,
-    ..._header.Header.styles,
-    ..._about.About.styles,
-  ],
+  styles: () => [..._theme.styles],
 );

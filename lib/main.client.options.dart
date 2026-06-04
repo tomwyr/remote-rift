@@ -6,8 +6,9 @@
 
 import 'package:jaspr/client.dart';
 
-import 'package:remote_rift_website/pages/about.dart' deferred as _about;
-import 'package:remote_rift_website/pages/home.dart' deferred as _home;
+import 'package:remote_rift_website/components/back_to_top.dart'
+    deferred as _back_to_top;
+import 'package:remote_rift_website/components/navbar.dart' deferred as _navbar;
 
 /// Default [ClientOptions] for use with your Jaspr project.
 ///
@@ -27,7 +28,13 @@ import 'package:remote_rift_website/pages/home.dart' deferred as _home;
 /// ```
 ClientOptions get defaultClientOptions => ClientOptions(
   clients: {
-    'about': ClientLoader((p) => _about.About(), loader: _about.loadLibrary),
-    'home': ClientLoader((p) => _home.Home(), loader: _home.loadLibrary),
+    'back_to_top': ClientLoader(
+      (p) => _back_to_top.BackToTop(),
+      loader: _back_to_top.loadLibrary,
+    ),
+    'navbar': ClientLoader(
+      (p) => _navbar.Navbar(),
+      loader: _navbar.loadLibrary,
+    ),
   },
 );
