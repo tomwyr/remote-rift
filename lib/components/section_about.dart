@@ -23,7 +23,7 @@ class SectionAbout extends StatelessComponent {
             ]),
             img(
               classes: 'my-12 max-h-64 max-w-full mx-auto',
-              src: '/images/showcase/showcase.png',
+              src: 'images/showcase/showcase.png',
               alt: 'Remote Rift',
             ),
           ]),

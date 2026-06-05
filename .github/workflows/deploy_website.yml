@@ -47,7 +47,8 @@ jobs:
         run: dart pub get
 
       - name: Build project
-        run: jaspr build
+        # Set the base path so GitHub Pages serves styles and assets from the repository URL.
+        run: jaspr build --dart-define=BASE_PATH=/remote-rift-website/
 
       - name: Setup Pages
         uses: actions/configure-pages@v5

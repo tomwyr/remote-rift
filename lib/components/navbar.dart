@@ -44,10 +44,10 @@ class NavbarState extends State<Navbar> {
           [
             // Logo and title
             a(
-              href: '/',
+              href: './',
               classes: 'no-underline flex flex-row items-center',
               [
-                img(src: '/images/branding/logo.png', alt: 'Remote Rift Logo', classes: 'h-12 py-1'),
+                img(src: 'images/branding/logo.png', alt: 'Remote Rift Logo', classes: 'h-12 py-1'),
                 span(classes: 'interactive-transition pl-2 text-lg hover:text-brand-600', [.text(siteInfo.title)]),
               ],
             ),

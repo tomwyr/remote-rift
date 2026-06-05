@@ -30,7 +30,7 @@ class SectionFeatures extends StatelessComponent {
                   classes:
                       'interactive-transition w-full sm:w-1/2 flex flex-row flex-no-wrap justify-start gap-4 rounded-xl hover:shadow-lg hover:bg-brand-charcoal-600 hover:bg-opacity-50 px-4 sm:px-8 py-6 sm:py-12',
                   [
-                    img(src: '/images/${feature.icon}', alt: feature.title, classes: 'w-12 h-12 self-start'),
+                    img(src: 'images/${feature.icon}', alt: feature.title, classes: 'w-12 h-12 self-start'),
                     div(classes: 'flex flex-col', [
                       h3(classes: 'tracking-wide text-gray-200 font-bold text-2xl mb-2', [
                         .text(feature.title),
