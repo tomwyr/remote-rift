@@ -37,6 +37,8 @@
     --tracking-wider: 0.05em;
     --tracking-widest: 0.1em;
     --radius-xl: 0.75rem;
+    --default-transition-duration: 150ms;
+    --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     --default-font-family: var(--font-sans);
     --default-mono-font-family: var(--font-mono);
   }
@@ -304,6 +306,9 @@
   .max-w-full {
     max-width: 100%;
   }
+  .transform {
+    transform: var(--tw-rotate-x,) var(--tw-rotate-y,) var(--tw-rotate-z,) var(--tw-skew-x,) var(--tw-skew-y,);
+  }
   .cursor-default {
     cursor: default;
   }
@@ -507,6 +512,11 @@
     --tw-shadow: 0 4px 6px -1px var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 2px 4px -2px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
     box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
   }
+  .transition {
+    transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, backdrop-filter, display, content-visibility, overlay, pointer-events;
+    transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
+    transition-duration: var(--tw-duration, var(--default-transition-duration));
+  }
   .hover\:bg-gray-200 {
     &:hover {
       @media (hover: hover) {
@@ -705,6 +715,52 @@
     }
   }
 }
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 64px;
+  }
+}
+@layer components {
+  .hamburger {
+    cursor: pointer;
+    width: 48px;
+    height: 48px;
+    transition: all 0.25s;
+    position: relative;
+  }
+  .hamburger__top-bun, .hamburger__bottom-bun {
+    content: "";
+    position: absolute;
+    width: 24px;
+    height: 2px;
+    background: #000;
+    left: 50%;
+    transform: translateX(-50%);
+    transition: all 0.5s;
+  }
+  .hamburger__top-bun {
+    top: 50%;
+    margin-top: -6px;
+  }
+  .hamburger__bottom-bun {
+    top: 50%;
+    margin-top: 6px;
+  }
+  .hamburger.open {
+    transform: rotate(90deg);
+  }
+  .hamburger.open .hamburger__top-bun {
+    transform: translateX(-50%) rotate(45deg) translateY(0);
+    top: 50%;
+    margin-top: 0;
+  }
+  .hamburger.open .hamburger__bottom-bun {
+    transform: translateX(-50%) rotate(-45deg) translateY(0);
+    top: 50%;
+    margin-top: 0;
+  }
+}
 @layer theme {
   :root, :host {
     --color-brand-50: #f9f5e8;
@@ -886,6 +942,26 @@
     color: var(--color-pink-500);
   }
 }
+@property --tw-rotate-x {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-rotate-y {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-rotate-z {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-skew-x {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-skew-y {
+  syntax: "*";
+  inherits: false;
+}
 @property --tw-border-style {
   syntax: "*";
   inherits: false;
@@ -967,6 +1043,11 @@
 @layer properties {
   @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
     *, ::before, ::after, ::backdrop {
+      --tw-rotate-x: initial;
+      --tw-rotate-y: initial;
+      --tw-rotate-z: initial;
+      --tw-skew-x: initial;
+      --tw-skew-y: initial;
       --tw-border-style: solid;
       --tw-font-weight: initial;
       --tw-tracking: initial;

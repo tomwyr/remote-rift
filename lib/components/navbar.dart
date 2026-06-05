@@ -18,6 +18,12 @@ class NavbarState extends State<Navbar> {
     setState(() => _menuOpen = !_menuOpen);
   }
 
+  void _closeMenu() {
+    if (_menuOpen) {
+      setState(() => _menuOpen = false);
+    }
+  }
+
   @override
   Component build(BuildContext context) {
     return nav(
@@ -39,7 +45,7 @@ class NavbarState extends State<Navbar> {
             ),
             // Hamburger menu button (mobile only)
             button(
-              classes: 'hamburger block sm:hidden focus:outline-none',
+              classes: 'hamburger ${_menuOpen ? 'open ' : ''}block sm:hidden focus:outline-none',
               onClick: _toggleMenu,
               [
                 span(classes: 'hamburger__top-bun', []),
@@ -59,6 +65,7 @@ class NavbarState extends State<Navbar> {
               href: '#${siteContent.sectionIdFeatures}',
               classes:
                   'text-gray-800 hover:text-brand-600 text-lg text-center w-full no-underline sm:w-auto sm:px-4 py-2 sm:py-1',
+              onClick: _closeMenu,
               [.text('Features')],
             ),
             // Download Now button
@@ -66,6 +73,7 @@ class NavbarState extends State<Navbar> {
               href: '#${siteContent.sectionIdDownload}',
               classes:
                   'text-gray-800 border border-brand-300 text-lg bg-gray-100 rounded-full w-auto no-underline text-center sm:text-left hover:border-brand-600 hover:text-brand-600 hover:bg-white hover:shadow-md px-6 py-1 my-2 sm:my-0 sm:ml-4',
+              onClick: _closeMenu,
               [.text('Download Now')],
             ),
           ],
