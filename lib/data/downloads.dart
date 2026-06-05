@@ -13,8 +13,8 @@ const downloads = [
     title: "Mobile",
     description: "Use the app to queue, accept matches, and check status from your phone or watch.",
     links: [
-      DownloadLink(icon: "icon_app_store.svg"),
-      DownloadLink(icon: "icon_play_store.svg"),
+      DownloadLink(icon: "downloads/icon_app_store.svg"),
+      DownloadLink(icon: "downloads/icon_play_store.svg"),
     ],
   ),
 ];

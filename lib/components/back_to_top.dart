@@ -52,10 +52,20 @@ class BackToTopState extends State<BackToTop> {
       id: 'home-button',
       href: '#top',
       classes:
-          '${_visible ? '' : 'hidden '}fixed bottom-0 right-0 mb-4 mr-4 text-gray-200 border rounded-full border-brand-600 hover:bg-gray-200 hover:text-brand-600 hover:border-browngray no-underline w-12 h-12 flex items-center justify-center bg-brand-600 shadow-md',
+          '${_visible ? '' : 'hidden '}interactive-transition fixed bottom-0 right-0 mb-4 mr-4 text-gray-200 border rounded-full border-brand-600 hover:bg-white hover:text-brand-600 hover:border-brand-600 no-underline w-12 h-12 flex items-center justify-center bg-brand-600 shadow-md hover:shadow-lg',
       [
-        // Arrow up icon
-        span(classes: 'text-2xl', [.text('↑')]),
+        svg(
+          viewBox: '0 -960 960 960',
+          width: Unit.pixels(24),
+          height: Unit.pixels(24),
+          classes: 'fill-current',
+          [
+            path(
+              d: 'M480-528 296-344l-56-56 240-240 240 240-56 56-184-184Z',
+              [],
+            ),
+          ],
+        ),
       ],
     );
   }

@@ -1,5 +1,6 @@
 import 'package:jaspr/dom.dart';
 import 'package:jaspr/jaspr.dart';
+import 'package:universal_web/web.dart';
 import '../data/content.dart';
 import '../data/site_info.dart';
 
@@ -24,6 +25,13 @@ class NavbarState extends State<Navbar> {
     }
   }
 
+  void _scrollToSection(Event event, String sectionId) {
+    event.preventDefault();
+    _closeMenu();
+
+    document.getElementById(sectionId)?.scrollIntoView();
+  }
+
   @override
   Component build(BuildContext context) {
     return nav(
@@ -39,8 +47,8 @@ class NavbarState extends State<Navbar> {
               href: '/',
               classes: 'no-underline flex flex-row items-center',
               [
-                img(src: '/images/logo.png', alt: 'Remote Rift Logo', classes: 'h-12 py-1'),
-                span(classes: 'pl-2 text-lg hover:text-brand-600', [.text(siteInfo.title)]),
+                img(src: '/images/branding/logo.png', alt: 'Remote Rift Logo', classes: 'h-12 py-1'),
+                span(classes: 'interactive-transition pl-2 text-lg hover:text-brand-600', [.text(siteInfo.title)]),
               ],
             ),
             // Hamburger menu button (mobile only)
@@ -64,16 +72,20 @@ class NavbarState extends State<Navbar> {
             a(
               href: '#${siteContent.sectionIdFeatures}',
               classes:
-                  'text-gray-800 hover:text-brand-600 text-lg text-center w-full no-underline sm:w-auto sm:px-4 py-2 sm:py-1',
-              onClick: _closeMenu,
+                  'interactive-transition text-gray-800 hover:text-brand-600 text-lg text-center w-full no-underline sm:w-auto sm:px-4 py-2 sm:py-1',
+              events: {
+                'click': (event) => _scrollToSection(event, siteContent.sectionIdFeatures),
+              },
               [.text('Features')],
             ),
             // Download Now button
             a(
               href: '#${siteContent.sectionIdDownload}',
               classes:
-                  'text-gray-800 border border-brand-300 text-lg bg-gray-100 rounded-full w-auto no-underline text-center sm:text-left hover:border-brand-600 hover:text-brand-600 hover:bg-white hover:shadow-md px-6 py-1 my-2 sm:my-0 sm:ml-4',
-              onClick: _closeMenu,
+                  'interactive-transition text-gray-800 border border-brand-300 text-lg bg-gray-100 rounded-full w-auto no-underline text-center sm:text-left hover:border-brand-600 hover:text-brand-600 hover:bg-white hover:shadow-md px-6 py-1 my-2 sm:my-0 sm:ml-4',
+              events: {
+                'click': (event) => _scrollToSection(event, siteContent.sectionIdDownload),
+              },
               [.text('Download Now')],
             ),
           ],

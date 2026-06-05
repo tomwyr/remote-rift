@@ -1,6 +1,7 @@
 import 'package:jaspr/dom.dart';
 import 'package:jaspr/jaspr.dart';
 import '../data/content.dart';
+import 'navbar.dart';
 
 class SectionAbout extends StatelessComponent {
   const SectionAbout({super.key});
@@ -9,8 +10,9 @@ class SectionAbout extends StatelessComponent {
   Component build(BuildContext context) {
     return section(
       id: siteContent.sectionIdAbout,
-      classes: 'w-full min-h-screen flex flex-col justify-between',
+      classes: 'header w-full min-h-screen flex flex-col justify-between',
       [
+        const Navbar(),
         div(classes: 'flex flex-col justify-center h-full py-12', [
           div(classes: 'self-center text-center w-full sm:w-2/3 xl:w-1/2 px-4 sm:px-0', [
             h2(classes: 'font-bold tracking-wider text-gray-800 text-4xl mb-4', [
@@ -21,7 +23,7 @@ class SectionAbout extends StatelessComponent {
             ]),
             img(
               classes: 'my-12 max-h-64 max-w-full mx-auto',
-              src: '/images/showcase.png',
+              src: '/images/showcase/showcase.png',
               alt: 'Remote Rift',
             ),
           ]),
@@ -30,7 +32,7 @@ class SectionAbout extends StatelessComponent {
           a(
             href: '#${siteContent.sectionIdFeatures}',
             classes:
-                'px-10 py-2 text-white hover:text-brand-600 bg-brand-600 hover:bg-white border border-brand-600 rounded-full shadow-md text-lg',
+                'interactive-transition px-10 py-2 text-white hover:text-brand-600 bg-brand-600 hover:bg-white border border-brand-600 rounded-full shadow-md hover:shadow-lg text-lg',
             [.text(siteContent.buttonMoreInformation)],
           ),
         ]),

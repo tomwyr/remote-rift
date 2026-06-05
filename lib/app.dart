@@ -1,7 +1,6 @@
 import 'package:jaspr/dom.dart';
 import 'package:jaspr/jaspr.dart';
 
-import 'components/navbar.dart';
 import 'components/section_about.dart';
 import 'components/section_features.dart';
 import 'components/section_download.dart';
@@ -17,7 +16,6 @@ class App extends StatelessComponent {
   @override
   Component build(BuildContext context) {
     return div(id: 'top', [
-      const Navbar(),
       const SectionAbout(),
       const SectionFeatures(),
       const SectionDownload(),

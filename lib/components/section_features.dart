@@ -12,6 +12,7 @@ class SectionFeatures extends StatelessComponent {
       id: siteContent.sectionIdFeatures,
       classes: 'w-full min-h-screen flex flex-col justify-between items-center bg-brand-charcoal-500',
       [
+        div([]),
         div(classes: 'flex flex-col items-center my-12', [
           div(classes: 'self-center text-center w-full sm:w-2/3 xl:w-1/2 px-4 sm:px-0', [
             h2(classes: 'tracking-wide text-gray-200 font-bold text-4xl mb-4', [
@@ -26,7 +27,8 @@ class SectionFeatures extends StatelessComponent {
             [
               for (var feature in features)
                 div(
-                  classes: 'w-full sm:w-1/2 flex flex-row flex-no-wrap justify-start gap-4 rounded-xl hover:shadow-lg hover:bg-brand-charcoal-600 hover:bg-opacity-50 px-4 sm:px-8 py-6 sm:py-12',
+                  classes:
+                      'interactive-transition w-full sm:w-1/2 flex flex-row flex-no-wrap justify-start gap-4 rounded-xl hover:shadow-lg hover:bg-brand-charcoal-600 hover:bg-opacity-50 px-4 sm:px-8 py-6 sm:py-12',
                   [
                     img(src: '/images/${feature.icon}', alt: feature.title, classes: 'w-12 h-12 self-start'),
                     div(classes: 'flex flex-col', [
@@ -41,14 +43,14 @@ class SectionFeatures extends StatelessComponent {
                 ),
             ],
           ),
-          div(classes: 'flex flex-row w-full justify-center pb-12', [
-            a(
-              href: '#${siteContent.sectionIdDownload}',
-              classes:
-                  'px-10 py-2 text-white hover:text-brand-600 bg-brand-600 hover:bg-gray-200 border border-brand-600 rounded-full shadow-md text-lg',
-              [.text(siteContent.buttonDownloadNow)],
-            ),
-          ]),
+        ]),
+        div(classes: 'flex flex-row w-full justify-center pb-12', [
+          a(
+            href: '#${siteContent.sectionIdDownload}',
+            classes:
+                'interactive-transition px-10 py-2 text-white hover:text-brand-600 bg-brand-600 hover:bg-gray-200 border border-brand-600 rounded-full shadow-md text-lg',
+            [.text(siteContent.buttonDownloadNow)],
+          ),
         ]),
       ],
     );
