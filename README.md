@@ -12,19 +12,33 @@ To run the project locally:
 
 1. Ensure the Dart SDK is installed.
 2. Install the Jaspr CLI with `dart pub global activate jaspr_cli`.
-3. Run `dart pub get`.
-4. Run `jaspr serve`.
-5. Open your browser at `http://localhost:8080`.
+3. Install the Tailwind CLI and make `tailwindcss` available on your `PATH`.
+4. Run `dart pub get`.
+5. Start development commands in separate terminals:
+   - `tailwindcss --input styles.tw.css --output web/styles.css --watch`
+   - `jaspr serve`
+
+> [!NOTE]
+> In VS Code, the `Dev: Run` task starts both development commands together.
+
+6. Open your browser at `http://localhost:8080`.
 
 To modify the website content, edit the components, data, and models located under the `lib` directory. Static assets are located under the `web` directory.
 
 After saving changes, Jaspr automatically reloads the site to reflect the updates.
+
+### Styling
+
+The project uses Tailwind CSS as the styling layer. Source styles are defined in `styles.tw.css`, which imports Tailwind and defines the project-level styling shared across components.
+
+Dart components reference Tailwind utility classes directly. The Tailwind CLI processes `styles.tw.css` and writes the compiled stylesheet to `web/styles.css`, which is then served by Jaspr during development and included in production builds.
 
 ## Building
 
 Build the static site with:
 
 ```sh
+tailwindcss --input styles.tw.css --output web/styles.css --minify
 jaspr build
 ```
 

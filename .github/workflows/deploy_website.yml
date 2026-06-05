@@ -34,6 +34,15 @@ jobs:
       - name: Install Jaspr CLI
         run: dart pub global activate jaspr_cli
 
+      - name: Install Tailwind CLI
+        run: |
+          curl -fsSL -o tailwindcss https://github.com/tailwindlabs/tailwindcss/releases/download/v4.3.0/tailwindcss-linux-x64
+          chmod +x tailwindcss
+          sudo mv tailwindcss /usr/local/bin/tailwindcss
+
+      - name: Build styles
+        run: tailwindcss --input styles.tw.css --output web/styles.css --minify
+
       - name: Install dependencies
         run: dart pub get
 

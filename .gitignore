@@ -6,6 +6,9 @@
 # Conventional directory for build output.
 /build/
 
+# Generated Tailwind output.
+/web/styles.css
+
 # Miscellaneous
 *.class
 *.log
