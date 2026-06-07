@@ -73,4 +73,3 @@ To update localized strings:
 
 - [Remote Rift Website](../website) - A landing page showcasing the application and guiding users on getting started.
 - [Remote Rift Mobile](../mobile) - A mobile application that allows interaction with the League Client remotely.
-- [Remote Rift Packages](../../packages) - Shared packages containing common UI, utilities, and core logic used across Remote Rift projects.

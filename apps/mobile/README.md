@@ -32,7 +32,7 @@ This section describes selected third-party packages used throughout the applica
 - [bloc](https://pub.dev/packages/bloc) - State management using blocs and cubits, providing clear separation of UI and state logic with minimal boilerplate.
 
 - [slang](https://pub.dev/packages/slang) - Localization via strongly typed code generation from YAML files, with support for advanced translation features.
- 
+
 ## Usage
 
 To run the application on a mobile device:
@@ -70,4 +70,3 @@ To update localized strings:
 
 - [Remote Rift Website](../website) - A landing page showcasing the application and guiding users on getting started.
 - [Remote Rift Desktop](../desktop) - A desktop application that launches and manages the local connector service.
-- [Remote Rift Packages](../../packages) - Shared packages containing common UI, utilities, and core logic used across Remote Rift projects.
