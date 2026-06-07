@@ -4,7 +4,7 @@ Desktop application for **Remote Rift**, an application that lets you queue for 
 
 ## Overview
 
-Remote Rift Desktop is available for Windows and macOS. It provides a thin wrapper around Remote Rift Connector, allowing the mobile application to access the League client and displaying key service information.
+Remote Rift Desktop is available for Windows and macOS. It provides a thin wrapper around the Remote Rift API service, allowing the mobile application to access the League client and displaying key service information.
 
 ## Architecture
 
@@ -72,6 +72,5 @@ To update localized strings:
 ## Related Projects
 
 - [Remote Rift Website](../website) - A landing page showcasing the application and guiding users on getting started.
-- [Remote Rift Connector](../../packages/connector) - A local service that connects to and communicates with the League Client API.
 - [Remote Rift Mobile](../mobile) - A mobile application that allows interaction with the League Client remotely.
 - [Remote Rift Packages](../../packages) - Shared packages containing common UI, utilities, and core logic used across Remote Rift projects.

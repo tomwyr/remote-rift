@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:remote_rift_connector/remote_rift_connector.dart';
+import 'package:remote_rift_api/remote_rift_api.dart';
 import 'package:remote_rift_ui/remote_rift_ui.dart';
 
 class RemoteRiftApiServiceRunner {

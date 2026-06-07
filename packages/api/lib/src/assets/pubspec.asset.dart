@@ -1,6 +1,6 @@
 class PubspecAsset {
   static Future<String> load() async => '''
-name: remote_rift_connector
+name: remote_rift_api
 publish_to: none
 version: 0.12.1
 

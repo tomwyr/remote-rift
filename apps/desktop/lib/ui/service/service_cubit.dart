@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:remote_rift_connector/remote_rift_connector.dart';
+import 'package:remote_rift_api/remote_rift_api.dart';
 
 import '../../services/api_service_runner.dart';
 import 'service_state.dart';

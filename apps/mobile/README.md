@@ -4,7 +4,7 @@ Mobile application for **Remote Rift**, an application that lets you queue for L
 
 ## Overview
 
-Remote Rift Mobile is available for Android and iOS. It provides a client interface to the League Client API and communicates with the League Client via the Remote Rift Connector service.
+Remote Rift Mobile is available for Android and iOS. It provides a client interface to the League Client API and communicates with the League Client via the Remote Rift API service.
 
 ## Architecture
 
@@ -14,10 +14,10 @@ The project is implemented in Flutter, targeting Android and iOS from a single s
 
 The project is organized into the following main layers:
 
-- **Data** - Provides model definitions and services for interacting with the Remote Rift Connector API and local device storage.
+- **Data** - Provides model definitions and services for interacting with the Remote Rift API service and local device storage.
 - **UI** - Contains widgets paired with cubits and state classes, where applicable, to manage feature-specific state and logic.
 
-When launched, the application attempts to connect to the Remote Rift Connector API by resolving its address via mDNS on the local network. If the service is not reachable on the network or the connection is lost, the application attempts to re-establish communication with the Connector service.
+When launched, the application attempts to connect to the Remote Rift API service by resolving its address via mDNS on the local network. If the service is not reachable on the network or the connection is lost, the application attempts to re-establish communication with the API service.
 
 ### API compatibility
 
@@ -69,6 +69,5 @@ To update localized strings:
 ## Related Projects
 
 - [Remote Rift Website](../website) - A landing page showcasing the application and guiding users on getting started.
-- [Remote Rift Connector](../../packages/connector) - A local service that connects to and communicates with the League Client API.
 - [Remote Rift Desktop](../desktop) - A desktop application that launches and manages the local connector service.
 - [Remote Rift Packages](../../packages) - Shared packages containing common UI, utilities, and core logic used across Remote Rift projects.

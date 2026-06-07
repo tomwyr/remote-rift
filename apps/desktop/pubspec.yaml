@@ -25,7 +25,7 @@ dependencies:
   hooks: ^1.0.1
 
   remote_rift_updater: any
-  remote_rift_connector: any
+  remote_rift_api: any
   remote_rift_core: any
   remote_rift_ui: any
   remote_rift_utils: any

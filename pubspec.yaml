@@ -9,7 +9,7 @@ workspace:
   - apps/mobile
   - apps/desktop
   - apps/website
-  - packages/connector
+  - packages/api
   - packages/core
   - packages/ui
   - packages/utils

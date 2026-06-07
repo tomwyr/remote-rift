@@ -53,7 +53,6 @@ To release a new version, push changes to the `master` branch or [manually trigg
 
 ## Related Projects
 
-- [Remote Rift Connector](../../packages/connector) - A local service that connects to and communicates with the League Client API.
 - [Remote Rift Desktop](../desktop) - A desktop application that launches and manages the local connector service.
 - [Remote Rift Mobile](../mobile) - A mobile application that allows interaction with the League Client remotely.
 - [Remote Rift Packages](../../packages) - Shared packages containing common UI, utilities, and core logic used across Remote Rift projects.
