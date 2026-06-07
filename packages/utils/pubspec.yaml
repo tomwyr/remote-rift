@@ -1,6 +1,6 @@
 name: remote_rift_utils
+description: Shared Dart utilities and common data models.
 publish_to: none
-version: 0.9.0
 
 resolution: workspace
 

@@ -1,7 +1,7 @@
 name: remote_rift_mobile
-description: "A mobile application that allows remote interaction with the League client."
+description: Mobile application allowing remote interaction with the League client.
 version: 0.9.0+1
-publish_to: "none"
+publish_to: none
 
 resolution: workspace
 

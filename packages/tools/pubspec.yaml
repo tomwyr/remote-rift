@@ -1,6 +1,6 @@
 name: remote_rift_tools
+description: Scripts and utilities used during development.
 publish_to: none
-version: 0.9.0
 
 resolution: workspace
 

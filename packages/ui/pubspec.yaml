@@ -1,6 +1,6 @@
 name: remote_rift_ui
+description: Shared UI, theming and Flutter dependent utilities.
 publish_to: none
-version: 0.9.0
 
 resolution: workspace
 

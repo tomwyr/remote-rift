@@ -1,6 +1,6 @@
 name: remote_rift_core
+description: League Client API integration and connector service.
 publish_to: none
-version: 0.12.1
 
 resolution: workspace
 

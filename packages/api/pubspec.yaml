@@ -1,6 +1,6 @@
 name: remote_rift_api
+description: Local API service and CLI wrapper around the League Client API.
 publish_to: none
-version: 0.12.1
 
 resolution: workspace
 
