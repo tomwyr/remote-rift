@@ -1,4 +1,4 @@
-import 'package:application_updater/application_updater.dart';
+import 'package:remote_rift_updater/remote_rift_updater.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'update_state.dart';

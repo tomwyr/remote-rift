@@ -1,4 +1,4 @@
-import 'package:application_updater/application_updater.dart';
+import 'package:remote_rift_updater/remote_rift_updater.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:remote_rift_connector/remote_rift_connector.dart';

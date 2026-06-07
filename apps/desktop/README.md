@@ -20,9 +20,9 @@ When launched, the application starts the Remote Rift API and registers a servic
 
 ### Application updates
 
-The application supports runtime updates through the `application_updater` package, which checks for newer releases on GitHub. Users are notified of available updates, which are installed upon confirmation.
+The application supports runtime updates through the `remote_rift_updater` package, which checks for newer releases on GitHub. Users are notified of available updates, which are installed upon confirmation.
 
-For more details, refer to the [Application Updater documentation](../../packages/application_updater/README.md).
+For more details, refer to the [Remote Rift Updater documentation](../../packages/updater/README.md).
 
 > [!note]
 > The updater executable is automatically built and bundled with the application using the [build.dart](hook/build.dart) hook script.

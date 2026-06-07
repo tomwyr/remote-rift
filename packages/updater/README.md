@@ -1,4 +1,4 @@
-# Application Updater
+# Remote Rift Updater
 
 A Dart package for enabling runtime application updates.
 
@@ -19,7 +19,7 @@ The package currently supports Windows and macOS desktop platforms and uses GitH
 
 ```yaml
 dependencies:
-  application_updater:
+  remote_rift_updater:
 ```
 
 2. Run `dart pub get` to install dependencies.
@@ -40,7 +40,7 @@ dart build cli bin/run_update.dart
 Configure the updater with your GitHub repository details and platform-specific settings:
 
 ```dart
-import 'package:application_updater/application_updater.dart';
+import 'package:remote_rift_updater/remote_rift_updater.dart';
 
 final updater = DesktopUpdater(
   releases: GitHubReleases(

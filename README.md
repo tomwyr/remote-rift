@@ -14,7 +14,7 @@ This repository is a Dart and Flutter monorepo using Pub workspaces.
 - [UI](packages/ui) - Shared Flutter UI and mDNS service discovery.
 - [Utils](packages/utils) - Shared Dart utilities.
 - [Tools](packages/tools) - Development scripts.
-- [Application Updater](packages/application_updater) - Desktop runtime update package.
+- [Updater](packages/updater) - Desktop runtime update package.
 
 ## Development
 

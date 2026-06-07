@@ -1,5 +1,5 @@
-import 'package:application_updater/src/platform.dart';
-import 'package:application_updater/src/update_runner.dart';
+import 'package:remote_rift_updater/src/platform.dart';
+import 'package:remote_rift_updater/src/update_runner.dart';
 
 void main(List<String> args) async {
   final archivePath = readArg(args, 0, 'archive path');
@@ -14,10 +14,16 @@ UpdateRunner createRunner(List<String> args) {
   switch (targetPlatform) {
     case .windows:
       final executableName = readArg(args, 3, 'Windows executable name');
-      return WindowsUpdateRunner(applicationLabel: appLabel, executableName: executableName);
+      return WindowsUpdateRunner(
+        applicationLabel: appLabel,
+        executableName: executableName,
+      );
     case .macos:
       final bundleName = readArg(args, 3, 'macOS bundle name');
-      return MacosUpdateRunner(applicationLabel: appLabel, bundleName: bundleName);
+      return MacosUpdateRunner(
+        applicationLabel: appLabel,
+        bundleName: bundleName,
+      );
   }
 }
 

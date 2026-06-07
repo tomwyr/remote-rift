@@ -14,4 +14,4 @@ workspace:
   - packages/ui
   - packages/utils
   - packages/tools
-  - packages/application_updater
+  - packages/updater
