@@ -1,0 +1,82 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Connector: Build",
+      "detail": "Compiles the Remote Rift Connector API into an executable",
+      "group": "build",
+      "type": "shell",
+      "command": "dart",
+      "args": [
+        "compile",
+        "exe",
+        "lib/src/cli/main.dart",
+        "-o",
+        "build/remoterift"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}/packages/api"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Connector: Generate Assets",
+      "detail": "Generates necessary project assets as Dart code",
+      "group": "none",
+      "type": "shell",
+      "command": "dart",
+      "args": [
+        "run",
+        "remote_rift_tools:generate_asset",
+        "pubspec",
+        "lib/src/assets/pubspec.asset.dart"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}/packages/api"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Website: Dev",
+      "dependsOn": [
+        "Website: Tailwind Watch",
+        "Website: Jaspr Serve"
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "Website: Tailwind Watch",
+      "type": "shell",
+      "command": "tailwindcss",
+      "args": [
+        "--input",
+        "styles.tw.css",
+        "--output",
+        "web/styles.css",
+        "--watch"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}/apps/website"
+      },
+      "presentation": {
+        "group": "dev"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Website: Jaspr Serve",
+      "type": "shell",
+      "command": "jaspr",
+      "args": [
+        "serve"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}/apps/website"
+      },
+      "presentation": {
+        "group": "dev"
+      },
+      "problemMatcher": []
+    }
+  ]
+}

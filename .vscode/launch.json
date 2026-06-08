@@ -1,0 +1,71 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Connector: Resolve Address",
+      "request": "launch",
+      "type": "dart",
+      "cwd": "${workspaceFolder}/packages/api",
+      "program": "lib/src/cli/main.dart",
+      "args": [
+        "--resolve-address"
+      ]
+    },
+    {
+      "name": "Connector: Custom Address",
+      "request": "launch",
+      "type": "dart",
+      "cwd": "${workspaceFolder}/packages/api",
+      "program": "lib/src/cli/main.dart",
+      "args": [
+        "--host",
+        "${input:host}",
+        "--port",
+        "${input:port}"
+      ]
+    },
+    {
+      "name": "Desktop",
+      "request": "launch",
+      "type": "dart",
+      "cwd": "${workspaceFolder}/apps/desktop",
+      "flutterMode": "debug",
+      "program": "lib/main.dart"
+    },
+    {
+      "name": "Desktop: Custom Address",
+      "request": "launch",
+      "type": "dart",
+      "cwd": "${workspaceFolder}/apps/desktop",
+      "flutterMode": "debug",
+      "program": "lib/main.dart",
+      "toolArgs": [
+        "--dart-define",
+        "API_HOST=${input:host}",
+        "--dart-define",
+        "API_PORT=${input:port}"
+      ]
+    },
+    {
+      "name": "Mobile",
+      "request": "launch",
+      "type": "dart",
+      "cwd": "${workspaceFolder}/apps/mobile",
+      "flutterMode": "debug",
+      "program": "lib/main.dart"
+    }
+  ],
+  "inputs": [
+    {
+      "id": "host",
+      "type": "promptString",
+      "description": "Connector API host address"
+    },
+    {
+      "id": "port",
+      "type": "promptString",
+      "description": "Connector API port number",
+      "default": "8080"
+    }
+  ]
+}
