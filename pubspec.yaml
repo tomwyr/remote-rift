@@ -1,5 +1,5 @@
 name: remote_rift
-description: Monorepo workspace for Remote Rift applications and packages.
+description: Remote Rift lets you queue for League of Legends games from your phone.
 publish_to: none
 
 environment:
