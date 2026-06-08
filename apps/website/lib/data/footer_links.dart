@@ -8,7 +8,7 @@ const footerLinks = [
   ),
   FooterLink(
     title: "Built with Jaspr",
-    url: "https://jaspr.dev",
+    url: "https://jaspr.site",
     urlDisplay: "Jaspr",
   ),
 ];
