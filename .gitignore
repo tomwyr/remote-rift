@@ -1,33 +1,15 @@
-# Files and directories created by pub.
-**/doc/api/
 .dart_tool/
 .packages
 
-# Conventional directory for build output.
-/build/
+# Flutter and Dart build output.
+build/
+.build/
+coverage/
+.flutter-plugins
+.flutter-plugins-dependencies
 
-# Generated Tailwind output.
-/web/styles.css
+# Website generated output.
+apps/website/web/styles.css
 
-# Miscellaneous
-*.class
-*.log
-*.pyc
-*.swp
+# macOS.
 .DS_Store
-.atom/
-.buildlog/
-.history
-.svn/
-migrate_working_dir/
-
-# IntelliJ related
-*.iml
-*.ipr
-*.iws
-.idea/
-
-# The .vscode folder contains launch configuration and tasks you configure in
-# VS Code which you may wish to be included in version control, so this line
-# is commented out by default.
-#.vscode/

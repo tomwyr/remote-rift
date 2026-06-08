@@ -1,59 +1,39 @@
-# Remote Rift Website
+# Remote Rift
 
-Landing page for **Remote Rift**, an application that lets you queue for League of Legends games from your phone.
+Remote Rift lets you queue for League of Legends games from your phone.
 
-Visit the current version of the website at https://tomwyr.github.io/remote-rift-website.
+This repository is a Dart and Flutter monorepo using Pub workspaces.
+
+## Projects
+
+- [Mobile](apps/mobile) - Flutter app for Android and iOS.
+- [Desktop](apps/desktop) - Flutter app for Windows and macOS that runs the local connector service.
+- [Website](apps/website) - Jaspr static website deployed to GitHub Pages.
+- [Connector](packages/connector) - Local REST and WebSocket API around the League Client API.
+- [Core](packages/core) - League Client API integration and Remote Rift state model.
+- [UI](packages/ui) - Shared Flutter UI and mDNS service discovery.
+- [Utils](packages/utils) - Shared Dart utilities.
+- [Tools](packages/tools) - Development scripts.
+- [Application Updater](packages/application_updater) - Desktop runtime update package.
 
 ## Development
 
-The project uses **Jaspr**, a Dart framework for building static websites and web applications. For more information, visit [jaspr.site](https://jaspr.site/).
-
-To run the project locally:
-
-1. Ensure the Dart SDK is installed.
-2. Install the Jaspr CLI with `dart pub global activate jaspr_cli`.
-3. Install the Tailwind CLI and make `tailwindcss` available on your `PATH`.
-4. Run `dart pub get`.
-5. Start development commands in separate terminals:
-   - `tailwindcss --input styles.tw.css --output web/styles.css --watch`
-   - `jaspr serve`
-
-> [!NOTE]
-> In VS Code, the `Dev: Run` task starts both development commands together.
-
-6. Open your browser at `http://localhost:8080`.
-
-To modify the website content, edit the components, data, and models located under the `lib` directory. Static assets are located under the `web` directory.
-
-After saving changes, Jaspr automatically reloads the site to reflect the updates.
-
-### Styling
-
-The project uses Tailwind CSS as the styling layer. Source styles are defined in `styles.tw.css`, which imports Tailwind and defines the project-level styling shared across components.
-
-Dart components reference Tailwind utility classes directly. The Tailwind CLI processes `styles.tw.css` and writes the compiled stylesheet to `web/styles.css`, which is then served by Jaspr during development and included in production builds.
-
-## Building
-
-Build the static site with:
+Install dependencies from the repository root:
 
 ```sh
-tailwindcss --input styles.tw.css --output web/styles.css --minify
-jaspr build
+dart pub get
 ```
 
-The output is generated in the `build/jaspr` directory.
+List workspace packages:
 
-## Deployment
+```sh
+dart pub workspace list
+```
 
-Deployment is handled via a GitHub Actions workflow that builds the static site and publishes it to GitHub Pages.  
-See the workflow file: [.github/workflows/deploy_website.yml](.github/workflows/deploy_website.yml).
+Run analysis from the repository root:
 
-To release a new version, push changes to the `master` branch or [manually trigger the workflow](https://github.com/tomwyr/remote-rift-website/actions/workflows/deploy_website.yml) from GitHub.
+```sh
+dart analyze
+```
 
-## Related Projects
-
-- [Remote Rift Connector](https://github.com/tomwyr/remote-rift-connector) - A local service that connects to and communicates with the League Client API.
-- [Remote Rift Desktop](https://github.com/tomwyr/remote-rift-desktop) - A desktop application that launches and manages the local connector service.
-- [Remote Rift Mobile](https://github.com/tomwyr/remote-rift-mobile) - A mobile application that allows interaction with the League Client remotely.
-- [Remote Rift Foundation](https://github.com/tomwyr/remote-rift-foundation) - A set of shared packages containing common UI, utilities, and core logic used across Remote Rift projects.
+Future releases are published from this repository using scoped tags in `<package>-<version>` format, for example `desktop-1.2.3`.

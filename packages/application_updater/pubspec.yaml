@@ -1,0 +1,21 @@
+name: application_updater
+description: A package that enables application updates at runtime.
+version: 0.0.1
+publish_to: none
+
+resolution: workspace
+
+environment:
+  sdk: ^3.10.0
+
+dependencies:
+  archive: ^4.0.7
+  path: ^1.9.1
+  http: ^1.6.0
+  package_info_plus: ^9.0.0
+
+  remote_rift_utils: ^0.9.0
+
+dev_dependencies:
+  lints: ^6.0.0
+  test: ^1.25.6

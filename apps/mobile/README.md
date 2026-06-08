@@ -1,0 +1,74 @@
+# Remote Rift Mobile
+
+Mobile application for **Remote Rift**, an application that lets you queue for League of Legends games from your phone.
+
+## Overview
+
+Remote Rift Mobile is available for Android and iOS. It provides a client interface to the League Client API and communicates with the League Client via the Remote Rift Connector service.
+
+## Architecture
+
+The project is implemented in Flutter, targeting Android and iOS from a single shared codebase.
+
+### Code structure
+
+The project is organized into the following main layers:
+
+- **Data** - Provides model definitions and services for interacting with the Remote Rift Connector API and local device storage.
+- **UI** - Contains widgets paired with cubits and state classes, where applicable, to manage feature-specific state and logic.
+
+When launched, the application attempts to connect to the Remote Rift Connector API by resolving its address via mDNS on the local network. If the service is not reachable on the network or the connection is lost, the application attempts to re-establish communication with the Connector service.
+
+### API compatibility
+
+The application requires a minimum Connector API version to function properly. On launch, it compares versions retrieved from the application config and the `/service/info` endpoint. If the API version is too low, users are prompted to update their desktop application.
+
+API changes are assumed to be backward compatible. Any new requirements should be accompanied by a version increase in the application config. To check or modify the current minimum API version, refer to [app_config.dart](./lib/data/app_config.dart).
+
+### Dependencies
+
+This section describes selected third-party packages used throughout the application:
+
+- [bloc](https://pub.dev/packages/bloc) - State management using blocs and cubits, providing clear separation of UI and state logic with minimal boilerplate.
+
+- [slang](https://pub.dev/packages/slang) - Localization via strongly typed code generation from YAML files, with support for advanced translation features.
+ 
+## Usage
+
+To run the application on a mobile device:
+
+1. Download and install the application:
+   - **Android**: Download the latest APK from the [GitHub releases page](https://github.com/tomwyr/remote-rift/releases) and install it on the device. Mobile releases use tags like `mobile-1.2.3`. You may need to enable installation from unknown sources in your device settings.
+   - **iOS**: Clone the repository, open it in Xcode, and build and run the application locally.
+2. Run the Remote Rift Desktop application following the [setup instructions](../desktop/README.md#usage).
+3. Start the League of Legends client.
+4. Launch the mobile application and wait for the connection to be established.
+
+## Development
+
+To run the project locally:
+
+1. Ensure Flutter is installed.
+2. Run `dart pub get` from the repository root to install workspace dependencies.
+3. Run `dart run slang` to generate localization source files.
+4. Run the application using `flutter run` or an IDE.
+5. After modifying source files, restart the application or use hot reload.
+
+### Building project
+
+Run `flutter build apk` or `flutter build ios` to compile the application for the target platform.
+
+### Localization
+
+To update localized strings:
+
+1. Edit the YAML files in `lib/i18n`.
+2. Run `dart run slang` to regenerate localization code.
+3. Reload the application to apply the changes.
+
+## Related Projects
+
+- [Remote Rift Website](../website) - A landing page showcasing the application and guiding users on getting started.
+- [Remote Rift Connector](../../packages/connector) - A local service that connects to and communicates with the League Client API.
+- [Remote Rift Desktop](../desktop) - A desktop application that launches and manages the local connector service.
+- [Remote Rift Packages](../../packages) - Shared packages containing common UI, utilities, and core logic used across Remote Rift projects.

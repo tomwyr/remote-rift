@@ -5,6 +5,11 @@ on:
   push:
     branches:
       - master
+    paths:
+      - ".github/workflows/deploy_website.yml"
+      - "apps/website/**"
+      - "pubspec.yaml"
+      - "pubspec.lock"
 
 permissions:
   contents: read
@@ -12,12 +17,15 @@ permissions:
   id-token: write
 
 concurrency:
-  group: "pages"
+  group: pages
   cancel-in-progress: true
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/website
 
     steps:
       - name: Checkout code
@@ -40,15 +48,14 @@ jobs:
           chmod +x tailwindcss
           sudo mv tailwindcss /usr/local/bin/tailwindcss
 
-      - name: Build styles
-        run: tailwindcss --input styles.tw.css --output web/styles.css --minify
-
       - name: Install dependencies
         run: dart pub get
 
+      - name: Build styles
+        run: tailwindcss --input styles.tw.css --output web/styles.css --minify
+
       - name: Build project
-        # Set the base path so GitHub Pages serves styles and assets from the repository URL.
-        run: jaspr build --dart-define=BASE_PATH=/remote-rift-website/
+        run: jaspr build --dart-define=BASE_PATH=/remote-rift/
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -56,7 +63,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: build/jaspr
+          path: apps/website/build/jaspr
 
       - name: Deploy to GitHub Pages
         id: deployment

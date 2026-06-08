@@ -1,0 +1,44 @@
+app:
+  title: "Remote Rift"
+
+update:
+  installTooltip: "Update"
+  availableTitle: "Update Available"
+  availableDescription: "A new version of the application is available. Update now to access the latest features."
+  availableConfirmLabel: "Update"
+  availableCancelLabel: "Later"
+  inProgressTitle: "Updating..."
+  inProgressDescription: "Downloading and installing the update. This may take a moment."
+  errorTitle: "Update Failed"
+  errorDescription: "An error occurred while updating. Please try again."
+  errorRetryLabel: "Retry"
+
+tray:
+  openLabel: "Open"
+  quitLabel: "Quit"
+
+service:
+  startingTitle: "Starting..."
+  startingDescription: "Initializing application components"
+  pendingMultipleAddressesTitle: "Multiple networks detected"
+  pendingMultipleAddressesDescription: "The application found more than one network address it can use and will automatically choose one."
+  pendingMultipleAddressesContinue: "Continue"
+  errorTitle: "Startup failed"
+  errorNoAddressDescription: "No network connection was found. Please check your internet connection and try again."
+  errorUnknownDescription: "The application couldn't start. This may be due to a missing network connection or another temporary issue."
+  errorRetry: "Restart"
+
+connection:
+  connectingTitle: "Connecting..."
+  connectingDescription: "Initializing communication with the game client."
+  connectedTitle: "Connected"
+  connectedDescription: "Successfully connected to the game client."
+  errorTitle: "Connection error"
+  errorDescription: "Unable to connect to the game client."
+  errorRetry: "Reconnect"
+
+gameError:
+  unableToConnectTitle: "Unable to connect"
+  unknownTitle: "Unknown game state"
+  unableToConnectDescription: "The game client could not be reached. Make sure that it is running to interact with the game."
+  unknownDescription: "The game's state could not be accessed due to an unexpected error."
