@@ -33,6 +33,7 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: stable
+          cache: true
 
       - name: Add Pub executables to PATH
         run: echo "$HOME/.pub-cache/bin" >> "$GITHUB_PATH"
