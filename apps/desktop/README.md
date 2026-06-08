@@ -4,7 +4,7 @@ Desktop application for **Remote Rift**, an application that lets you queue for 
 
 ## Overview
 
-Remote Rift Desktop is available for Windows and macOS. It provides a thin wrapper around the Remote Rift API service, allowing the mobile application to access the League client and displaying key service information.
+Remote Rift Desktop is available for Windows and macOS. It provides a thin wrapper around Remote Rift Connector, allowing the mobile application to access the League client and displaying key service information.
 
 ## Architecture
 
@@ -39,7 +39,7 @@ This section describes selected third-party packages used throughout the applica
 
 To run the application on a device:
 
-1. Download the latest version from the [GitHub releases page](https://github.com/tomwyr/remote-rift/releases) for your operating system. Desktop releases use tags like `desktop-1.2.3`. Builds are available for Windows and macOS.
+1. Download the latest version from the [GitHub releases page](https://github.com/tomwyr/remote-rift/releases) for your operating system. Builds are available for Windows and macOS.
 2. Run the downloaded application. You may need to grant permission to allow communication with devices on your local network.
 3. Start the League of Legends client and wait for the connection to be established.
 4. Run the Remote Rift Mobile application following the [setup instructions](../mobile/README.md#usage).
@@ -52,7 +52,7 @@ To run the application on a device:
 To run the project locally:
 
 1. Ensure Flutter is installed.
-2. Run `dart pub get` from the repository root to install workspace dependencies.
+2. Run `flutter pub get` to install dependencies.
 3. Run `dart run slang` to generate localization source files.
 4. Run the application using `flutter run` or an IDE.
 5. After modifying source files, restart the application or use hot reload.

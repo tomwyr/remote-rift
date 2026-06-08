@@ -2,38 +2,42 @@
 
 Remote Rift lets you queue for League of Legends games from your phone.
 
-This repository is a Dart and Flutter monorepo using Pub workspaces.
+## Overview
 
-## Projects
+Remote Rift is a cross-platform companion system for controlling League of Legends matchmaking from a phone. It lets users step away from the PC while still monitoring queue progress and responding to ready-check events.
 
-- [Mobile](apps/mobile) - Flutter app for Android and iOS.
-- [Desktop](apps/desktop) - Flutter app for Windows and macOS that runs the local connector service.
-- [Website](apps/website) - Jaspr static website deployed to GitHub Pages.
-- [Api](packages/api) - Local API service and CLI wrapper around the League Client API.
-- [Core](packages/core) - League Client API integration and Remote Rift state model.
-- [UI](packages/ui) - Shared Flutter UI and mDNS service discovery.
-- [Utils](packages/utils) - Shared Dart utilities.
-- [Tools](packages/tools) - Development scripts.
-- [Updater](packages/updater) - Desktop runtime update package.
+Remote Rift provides:
 
-## Development
+- **Remote queue control** - Select a queue, create or leave a lobby, start or stop matchmaking, and accept or decline a found match.
+- **Live status updates** - View the current lobby, queue, ready-check, and game-client connection state from the mobile application.
+- **Desktop connector** - Run the local service, display connection status, integrate with the system tray, discover the service automatically on the local network, and prompt for updates.
 
-Install dependencies from the repository root:
+## Implementation
 
-```sh
-dart pub get
-```
+Remote Rift is implemented as a Dart workspace with Flutter applications for mobile and desktop, a Jaspr-based website, and shared packages for common runtime and development logic.
 
-List workspace packages:
+Technical highlights:
 
-```sh
-dart pub workspace list
-```
+- **Local API service** - Built with `shelf`, exposing REST endpoints for commands and WebSocket streams for continuous status updates.
+- **LCU integration** - The core package wraps League Client API communication and translates high-level actions into LCU requests.
+- **Local discovery** - Shared UI utilities use mDNS service discovery so mobile clients can find the desktop service automatically.
+- **Desktop updates** - The updater package uses GitHub Releases to check, download, and install new desktop application versions.
 
-Run analysis from the repository root:
+## Workspace
 
-```sh
-dart analyze
-```
+The workspace is organized around user-facing applications and the packages that support them.
 
-Future releases are published from this repository using scoped tags in `<package>-<version>` format, for example `desktop-1.2.3`.
+### Applications
+
+- [Mobile](apps/mobile) - Mobile application allowing remote interaction with the League client.
+- [Desktop](apps/desktop) - Desktop application exposing connection to the League Client.
+- [Website](apps/website) - Landing page showcasing the application and guiding users on getting started.
+
+### Packages
+
+- [API](packages/api) - Local API service and CLI wrapper around the League Client API.
+- [Core](packages/core) - League Client API integration and connector service.
+- [UI](packages/ui) - Shared UI, theming and Flutter dependent utilities.
+- [Utils](packages/utils) - Shared Dart utilities and common data models.
+- [Tools](packages/tools) - Scripts and utilities used during development.
+- [Updater](packages/updater) - Service enabling application updates at runtime.
