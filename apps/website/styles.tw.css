@@ -1,204 +1,43 @@
 @import "tailwindcss";
 
-.interactive-transition {
-  transition: all 400ms ease;
-}
-
-.border-brand-300 {
-  border-color: var(--color-brand-300);
-}
-
-.border-brand-600 {
-  border-color: var(--color-brand-600);
-}
-
-.hover\:border-brand-500:hover {
-  border-color: var(--color-brand-500);
-}
-
-.hover\:border-brand-600:hover {
-  border-color: var(--color-brand-600);
-}
-
-.hover\:text-brand-600:hover {
-  color: var(--color-brand-600);
-}
-
-.hover\:bg-brand-charcoal-600:hover {
-  background-color: var(--color-brand-charcoal-600);
-}
-
-.hover\:bg-white:hover {
-  background-color: var(--color-white);
-}
-
-.hover\:bg-gray-200:hover {
-  background-color: var(--color-gray-200);
-}
-
-.hover\:shadow-md:hover {
-  --tw-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
-}
-
-.hover\:shadow-lg:hover {
-  --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-  box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+@theme {
+  --color-canvas: #ffffff;
+  --color-navy: #0a1428;
+  --color-panel: #0e1b2b;
+  --color-panel-muted: #16263a;
+  --color-rift-blue: #005a82;
+  --color-light-blue: #54c7f3;
+  --color-cyan: #0ac8b9;
+  --color-gold: #c8aa6e;
+  --color-gold-ink: #806528;
+  --color-highlight: #ffffff;
+  --color-ready: #00726b;
 }
 
 @layer base {
-  html {
-    scroll-behavior: smooth;
+  :root { --cursor-x: 50vw; --cursor-y: 50vh; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--color-canvas); color: var(--color-navy); font-family: Inter, ui-sans-serif, system-ui, sans-serif; line-height: 1.55; }
+  a { color: inherit; }
+  button, a { outline-offset: 4px; }
+  button:focus-visible, a:focus-visible { outline: 3px solid var(--color-ready); }
+  button:disabled { cursor: not-allowed; }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .cursor-glow::before {
+    position: fixed;
+    z-index: 0;
+    inset: 0;
+    content: '';
+    pointer-events: none;
+    background: radial-gradient(17rem circle at var(--cursor-x) var(--cursor-y), color-mix(in srgb, var(--color-light-blue) 11%, transparent), transparent 68%);
+    transition: background .25s ease-out;
   }
 }
 
-@layer components {
-  .header {
-    background-color: #fff;
-    background-image:
-      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 304 304' width='304' height='304'%3E%3Cpath fill='%23f5f7fa' fill-opacity='0.4' d='M44.1 224a5 5 0 1 1 0 2H0v-2h44.1zm160 48a5 5 0 1 1 0 2H82v-2h122.1zm57.8-46a5 5 0 1 1 0-2H304v2h-42.1zm0 16a5 5 0 1 1 0-2H304v2h-42.1zm6.2-114a5 5 0 1 1 0 2h-86.2a5 5 0 1 1 0-2h86.2zm-256-48a5 5 0 1 1 0 2H0v-2h12.1zm185.8 34a5 5 0 1 1 0-2h86.2a5 5 0 1 1 0 2h-86.2zM258 12.1a5 5 0 1 1-2 0V0h2v12.1zm-64 208a5 5 0 1 1-2 0v-54.2a5 5 0 1 1 2 0v54.2zm48-198.2V80h62v2h-64V21.9a5 5 0 1 1 2 0zm16 16V64h46v2h-48V37.9a5 5 0 1 1 2 0zm-128 96V208h16v12.1a5 5 0 1 1-2 0V210h-16v-76.1a5 5 0 1 1 2 0zm-5.9-21.9a5 5 0 1 1 0 2H114v48H85.9a5 5 0 1 1 0-2H112v-48h12.1zm-6.2 130a5 5 0 1 1 0-2H176v-74.1a5 5 0 1 1 2 0V242h-60.1zm-16-64a5 5 0 1 1 0-2H114v48h10.1a5 5 0 1 1 0 2H112v-48h-10.1zM66 284.1a5 5 0 1 1-2 0V274H50v30h-2v-32h18v12.1zM236.1 176a5 5 0 1 1 0 2H226v94h48v32h-2v-30h-48v-98h12.1zm25.8-30a5 5 0 1 1 0-2H274v44.1a5 5 0 1 1-2 0V146h-10.1zm-64 96a5 5 0 1 1 0-2H208v-80h16v-14h-42.1a5 5 0 1 1 0-2H226v18h-16v80h-12.1zm86.2-210a5 5 0 1 1 0 2H272V0h2v32h10.1zM98 101.9V146H53.9a5 5 0 1 1 0-2H96v-42.1a5 5 0 1 1 2 0zM53.9 34a5 5 0 1 1 0-2H80V0h2v34H53.9zm60.1 3.9V66H82v64H69.9a5 5 0 1 1 0-2H80V64h32V37.9a5 5 0 1 1 2 0zM101.9 82a5 5 0 1 1 0-2H128V37.9a5 5 0 1 1 2 0V82h-28.1zm16-64a5 5 0 1 1 0-2H146v44.1a5 5 0 1 1-2 0V18h-26.1zm102.2 270a5 5 0 1 1 0 2H98v14h-2v-16h124.1zM242 149.9V160h16v34h-16v62h48v48h-2v-46h-48v-66h16v-30h-16v-12.1a5 5 0 1 1 2 0zM53.9 18a5 5 0 1 1 0-2H64V2H48V0h18v18H53.9zm112 32a5 5 0 1 1 0-2H192V0h50v2h-48v48h-28.1zm-48-48a5 5 0 0 1-9.8-2h2.07a3 3 0 1 0 5.66 0H178v34h-18V21.9a5 5 0 1 1 2 0V32h14V2h-58.1zm0 96a5 5 0 1 1 0-2H137l32-32h39V21.9a5 5 0 1 1 2 0V66h-40.17l-32 32H117.9zm28.1 90.1a5 5 0 1 1-2 0v-76.51L175.59 80H224V21.9a5 5 0 1 1 2 0V82h-49.59L146 112.41v75.69zm16 32a5 5 0 1 1-2 0v-99.51L184.59 96H300.1a5 5 0 0 1 3.9-3.9v2.07a3 3 0 0 0 0 5.66v2.07a5 5 0 0 1-3.9-3.9H185.41L162 121.41v98.69zm-144-64a5 5 0 1 1-2 0v-3.51l48-48V48h32V0h2v50H66v55.41l-48 48v2.69zM50 53.9v43.51l-48 48V208h26.1a5 5 0 1 1 0 2H0v-65.41l48-48V53.9a5 5 0 1 1 2 0zm-16 16V89.41l-34 34v-2.82l32-32V69.9a5 5 0 1 1 2 0zM12.1 32a5 5 0 1 1 0 2H9.41L0 43.41V40.6L8.59 32h3.51zm265.8 18a5 5 0 1 1 0-2h18.69l7.41-7.41v2.82L297.41 50H277.9zm-16 160a5 5 0 1 1 0-2H288v-71.41l16-16v2.82l-14 14V210h-28.1zm-208 32a5 5 0 1 1 0-2H64v-22.59L40.59 194H21.9a5 5 0 1 1 0-2H41.41L66 216.59V242H53.9zm150.2 14a5 5 0 1 1 0 2H96v-56.6L56.6 162H37.9a5 5 0 1 1 0-2h19.5L98 200.6V256h106.1zm-150.2 2a5 5 0 1 1 0-2H80v-46.59L48.59 178H21.9a5 5 0 1 1 0-2H49.41L82 208.59V258H53.9zM34 39.8v1.61L9.41 66H0v-2h8.59L32 40.59V0h2v39.8zM2 300.1a5 5 0 0 1 3.9 3.9H3.83A3 3 0 0 0 0 302.17V256h18v48h-2v-46H2v42.1zM34 241v63h-2v-62H0v-2h34v1zM17 18H0v-2h16V0h2v18h-1zm273-2h14v2h-16V0h2v16zm-32 273v15h-2v-14h-14v14h-2v-16h18v1zM0 92.1A5.02 5.02 0 0 1 6 97a5 5 0 0 1-6 4.9v-2.07a3 3 0 1 0 0-5.66V92.1zM80 272h2v32h-2v-32zm37.9 32h-2.07a3 3 0 0 0-5.66 0h-2.07a5 5 0 0 1 9.8 0zM5.9 0A5.02 5.02 0 0 1 0 5.9V3.83A3 3 0 0 0 3.83 0H5.9zm294.2 0h2.07A3 3 0 0 0 304 3.83V5.9a5 5 0 0 1-3.9-5.9zm3.9 300.1v2.07a3 3 0 0 0-1.83 1.83h-2.07a5 5 0 0 1 3.9-3.9zM97 100a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0-16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm16 16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm16 16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-48 32a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm16 16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm32 48a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-16 16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm32-16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0-32a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm16 32a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm32 16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0-16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-16-64a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm16 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm16 96a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm16 16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm16-144a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 32a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm16-32a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm16-16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-96 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm16-32a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm96 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-16-64a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm16-16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-32 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0-16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-16 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-16 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-16 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM49 36a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-32 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm32 16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM33 68a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm16-48a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 240a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm16 32a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-16-64a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-16-32a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm80-176a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm16 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-16-16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm32 48a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm16-16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0-32a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm112 176a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-16 16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM17 180a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 16a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0-32a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm16 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM17 84a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm32 64a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm16-16a3 3 0 1 0 0-6 3 3 0 0 0 0 6z'%3E%3C/path%3E%3C/svg%3E"),
-      linear-gradient(135deg, #f5f7fa 0%, #fff 20%, #fff 80%, #f5f7fa 100%);
-  }
-
-  .hamburger {
-    cursor: pointer;
-    width: 48px;
-    height: 48px;
-    transition: all 0.25s;
-    position: relative;
-  }
-
-  .hamburger__top-bun,
-  .hamburger__bottom-bun {
-    content: "";
-    position: absolute;
-    width: 24px;
-    height: 2px;
-    background: #000;
-    left: 50%;
-    transform: translateX(-50%);
-    transition: all 0.5s;
-  }
-
-  .hamburger__top-bun {
-    top: 50%;
-    margin-top: -6px;
-  }
-
-  .hamburger__bottom-bun {
-    top: 50%;
-    margin-top: 6px;
-  }
-
-  .hamburger.open {
-    transform: rotate(90deg);
-  }
-
-  .hamburger.open .hamburger__top-bun {
-    transform: translateX(-50%) rotate(45deg) translateY(0);
-    top: 50%;
-    margin-top: 0;
-  }
-
-  .hamburger.open .hamburger__bottom-bun {
-    transform: translateX(-50%) rotate(-45deg) translateY(0);
-    top: 50%;
-    margin-top: 0;
-  }
-}
-
-@layer theme {
-  :root, :host {
-    /* Brand colors (gold/yellow theme) */
-    --color-brand-50: #f9f5e8;
-    --color-brand-100: #f3e8c7;
-    --color-brand-200: #ead189;
-    --color-brand-300: #e0bb5e;
-    --color-brand-400: #d7ae4d;
-    --color-brand-500: #d0ad4f;
-    --color-brand-600: #b69141;
-    --color-brand-700: #967436;
-    --color-brand-800: #7a5c2c;
-    --color-brand-900: #644b24;
-
-    /* Brand-charcoal colors (blue theme) */
-    --color-brand-charcoal-100: #c2dcea;
-    --color-brand-charcoal-200: #85b8d5;
-    --color-brand-charcoal-300: #4995c1;
-    --color-brand-charcoal-400: #2f6889;
-    --color-brand-charcoal-500: #1a3a4c;
-    --color-brand-charcoal-600: #152e3d;
-    --color-brand-charcoal-700: #10232e;
-    --color-brand-charcoal-800: #0a171e;
-    --color-brand-charcoal-900: #050c0f;
-
-    /* Standard Tailwind colors (subset for testing) */
-    --color-red-500: #ef4444;
-    --color-blue-500: #3b82f6;
-    --color-green-500: #22c55e;
-    --color-yellow-500: #eab308;
-    --color-purple-500: #a855f7;
-    --color-pink-500: #ec4899;
-  }
-}
-
-@layer utilities {
-  /* Brand color utilities */
-  .bg-brand-50 { background-color: var(--color-brand-50); }
-  .bg-brand-100 { background-color: var(--color-brand-100); }
-  .bg-brand-200 { background-color: var(--color-brand-200); }
-  .bg-brand-300 { background-color: var(--color-brand-300); }
-  .bg-brand-400 { background-color: var(--color-brand-400); }
-  .bg-brand-500 { background-color: var(--color-brand-500); }
-  .bg-brand-600 { background-color: var(--color-brand-600); }
-  .bg-brand-700 { background-color: var(--color-brand-700); }
-  .bg-brand-800 { background-color: var(--color-brand-800); }
-  .bg-brand-900 { background-color: var(--color-brand-900); }
-
-  .text-brand-50 { color: var(--color-brand-50); }
-  .text-brand-100 { color: var(--color-brand-100); }
-  .text-brand-200 { color: var(--color-brand-200); }
-  .text-brand-300 { color: var(--color-brand-300); }
-  .text-brand-400 { color: var(--color-brand-400); }
-  .text-brand-500 { color: var(--color-brand-500); }
-  .text-brand-600 { color: var(--color-brand-600); }
-  .text-brand-700 { color: var(--color-brand-700); }
-  .text-brand-800 { color: var(--color-brand-800); }
-  .text-brand-900 { color: var(--color-brand-900); }
-
-  /* Brand-charcoal color utilities */
-  .bg-brand-charcoal-100 { background-color: var(--color-brand-charcoal-100); }
-  .bg-brand-charcoal-200 { background-color: var(--color-brand-charcoal-200); }
-  .bg-brand-charcoal-300 { background-color: var(--color-brand-charcoal-300); }
-  .bg-brand-charcoal-400 { background-color: var(--color-brand-charcoal-400); }
-  .bg-brand-charcoal-500 { background-color: var(--color-brand-charcoal-500); }
-  .bg-brand-charcoal-600 { background-color: var(--color-brand-charcoal-600); }
-  .bg-brand-charcoal-700 { background-color: var(--color-brand-charcoal-700); }
-  .bg-brand-charcoal-800 { background-color: var(--color-brand-charcoal-800); }
-  .bg-brand-charcoal-900 { background-color: var(--color-brand-charcoal-900); }
-
-  .text-brand-charcoal-100 { color: var(--color-brand-charcoal-100); }
-  .text-brand-charcoal-200 { color: var(--color-brand-charcoal-200); }
-  .text-brand-charcoal-300 { color: var(--color-brand-charcoal-300); }
-  .text-brand-charcoal-400 { color: var(--color-brand-charcoal-400); }
-  .text-brand-charcoal-500 { color: var(--color-brand-charcoal-500); }
-  .text-brand-charcoal-600 { color: var(--color-brand-charcoal-600); }
-  .text-brand-charcoal-700 { color: var(--color-brand-charcoal-700); }
-  .text-brand-charcoal-800 { color: var(--color-brand-charcoal-800); }
-  .text-brand-charcoal-900 { color: var(--color-brand-charcoal-900); }
-
-  /* Standard Tailwind color utilities (500 shade) */
-  .bg-red-500 { background-color: var(--color-red-500); }
-  .bg-blue-500 { background-color: var(--color-blue-500); }
-  .bg-green-500 { background-color: var(--color-green-500); }
-  .bg-yellow-500 { background-color: var(--color-yellow-500); }
-  .bg-purple-500 { background-color: var(--color-purple-500); }
-  .bg-pink-500 { background-color: var(--color-pink-500); }
-
-  .text-red-500 { color: var(--color-red-500); }
-  .text-blue-500 { color: var(--color-blue-500); }
-  .text-green-500 { color: var(--color-green-500); }
-  .text-yellow-500 { color: var(--color-yellow-500); }
-  .text-purple-500 { color: var(--color-purple-500); }
-  .text-pink-500 { color: var(--color-pink-500); }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
+  .cursor-glow::before { content: none; }
 }

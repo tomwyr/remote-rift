@@ -2,19 +2,19 @@ import '../models/download.dart';
 
 const downloads = [
   DownloadOption(
-    title: "Desktop",
-    description: "Run the client connector to link your League account and enable remote access.",
+    title: 'Desktop application',
+    description: 'Connect Remote Rift to the League Client on your computer.',
     links: [
-      DownloadLink(label: "Windows"),
-      DownloadLink(label: "macOS"),
+      DownloadLink(label: 'Windows'),
+      DownloadLink(label: 'macOS'),
     ],
   ),
   DownloadOption(
-    title: "Mobile",
-    description: "Use the app to queue, accept matches, and check status from your phone or watch.",
+    title: 'Mobile application',
+    description: 'Check queue status, manage the lobby, and respond to a found match.',
     links: [
-      DownloadLink(icon: "downloads/icon_app_store.svg"),
-      DownloadLink(icon: "downloads/icon_play_store.svg"),
+      DownloadLink(label: 'Android'),
+      DownloadLink(label: 'iOS'),
     ],
   ),
 ];

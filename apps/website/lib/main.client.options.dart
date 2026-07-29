@@ -8,7 +8,8 @@ import 'package:jaspr/client.dart';
 
 import 'package:remote_rift_website/components/back_to_top.dart'
     deferred as _back_to_top;
-import 'package:remote_rift_website/components/navbar.dart' deferred as _navbar;
+import 'package:remote_rift_website/components/cursor_tracker.dart'
+    deferred as _cursor_tracker;
 
 /// Default [ClientOptions] for use with your Jaspr project.
 ///
@@ -32,9 +33,9 @@ ClientOptions get defaultClientOptions => ClientOptions(
       (p) => _back_to_top.BackToTop(),
       loader: _back_to_top.loadLibrary,
     ),
-    'navbar': ClientLoader(
-      (p) => _navbar.Navbar(),
-      loader: _navbar.loadLibrary,
+    'cursor_tracker': ClientLoader(
+      (p) => _cursor_tracker.CursorTracker(),
+      loader: _cursor_tracker.loadLibrary,
     ),
   },
 );

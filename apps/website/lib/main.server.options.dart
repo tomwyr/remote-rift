@@ -7,7 +7,8 @@
 import 'package:jaspr/server.dart';
 import 'package:remote_rift_website/components/back_to_top.dart'
     as _back_to_top;
-import 'package:remote_rift_website/components/navbar.dart' as _navbar;
+import 'package:remote_rift_website/components/cursor_tracker.dart'
+    as _cursor_tracker;
 import 'package:remote_rift_website/constants/theme.dart' as _theme;
 
 /// Default [ServerOptions] for use with your Jaspr project.
@@ -30,7 +31,9 @@ ServerOptions get defaultServerOptions => ServerOptions(
   clientId: 'main.client.dart.js',
   clients: {
     _back_to_top.BackToTop: ClientTarget<_back_to_top.BackToTop>('back_to_top'),
-    _navbar.Navbar: ClientTarget<_navbar.Navbar>('navbar'),
+    _cursor_tracker.CursorTracker: ClientTarget<_cursor_tracker.CursorTracker>(
+      'cursor_tracker',
+    ),
   },
   styles: () => [..._theme.styles],
 );
