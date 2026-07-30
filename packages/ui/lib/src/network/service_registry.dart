@@ -56,8 +56,8 @@ class ServiceRegistry {
           event.service.resolve(discovery.serviceResolver);
 
         case BonsoirDiscoveryServiceResolvedEvent():
-          if (event.service case BonsoirService(:var host?, :var port)) {
-            return ServiceAddress.normalized(host: host, port: port);
+          if (event.service case BonsoirService(:var hostAddress?, :var port)) {
+            return ServiceAddress.normalized(host: hostAddress, port: port);
           }
 
         default:

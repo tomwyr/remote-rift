@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:remote_rift_core/remote_rift_core.dart';
+import 'package:remote_rift_ui/remote_rift_ui.dart';
 import 'package:remote_rift_utils/remote_rift_utils.dart';
 
 import '../../../data/models.dart';
@@ -8,34 +9,38 @@ import '../../../i18n/strings.g.dart';
 import '../game_cubit.dart';
 
 class GameQueueSelectionButton extends StatelessWidget {
-  const GameQueueSelectionButton({super.key, required this.loading, required this.availableQueues});
+  const GameQueueSelectionButton({
+    super.key,
+    required this.loading,
+    required this.availableQueues,
+  });
 
   final bool loading;
   final List<GameQueue> availableQueues;
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
+    final colors = context.remoteRiftTheme.colorScheme;
 
-    return Transform.translate(
-      offset: Offset(-12, 0),
-      child: TextButton(
-        style: TextButton.styleFrom(
-          minimumSize: Size(0, 32),
-          tapTargetSize: .shrinkWrap,
-          maximumSize: Size(.infinity, 32),
-          padding: .symmetric(horizontal: 12, vertical: 4),
-          backgroundColor: Colors.grey[200],
-          foregroundColor: textTheme.bodyMedium?.color,
+    return TextButton.icon(
+      style: TextButton.styleFrom(
+        minimumSize: const .new(0, 40),
+        tapTargetSize: .shrinkWrap,
+        padding: const .symmetric(horizontal: 10, vertical: 6),
+        foregroundColor: colors.navy,
+        shape: RoundedRectangleBorder(
+          borderRadius: .circular(10),
+          side: .new(color: colors.navy.withValues(alpha: 0.45)),
         ),
-        onPressed: !loading && availableQueues.isNotEmpty
-            ? () => GameQueueSelectionModal.selectAndUpdateQueue(
-                context,
-                availableQueues: availableQueues,
-              )
-            : null,
-        child: Text(t.gameQueue.selectButton),
       ),
+      onPressed: !loading && availableQueues.isNotEmpty
+          ? () => GameQueueSelectionModal.selectAndUpdateQueue(
+              context,
+              availableQueues: availableQueues,
+            )
+          : null,
+      icon: const Icon(Icons.tune, size: 18),
+      label: Text(t.gameQueue.selectButton),
     );
   }
 }
@@ -56,7 +61,10 @@ class GameQueueSelectionModal extends StatelessWidget {
     }
   }
 
-  static Future<GameQueue?> show(BuildContext context, {required List<GameQueue> availableQueues}) {
+  static Future<GameQueue?> show(
+    BuildContext context, {
+    required List<GameQueue> availableQueues,
+  }) {
     final cubit = context.read<GameCubit>();
 
     final heightRatio = switch (MediaQuery.orientationOf(context)) {
@@ -69,7 +77,7 @@ class GameQueueSelectionModal extends StatelessWidget {
       context: context,
       showDragHandle: true,
       isScrollControlled: true,
-      constraints: BoxConstraints(maxHeight: maxHeight),
+      constraints: .new(maxHeight: maxHeight, minWidth: .infinity),
       builder: (_) => BlocProvider.value(
         value: cubit,
         child: GameQueueSelectionModal(availableQueues: availableQueues),
@@ -90,19 +98,13 @@ class GameQueueSelectionModal extends StatelessWidget {
       top: false,
       bottom: false,
       child: ListView(
-        padding: .symmetric(horizontal: 12),
+        padding: const .fromLTRB(20, 4, 20, 0),
         children: [
-          Padding(
-            padding: const .symmetric(horizontal: 16),
-            child: Text(
-              t.gameQueue.selectionTitle,
-              style: Theme.of(context).textTheme.headlineSmall,
-            ),
-          ),
-          const SizedBox(height: 8),
+          const _QueueSelectionHeader(),
+          const SizedBox(height: 12),
 
           for (var (index, (:title, :queues)) in _resolveData().indexed) ...[
-            if (index > 0) Divider(indent: 12, endIndent: 12, thickness: 0.5),
+            if (index > 0) const SizedBox(height: 12),
             _QueuesSection(
               title: title,
               queues: queues,
@@ -121,19 +123,56 @@ class GameQueueSelectionModal extends StatelessWidget {
     final pvpQueues = availableQueues
         .where((queue) => queue.category == .pvp)
         .groupedBy((queue) => queue.group)
-        .mapValues((queues) => queues.orderedBy((queue) => queue.enabled ? 0 : 1))
+        .mapValues(
+          (queues) => queues.orderedBy((queue) => queue.enabled ? 0 : 1),
+        )
         .records
         .orderedBy((item) => item.$1.orderRank);
 
     return [
-      for (var (group, queues) in pvpQueues) (title: group.displayName, queues: queues),
-      if (aiQueues.isNotEmpty) (title: t.gameQueue.selectionAiTitle, queues: aiQueues),
+      for (var (group, queues) in pvpQueues)
+        (title: group.displayName, queues: queues),
+      if (aiQueues.isNotEmpty)
+        (title: t.gameQueue.selectionAiTitle, queues: aiQueues),
     ];
   }
 }
 
+class _QueueSelectionHeader extends StatelessWidget {
+  const _QueueSelectionHeader();
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const .only(bottom: 14),
+      child: Column(
+        crossAxisAlignment: .start,
+        children: [
+          Text(
+            t.home.gameModeLabel.toUpperCase(),
+            style: Theme.of(context).textTheme.labelSmall?.copyWith(
+              color: context.remoteRiftTheme.colorScheme.gold,
+              fontWeight: .w800,
+              letterSpacing: 1.2,
+            ),
+          ),
+          const SizedBox(height: 5),
+          Text(
+            t.gameQueue.selectionTitle,
+            style: Theme.of(context).textTheme.headlineSmall,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class _QueuesSection extends StatelessWidget {
-  const _QueuesSection({required this.title, required this.queues, required this.onSelect});
+  const _QueuesSection({
+    required this.title,
+    required this.queues,
+    required this.onSelect,
+  });
 
   final String title;
   final Iterable<GameQueue> queues;
@@ -145,21 +184,31 @@ class _QueuesSection extends StatelessWidget {
       crossAxisAlignment: .start,
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+          padding: const .only(bottom: 6),
           child: Text(
-            title,
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: .bold),
+            title.toUpperCase(),
+            style: Theme.of(context).textTheme.labelMedium?.copyWith(
+              fontWeight: .w800,
+              letterSpacing: 0.9,
+            ),
           ),
         ),
 
         for (var queue in queues)
-          ListTile(
-            shape: RoundedRectangleBorder(borderRadius: .circular(12)),
-            enabled: queue.enabled,
-            visualDensity: .compact,
-            onTap: () => onSelect(queue),
-            title: Text(queue.name),
-            trailing: queue.enabled ? Icon(Icons.chevron_right) : null,
+          Column(
+            children: [
+              ListTile(
+                contentPadding: const .symmetric(horizontal: 14),
+                enabled: queue.enabled,
+                visualDensity: .standard,
+                onTap: () => onSelect(queue),
+                title: Text(queue.name),
+                trailing: queue.enabled
+                    ? const Icon(Icons.chevron_right)
+                    : const Icon(Icons.block),
+              ),
+              if (queue != queues.last) const Divider(height: 1),
+            ],
           ),
       ],
     );

@@ -11,6 +11,8 @@ class GameDataBody extends StatelessWidget {
     required this.title,
     required this.description,
     this.child,
+    this.tone = .neutral,
+    this.icon,
   });
 
   final String? queueName;
@@ -18,6 +20,8 @@ class GameDataBody extends StatelessWidget {
   final String title;
   final String description;
   final Widget? child;
+  final RiftStatusTone tone;
+  final IconData? icon;
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +45,8 @@ class GameDataBody extends StatelessWidget {
           title: title,
           titleFontSize: .large,
           description: description,
+          tone: tone,
+          icon: icon,
         ),
         ?child,
       ],

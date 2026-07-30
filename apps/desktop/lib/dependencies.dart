@@ -41,7 +41,7 @@ class Dependencies {
           return 'RemoteRift-$releaseTag-$platform.zip';
         },
       ),
-      updateRunner: UpdateRunner.platform(
+      updateRunner: .platform(
         applicationLabel: 'remote-rift',
         macosBundleName: 'Remote Rift.app',
         windowsExecutableName: 'RemoteRift.exe',

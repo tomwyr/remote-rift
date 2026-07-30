@@ -13,7 +13,7 @@ class App extends StatelessWidget {
       title: t.app.title,
       theme: RemoteRiftTheme.light(),
       builder: RemoteRiftTheme.builder,
-      home: const HomePage(),
+      home: HomePage.builder(),
     );
   }
 }

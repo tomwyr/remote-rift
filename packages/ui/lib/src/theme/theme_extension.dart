@@ -19,9 +19,9 @@ class RemoteRiftThemeExtension extends ThemeExtension<RemoteRiftThemeExtension> 
 
   static Size buttonSize(RemoteRiftButtonVariant variant) {
     return switch (variant) {
-      .large => Size(double.infinity, 48),
-      .medium => Size(double.infinity, 44),
-      .small => Size(double.infinity, 40),
+      .large => Size(.infinity, 48),
+      .medium => Size(.infinity, 44),
+      .small => Size(.infinity, 40),
     };
   }
 

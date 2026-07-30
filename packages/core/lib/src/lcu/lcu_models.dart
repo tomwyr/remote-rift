@@ -2,7 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'lcu_models.g.dart';
 
-@JsonEnum(alwaysCreate: true, fieldRename: FieldRename.pascal)
+@JsonEnum(alwaysCreate: true, fieldRename: .pascal)
 enum GameflowPhase {
   none,
   lobby,
@@ -107,7 +107,7 @@ class MatchmakingSearch {
   Map<String, dynamic> toJson() => _$MatchmakingSearchToJson(this);
 }
 
-@JsonEnum(fieldRename: FieldRename.pascal)
+@JsonEnum(fieldRename: .pascal)
 enum MatchmakingSearchState { invalid, searching, found }
 
 @JsonSerializable()
@@ -123,10 +123,10 @@ class ReadyCheck {
   Map<String, dynamic> toJson() => _$ReadyCheckToJson(this);
 }
 
-@JsonEnum(fieldRename: FieldRename.pascal)
+@JsonEnum(fieldRename: .pascal)
 enum ReadyCheckState { invalid, inProgress }
 
-@JsonEnum(fieldRename: FieldRename.pascal)
+@JsonEnum(fieldRename: .pascal)
 enum ReadyCheckResponse { none, accepted, declined }
 
 @JsonSerializable()

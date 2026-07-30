@@ -46,6 +46,14 @@ class ConnectionError extends ConnectionState {
   List<Object?> get props => [cause, reconnectTriggered];
 }
 
+extension ConnectionStateStrings on ConnectionState {
+  String get statusLabel => switch (this) {
+    Connected() => t.connection.statusReady,
+    Connecting() || Initial() => t.connection.statusConnecting,
+    _ => t.connection.statusCheck,
+  };
+}
+
 enum ConnectionIncompatibility { apiVersionTooLow }
 
 enum ConnectionErrorCause {

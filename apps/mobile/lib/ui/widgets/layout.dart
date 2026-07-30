@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:remote_rift_ui/remote_rift_ui.dart';
 
 import 'fit_viewport_scroll_view.dart';
 
@@ -9,6 +10,8 @@ class BasicLayout extends StatelessWidget {
     this.description,
     this.body,
     this.loading = false,
+    this.tone = .neutral,
+    this.icon,
     this.action,
     this.secondaryAction,
   }) : assert(
@@ -20,6 +23,8 @@ class BasicLayout extends StatelessWidget {
   final String? description;
   final Widget? body;
   final bool loading;
+  final RiftStatusTone tone;
+  final IconData? icon;
   final BasicLayoutAction? action;
   final BasicLayoutAction? secondaryAction;
 
@@ -39,7 +44,13 @@ class BasicLayout extends StatelessWidget {
       crossAxisAlignment: .start,
       children: [
         if (title case var title?)
-          BasicLayoutSection(title: title, titleFontSize: .large, description: description),
+          BasicLayoutSection(
+            title: title,
+            titleFontSize: .large,
+            description: description,
+            tone: tone,
+            icon: icon,
+          ),
         if (body case var body?) ...[SizedBox(height: 12), body],
       ],
     );
@@ -61,7 +72,10 @@ class BasicLayout extends StatelessWidget {
             SizedBox(height: 12),
             ElevatedButton(onPressed: onPressed, child: Text(label)),
           ],
-          if (secondaryAction case BasicLayoutAction(:var label, :var onPressed)) ...[
+          if (secondaryAction case BasicLayoutAction(
+            :var label,
+            :var onPressed,
+          )) ...[
             SizedBox(height: 12),
             OutlinedButton(onPressed: onPressed, child: Text(label)),
           ],
@@ -79,6 +93,8 @@ class BasicLayoutAction {
   final VoidCallback? onPressed;
 }
 
+enum RiftStatusTone { neutral, active, ready, warning, error }
+
 enum BasicLayoutSectionFontSize { medium, large }
 
 class BasicLayoutSection extends StatelessWidget {
@@ -89,6 +105,8 @@ class BasicLayoutSection extends StatelessWidget {
     this.titlePlaceholder,
     this.titleFontSize = .medium,
     this.description,
+    this.tone = .neutral,
+    this.icon,
   }) : assert(
          title != null || titlePlaceholder != null,
          'Either the title or title placeholder must be provided.',
@@ -99,37 +117,94 @@ class BasicLayoutSection extends StatelessWidget {
   final Widget? titlePlaceholder;
   final BasicLayoutSectionFontSize titleFontSize;
   final String? description;
+  final RiftStatusTone tone;
+  final IconData? icon;
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
 
-    return Column(
-      crossAxisAlignment: .start,
-      children: [
-        if (label case var label?)
-          Text(label, style: Theme.of(context).textTheme.labelMedium?.copyWith(fontWeight: .w300))
-        else
-          const SizedBox(height: 4),
+    final colors = context.remoteRiftTheme.colorScheme;
+    final accent = switch (tone) {
+      .neutral => colors.gold,
+      .active => colors.cyan,
+      .ready => colors.ready,
+      .warning => colors.warning,
+      .error => colors.error,
+    };
 
-        if (title case var title?)
-          Text(
-            title,
-            style: switch (titleFontSize) {
-              .medium => textTheme.titleMedium,
-              .large => textTheme.headlineMedium,
-            },
-          )
-        else if (titlePlaceholder case var titleWidget?) ...[
-          const SizedBox(height: 4),
-          titleWidget,
+    return Container(
+      width: .infinity,
+      padding: const .all(16),
+      decoration: BoxDecoration(
+        color: colors.navy.withValues(alpha: 0.025),
+        border: .all(color: colors.navy.withValues(alpha: 0.12)),
+        borderRadius: .circular(16),
+      ),
+      child: Column(
+        crossAxisAlignment: .start,
+        children: [
+          if (label case var label?)
+            Text(
+              label.toUpperCase(),
+              style: textTheme.labelSmall?.copyWith(
+                color: colors.navy.withValues(alpha: 0.72),
+                fontWeight: .w800,
+                letterSpacing: 1.2,
+              ),
+            ),
+          if (label != null) const SizedBox(height: 8),
+          if (title case var title?)
+            Row(
+              crossAxisAlignment: .start,
+              children: [
+                if (icon case var icon?) ...[
+                  _StatusSectionIcon(icon: icon, color: accent),
+                  const SizedBox(width: 12),
+                ],
+                Expanded(
+                  child: Text(
+                    title,
+                    style: switch (titleFontSize) {
+                      .medium => textTheme.titleLarge,
+                      .large => textTheme.headlineMedium,
+                    },
+                  ),
+                ),
+              ],
+            )
+          else if (titlePlaceholder case var titleWidget?) ...[
+            const SizedBox(height: 2),
+            titleWidget,
+          ],
+          if (description case var description?) ...[
+            const SizedBox(height: 8),
+            Text(
+              description,
+              style: textTheme.bodyLarge?.copyWith(height: 1.4),
+            ),
+          ],
         ],
+      ),
+    );
+  }
+}
 
-        if (description case var description?) ...[
-          SizedBox(height: 2),
-          Text(description, style: Theme.of(context).textTheme.bodyLarge),
-        ],
-      ],
+class _StatusSectionIcon extends StatelessWidget {
+  const _StatusSectionIcon({required this.icon, required this.color});
+
+  final IconData icon;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const .all(8),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.12),
+        borderRadius: .circular(10),
+      ),
+      child: Icon(icon, color: color, size: 22),
     );
   }
 }

@@ -2,14 +2,14 @@ app:
   title: "Remote Rift"
 
 gameState:
-  preGameTitle: "Pre game"
-  preGameDescription: "Create a lobby to start queuing for a game."
+  preGameTitle: "Ready to queue"
+  preGameDescription: "Choose a queue, then create a lobby."
   lobbyIdleTitle: "In lobby"
   lobbyIdleDescription: "Start matchmaking to search for a game."
-  lobbySearchingTitle: "Searching game"
-  lobbySearchingDescription: "Wait for matchmaking to find a suitable game."
+  lobbySearchingTitle: "Searching for a match"
+  lobbySearchingDescription: "Matchmaking is looking for a game."
   foundPendingTitle: "Game found"
-  foundPendingDescription: "Waiting for confirmation to join the game."
+  foundPendingDescription: "Accept the ready check before time runs out."
   foundPendingTimeLeft: "Time left"
   foundAcceptedTitle: "Game accepted"
   foundAcceptedDescription: "Waiting for other players to join before starting the game."
@@ -18,7 +18,7 @@ gameState:
   inGameTitle: "Game in progress"
   inGameDescription: "Wait for the current game to finish before queueing again."
   unknownTitle: "Unknown game state"
-  unknownDescription: "The game is running, but its current state can't be identified.\nTry restarting the client and the application, or join a game manually this time around."
+  unknownDescription: "The game is running, but its current state cannot be identified. Restart the League Client and Remote Rift Desktop, or join manually this time."
 
 gameError:
   unableToConnectTitle: "Unable to connect"
@@ -32,22 +32,25 @@ gameQueue:
   selectionTitle: "Available Queues"
   selectionAiTitle: "CO-OP vs. AI"
   groupLabel:
-    summonersRift: "Summonter's Rift"
+    summonersRift: "Summoner's Rift"
     aram: "ARAM"
     alternative: "Alternative"
     other: "Other"
 
 connection:
+  statusReady: "Local link ready"
+  statusConnecting: "Connecting"
+  statusCheck: "Check connection"
   connectingTitle: "Connecting..."
-  connectingDescription: "Initializing communication with the game client."
+  connectingDescription: "Looking for Remote Rift Desktop on your local network."
   loadingTitle: "Checking game state..."
-  loadingDescription: "Awaiting details about the current game session."
+  loadingDescription: "Reading the current League Client session."
   incompatibleTitle: "Update required"
   incompatibleDescription: "Your desktop application is out of date and isn't compatible anymore. Please update it to continue."
   incompatibleRetry: "Refresh"
   errorTitle: "Connection error"
-  errorUnableToConnectDescription: "Unable to connect to the desktop application. Make sure it's running and that both devices are on the same network."
-  errorUnknownDescription: "Unable to connect to the desktop application."
+  errorUnableToConnectDescription: "Remote Rift Desktop could not be reached. Make sure it is running and both devices are on the same local network."
+  errorUnknownDescription: "Remote Rift Desktop could not be reached."
   errorRetry: "Reconnect"
 
 home:

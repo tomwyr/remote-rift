@@ -18,7 +18,7 @@ class AppTray {
     return Menu(
       items: [
         MenuItem(key: AppTrayEntry.open.name, label: t.tray.openLabel),
-        MenuItem.separator(),
+        .separator(),
         MenuItem(key: AppTrayEntry.quit.name, label: t.tray.quitLabel),
       ],
     );

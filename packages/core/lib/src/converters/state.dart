@@ -7,7 +7,7 @@ class RemoteRiftStateConverter extends JsonConverter<RemoteRiftState, Map<String
 
   @override
   RemoteRiftState fromJson(Map<String, dynamic> json) {
-    return RemoteRiftState.fromJson(json);
+    return .fromJson(json);
   }
 
   @override

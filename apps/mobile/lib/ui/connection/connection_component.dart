@@ -44,6 +44,8 @@ class ConnectionComponent extends StatelessWidget {
               title: t.connection.connectingTitle,
               description: t.connection.connectingDescription,
               loading: true,
+              tone: .active,
+              icon: Icons.sync,
             ),
           ),
 
@@ -51,17 +53,23 @@ class ConnectionComponent extends StatelessWidget {
             title: t.connection.errorTitle,
             description: cause.description,
             loading: reconnectTriggered,
+            tone: .error,
+            icon: Icons.wifi_off,
             action: .new(label: t.connection.errorRetry, onPressed: cubit.reconnectAfterError),
           ),
 
           ConnectedWithError(:var cause) => BasicLayout(
             title: cause.title,
             description: cause.description,
+            tone: .error,
+            icon: Icons.error_outline,
           ),
 
           ConnectedIncompatible() => BasicLayout(
             title: t.connection.incompatibleTitle,
             description: t.connection.incompatibleDescription,
+            tone: .warning,
+            icon: Icons.system_update_alt,
             action: .new(
               label: t.connection.incompatibleRetry,
               onPressed: cubit.reconnectAfterIncompatibility,
