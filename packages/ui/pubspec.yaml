@@ -10,4 +10,4 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  bonsoir: ^6.0.1
+  bonsoir: ^7.1.4
