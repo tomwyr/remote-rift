@@ -19,7 +19,7 @@ const requirements = 'Requires Remote Rift Desktop, the League Client, and both 
 const setupSteps = [
   SetupStep('Run Remote Rift Desktop', 'Starts the local connector.'),
   SetupStep('Start the League Client', 'Remote Rift reads the available matchmaking state.'),
-  SetupStep('Open Remote Rift Mobile', 'It finds the desktop connector on the same local network.'),
+  SetupStep('Open Remote Rift Mobile', 'Remote Rift Mobile detects the desktop connector on the same local network.'),
   SetupStep('Manage matchmaking', 'Available actions depend on the current client state.'),
 ];
 
@@ -45,8 +45,24 @@ const statusItems = [
 ];
 
 const exceptionStates = [
-  StatusItem('Connection unavailable', 'Remote Rift Desktop or the League Client is not running or cannot be reached.', advice: 'Start both applications, then reopen Remote Rift Mobile.'),
-  StatusItem('Same local network required', 'The phone and computer are connected to different networks.', advice: 'Connect both devices to the same local network, then try again.'),
-  StatusItem('Update required', 'The desktop and mobile applications use incompatible versions.', advice: 'Update Remote Rift Desktop, then reopen the mobile application.'),
-  StatusItem('Multiple networks detected', 'Remote Rift Desktop found more than one possible network address.', advice: 'Use one active local network connection, then restart Remote Rift Desktop.'),
+  StatusItem(
+    'Connection unavailable',
+    'Remote Rift Desktop or the League Client is not running or cannot be reached.',
+    advice: 'Start both applications, then reopen Remote Rift Mobile.',
+  ),
+  StatusItem(
+    'Same local network required',
+    'The phone and computer are connected to different networks.',
+    advice: 'Connect both devices to the same local network, then try again.',
+  ),
+  StatusItem(
+    'Update required',
+    'The desktop and mobile applications use incompatible versions.',
+    advice: 'Update Remote Rift Desktop, then reopen the mobile application.',
+  ),
+  StatusItem(
+    'Multiple networks detected',
+    'Remote Rift Desktop found more than one possible network address.',
+    advice: 'Use one active local network connection, then restart Remote Rift Desktop.',
+  ),
 ];

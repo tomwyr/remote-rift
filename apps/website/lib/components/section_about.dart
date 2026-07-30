@@ -28,7 +28,7 @@ class SectionAbout extends StatelessComponent {
             ),
             p(classes: 'my-6 max-w-[39rem] text-[1.15rem]', [
               .text(
-                'Remote Rift connects a desktop application to your phone. It shows queue status, manages a lobby, and provides controls when a match is found.',
+                'Use your phone to check queue and lobby status, manage supported matchmaking actions, and respond when a match is found.',
               ),
             ]),
             div(
