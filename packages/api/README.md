@@ -16,19 +16,6 @@ Automatic address resolution binds the service to a single suitable local networ
 > [!important]
 > If no address or multiple addresses are detected, startup is aborted and the host must be configured manually.
 
-## Assets
-
-The project uses the `_generate_assets_` script from `remote_rift_tools` to embed text-based assets directly into the compiled executable. This approach overcomes the limitation of Dart projects that cannot bundle assets and avoids distributing additional files alongside the binary.
-
-Running the script converts assets into `.asset.dart` files containing string constants. For example:
-
-- `pubspec.yaml` -> `lib/src/assets/pubspec.asset.dart`
-
-These files are then imported and used directly in the codebase.
-
-> [!important]
-> Because Dart does not yet support data assets in its build system, project assets must be generated manually whenever their source files change.
-
 ## Dependencies
 
 This section describes selected third-party packages used throughout the application:
@@ -82,10 +69,3 @@ Run `dart compile exe lib/src/cli/main.dart -o build/remoterift` from the `packa
 
 > [!tip]
 > Alternatively, use the `Connector: Build` VS Code task to compile the project. The resulting binary will be placed in `packages/api/build/remoterift`.
-
-### Generating assets
-
-Run `dart run remote_rift_tools:generate_asset pubspec lib/src/assets/pubspec.asset.dart` from the `packages/api` directory to generate the necessary assets as code.
-
-> [!tip]
-> Alternatively, use the `Connector: Generate Assets` VS Code task to generate assets. The resulting source will be placed in `packages/api/lib/src/assets`.

@@ -1,10 +1,9 @@
 import 'package:remote_rift_utils/remote_rift_utils.dart';
 
-import 'version.dart';
+import 'config.dart';
 
 class ApiServiceRepository {
-  Future<RemoteRiftApiServiceInfo> getServiceInfo() async {
-    final version = await ApiServiceVersion().load();
-    return RemoteRiftApiServiceInfo(version: version);
+  RemoteRiftApiServiceInfo getServiceInfo() {
+    return RemoteRiftApiServiceInfo(version: ApiServiceConfig.version);
   }
 }
