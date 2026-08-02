@@ -48,8 +48,7 @@ extension on ArgParser {
     );
     addOption(
       'host',
-      help:
-          'The host name or IP address of the API exposed to client applications.',
+      help: 'The host name or IP address of the API exposed to client applications.',
     );
     addOption(
       'port',

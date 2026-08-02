@@ -76,10 +76,7 @@ class ConnectionCubit extends Cubit<ConnectionState> {
         }
 
         switch (state) {
-          case Connecting() ||
-              ConnectedWithError() ||
-              ConnectionError() ||
-              Connected():
+          case Connecting() || ConnectedWithError() || ConnectionError() || Connected():
             // Can emit from the current state
             break;
           case Initial():

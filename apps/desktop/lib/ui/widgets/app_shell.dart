@@ -49,8 +49,7 @@ class DesktopAppShell extends StatelessWidget {
                     ),
                   ),
                   ?trailing,
-                  if (trailing != null && showUpdateAction)
-                    const SizedBox(width: 4),
+                  if (trailing != null && showUpdateAction) const SizedBox(width: 4),
                   if (showUpdateAction) UpdateButton.builder(),
                 ],
               ),

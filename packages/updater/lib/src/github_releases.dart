@@ -31,8 +31,7 @@ class GitHubReleases {
     if (response.statusCode != 200) {
       return null;
     }
-    final releases = (jsonDecode(response.body) as List)
-        .cast<Map<String, dynamic>>();
+    final releases = (jsonDecode(response.body) as List).cast<Map<String, dynamic>>();
     for (var release in releases) {
       final tagName = release['tag_name'];
       if (tagName case String value when value.startsWith(tagPrefix)) {

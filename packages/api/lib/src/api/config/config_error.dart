@@ -33,8 +33,7 @@ class AddressNotFound implements RemoteRiftApiConfigError, AddressLookupError {
   String toString() => 'No IPv4 network is connected';
 }
 
-class MultipleAddressesFound
-    implements RemoteRiftApiConfigError, AddressLookupError {
+class MultipleAddressesFound implements RemoteRiftApiConfigError, AddressLookupError {
   @override
   String toString() => 'Multiple IPv4 networks are connected';
 }

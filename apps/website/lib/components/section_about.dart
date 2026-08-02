@@ -18,9 +18,13 @@ class SectionAbout extends StatelessComponent {
             'mx-auto grid min-h-[calc(100vh-5rem)] max-w-304 grid-cols-[minmax(0,1fr)_minmax(22rem,.9fr)] items-center gap-16 px-6 py-12 max-[800px]:min-h-0 max-[800px]:grid-cols-1 max-[800px]:gap-10',
         [
           div([
-            span(classes: 'mb-[.9rem] block text-[.75rem] font-extrabold tracking-[.16em] text-gold-ink', [
-              .text('LOCAL LEAGUE COMPANION'),
-            ]),
+            span(
+              classes:
+                  'mb-[.9rem] block text-[.75rem] font-extrabold tracking-[.16em] text-gold-ink',
+              [
+                .text('LOCAL LEAGUE COMPANION'),
+              ],
+            ),
             h1(
               classes:
                   'max-w-[11ch] font-serif text-[clamp(3rem,6vw,5.6rem)] font-bold leading-[1.06] tracking-[-.035em] max-[800px]:max-w-[12ch]',

@@ -14,12 +14,16 @@ class StatusItem {
   final bool active;
 }
 
-const requirements = 'Requires Remote Rift Desktop, the League Client, and both devices on the same local network.';
+const requirements =
+    'Requires Remote Rift Desktop, the League Client, and both devices on the same local network.';
 
 const setupSteps = [
   SetupStep('Run Remote Rift Desktop', 'Starts the local connector.'),
   SetupStep('Start the League Client', 'Remote Rift reads the available matchmaking state.'),
-  SetupStep('Open Remote Rift Mobile', 'Remote Rift Mobile detects the desktop connector on the same local network.'),
+  SetupStep(
+    'Open Remote Rift Mobile',
+    'Remote Rift Mobile detects the desktop connector on the same local network.',
+  ),
   SetupStep('Manage matchmaking', 'Available actions depend on the current client state.'),
 ];
 

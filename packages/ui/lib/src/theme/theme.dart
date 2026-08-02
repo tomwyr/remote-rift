@@ -66,9 +66,7 @@ class RemoteRiftTheme {
           borderSide: .new(color: colors.cyan, width: 2),
         ),
         floatingLabelStyle: WidgetStateTextStyle.resolveWith((states) {
-          final color = states.contains(WidgetState.focused)
-              ? colors.cyan
-              : Colors.grey;
+          final color = states.contains(WidgetState.focused) ? colors.cyan : Colors.grey;
           return TextStyle(color: color);
         }),
       ),

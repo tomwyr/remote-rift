@@ -19,7 +19,9 @@ class _CursorTrackerState extends State<CursorTracker> {
   void initState() {
     super.initState();
     if (kIsWeb) {
-      _pointerSubscription = EventStreamProvider<MouseEvent>('pointermove').forTarget(document).listen(_trackPointer);
+      _pointerSubscription = EventStreamProvider<MouseEvent>(
+        'pointermove',
+      ).forTarget(document).listen(_trackPointer);
     }
   }
 

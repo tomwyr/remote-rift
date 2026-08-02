@@ -32,9 +32,7 @@ class RemoteRiftApiServiceRunner {
     bool resolveAddressOnMany,
   ) async {
     final configSource = RemoteRiftApiConfigSource.systemLookup(
-      resolveAddress: resolveAddressOnMany
-          ? (addresses) => addresses.first
-          : null,
+      resolveAddress: resolveAddressOnMany ? (addresses) => addresses.first : null,
     );
     final RemoteRiftApiConfig(:host, :port) = await .resolve(
       source: configSource,

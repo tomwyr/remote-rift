@@ -151,8 +151,7 @@ class _StatusDetails extends StatelessWidget {
           )
         else if (icon case final icon?)
           _StatusIcon(icon: icon, accent: accent),
-        if ((title != null || icon != null) && description != null)
-          const SizedBox(height: 10),
+        if ((title != null || icon != null) && description != null) const SizedBox(height: 10),
         if (description case final description?)
           Text(
             description,

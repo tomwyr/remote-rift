@@ -130,10 +130,8 @@ class GameQueueSelectionModal extends StatelessWidget {
         .orderedBy((item) => item.$1.orderRank);
 
     return [
-      for (var (group, queues) in pvpQueues)
-        (title: group.displayName, queues: queues),
-      if (aiQueues.isNotEmpty)
-        (title: t.gameQueue.selectionAiTitle, queues: aiQueues),
+      for (var (group, queues) in pvpQueues) (title: group.displayName, queues: queues),
+      if (aiQueues.isNotEmpty) (title: t.gameQueue.selectionAiTitle, queues: aiQueues),
     ];
   }
 }
@@ -203,9 +201,7 @@ class _QueuesSection extends StatelessWidget {
                 visualDensity: .standard,
                 onTap: () => onSelect(queue),
                 title: Text(queue.name),
-                trailing: queue.enabled
-                    ? const Icon(Icons.chevron_right)
-                    : const Icon(Icons.block),
+                trailing: queue.enabled ? const Icon(Icons.chevron_right) : const Icon(Icons.block),
               ),
               if (queue != queues.last) const Divider(height: 1),
             ],

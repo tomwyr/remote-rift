@@ -38,8 +38,7 @@ extension on Router {
     String route(String value) => '/session/$value';
 
     mountWs(route('watch'), (webSocket) async {
-      await for (var session
-          in RemoteRiftConnector().getCurrentSessionStream()) {
+      await for (var session in RemoteRiftConnector().getCurrentSessionStream()) {
         if (webSocket.status == .closed) break;
         webSocket.sink.addJson(session.toJson());
       }

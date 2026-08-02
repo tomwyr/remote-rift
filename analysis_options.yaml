@@ -6,3 +6,7 @@ analyzer:
         prefer_html_components: true
         sort_children_last: true
         styles_ordering: true
+
+formatter:
+  page_width: 100
+  trailing_commas: preserve
