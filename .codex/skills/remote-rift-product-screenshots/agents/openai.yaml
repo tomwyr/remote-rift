@@ -1,0 +1,4 @@
+interface:
+  display_name: "Remote Rift Screenshots"
+  short_description: "Capture Remote Rift product walkthrough screenshots."
+  default_prompt: "Use $remote-rift-product-screenshots to retake Remote Rift product screenshots and update docs."
