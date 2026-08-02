@@ -54,16 +54,32 @@ class SectionAbout extends StatelessComponent {
             ),
           ]),
           figure(
-            classes:
-                'm-0 border border-gold bg-panel p-3 shadow-[12px_12px_0_color-mix(in_srgb,var(--color-navy)_16%,transparent)]',
+            classes: 'm-0 flex w-fit max-w-full justify-self-center flex-col items-center gap-4',
             [
-              img(
-                src: 'images/showcase/showcase.png',
-                alt: 'Example Remote Rift ready-check screen showing a game found state',
+              div(
+                classes:
+                    'rounded-[3.15rem] border-[.45rem] border-[#1b1e24] bg-[#1b1e24] p-[.18rem] shadow-[12px_12px_0_color-mix(in_srgb,var(--color-navy)_16%,transparent)]',
+                [
+                  div(
+                    classes:
+                        'h-[min(38rem,calc(100vh-12rem))] aspect-[1206/2622] overflow-hidden rounded-[2.65rem] bg-canvas max-[800px]:h-[min(36rem,74vh)]',
+                    [
+                      img(
+                        src: 'images/showcase/showcase.png',
+                        alt: 'Remote Rift Mobile showing a game found ready-check countdown',
+                        classes: 'block h-full w-full object-cover',
+                      ),
+                    ],
+                  ),
+                ],
               ),
-              figcaption(classes: 'px-1 pt-3 text-[.8rem] tracking-[.05em] text-highlight', [
-                .text('Respond to a found match from your phone.'),
-              ]),
+              figcaption(
+                classes:
+                    'w-full max-w-[22rem] px-4 text-center text-[.8rem] leading-5 tracking-[.05em] text-highlight',
+                [
+                  .text('Accept a found match from your phone.'),
+                ],
+              ),
             ],
           ),
         ],

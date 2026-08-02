@@ -58,7 +58,7 @@ class RemoteRiftTheme {
         shape: const RoundedRectangleBorder(
           borderRadius: .vertical(top: .circular(28)),
         ),
-        dragHandleColor: colors.gold,
+        dragHandleColor: colors.navy.withValues(alpha: 0.35),
       ),
       drawerTheme: DrawerThemeData(backgroundColor: colors.canvas),
       inputDecorationTheme: InputDecorationTheme(
