@@ -9,7 +9,7 @@ class AppWindow {
     await Future.wait([
       windowManager.setAlignment(_resolveAlignment()),
       windowManager.setTitleBarStyle(_resolveTitleBarStyle()),
-      windowManager.setSize(Size(300, 400)),
+      windowManager.setSize(Size(320, 440)),
       windowManager.setResizable(false),
       windowManager.setPreventClose(true),
     ]);

@@ -30,7 +30,7 @@ class RemoteRiftTheme {
       textTheme: Typography.material2021().black.apply(
         bodyColor: colors.navy,
         displayColor: colors.navy,
-        fontFamily: 'Inter',
+        fontFamily: 'packages/remote_rift_ui/Inter',
       ),
       appBarTheme: AppBarTheme(
         backgroundColor: colors.canvas,
@@ -41,7 +41,9 @@ class RemoteRiftTheme {
         centerTitle: false,
         actionsPadding: .only(right: 8),
       ),
-      dividerTheme: DividerThemeData(color: colors.gold.withValues(alpha: 0.65)),
+      dividerTheme: DividerThemeData(
+        color: colors.gold.withValues(alpha: 0.65),
+      ),
       cardTheme: CardThemeData(
         color: colors.canvas,
         elevation: 0,
@@ -53,14 +55,20 @@ class RemoteRiftTheme {
       bottomSheetTheme: BottomSheetThemeData(
         backgroundColor: colors.canvas,
         modalBackgroundColor: colors.canvas,
-        shape: const RoundedRectangleBorder(borderRadius: .vertical(top: .circular(28))),
+        shape: const RoundedRectangleBorder(
+          borderRadius: .vertical(top: .circular(28)),
+        ),
         dragHandleColor: colors.gold,
       ),
       drawerTheme: DrawerThemeData(backgroundColor: colors.canvas),
       inputDecorationTheme: InputDecorationTheme(
-        focusedBorder: UnderlineInputBorder(borderSide: .new(color: colors.cyan, width: 2)),
+        focusedBorder: UnderlineInputBorder(
+          borderSide: .new(color: colors.cyan, width: 2),
+        ),
         floatingLabelStyle: WidgetStateTextStyle.resolveWith((states) {
-          final color = states.contains(WidgetState.focused) ? colors.cyan : Colors.grey;
+          final color = states.contains(WidgetState.focused)
+              ? colors.cyan
+              : Colors.grey;
           return TextStyle(color: color);
         }),
       ),
@@ -97,16 +105,25 @@ class RemoteRiftTheme {
     final themeExtension = RemoteRiftThemeExtension.of(context);
 
     final buttonTextStyle = WidgetStateProperty.all(
-      RemoteRiftThemeExtension.buttonTextStyle(themeExtension.buttonVariant, theme),
+      RemoteRiftThemeExtension.buttonTextStyle(
+        themeExtension.buttonVariant,
+        theme,
+      ),
     );
 
     final modifiedTheme = theme.copyWith(
-      appBarTheme: theme.appBarTheme.copyWith(titleTextStyle: theme.textTheme.headlineSmall),
+      appBarTheme: theme.appBarTheme.copyWith(
+        titleTextStyle: theme.textTheme.headlineSmall,
+      ),
       elevatedButtonTheme: ElevatedButtonThemeData(
-        style: theme.elevatedButtonTheme.style!.copyWith(textStyle: buttonTextStyle),
+        style: theme.elevatedButtonTheme.style!.copyWith(
+          textStyle: buttonTextStyle,
+        ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
-        style: theme.outlinedButtonTheme.style!.copyWith(textStyle: buttonTextStyle),
+        style: theme.outlinedButtonTheme.style!.copyWith(
+          textStyle: buttonTextStyle,
+        ),
       ),
     );
 

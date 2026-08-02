@@ -40,17 +40,17 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	Translations $copyWith({TranslationMetadata<AppLocale, Translations>? meta}) => Translations(meta: meta ?? this.$meta);
 
 	// Translations
-	late final TranslationsAppEn app = TranslationsAppEn._(_root);
-	late final TranslationsUpdateEn update = TranslationsUpdateEn._(_root);
-	late final TranslationsTrayEn tray = TranslationsTrayEn._(_root);
-	late final TranslationsServiceEn service = TranslationsServiceEn._(_root);
-	late final TranslationsConnectionEn connection = TranslationsConnectionEn._(_root);
-	late final TranslationsGameErrorEn gameError = TranslationsGameErrorEn._(_root);
+	late final Translations$app$en app = Translations$app$en._(_root);
+	late final Translations$update$en update = Translations$update$en._(_root);
+	late final Translations$tray$en tray = Translations$tray$en._(_root);
+	late final Translations$service$en service = Translations$service$en._(_root);
+	late final Translations$connection$en connection = Translations$connection$en._(_root);
+	late final Translations$gameError$en gameError = Translations$gameError$en._(_root);
 }
 
 // Path: app
-class TranslationsAppEn {
-	TranslationsAppEn._(this._root);
+class Translations$app$en {
+	Translations$app$en._(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -61,12 +61,15 @@ class TranslationsAppEn {
 }
 
 // Path: update
-class TranslationsUpdateEn {
-	TranslationsUpdateEn._(this._root);
+class Translations$update$en {
+	Translations$update$en._(this._root);
 
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: 'Application update'
+	String get statusEyebrow => 'Application update';
 
 	/// en: 'Update'
 	String get installTooltip => 'Update';
@@ -100,8 +103,8 @@ class TranslationsUpdateEn {
 }
 
 // Path: tray
-class TranslationsTrayEn {
-	TranslationsTrayEn._(this._root);
+class Translations$tray$en {
+	Translations$tray$en._(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -115,12 +118,18 @@ class TranslationsTrayEn {
 }
 
 // Path: service
-class TranslationsServiceEn {
-	TranslationsServiceEn._(this._root);
+class Translations$service$en {
+	Translations$service$en._(this._root);
 
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: 'Service status'
+	String get statusEyebrow => 'Service status';
+
+	/// en: 'Network setup'
+	String get networkSetupEyebrow => 'Network setup';
 
 	/// en: 'Starting...'
 	String get startingTitle => 'Starting...';
@@ -151,12 +160,15 @@ class TranslationsServiceEn {
 }
 
 // Path: connection
-class TranslationsConnectionEn {
-	TranslationsConnectionEn._(this._root);
+class Translations$connection$en {
+	Translations$connection$en._(this._root);
 
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: 'League client'
+	String get statusEyebrow => 'League client';
 
 	/// en: 'Connecting...'
 	String get connectingTitle => 'Connecting...';
@@ -181,8 +193,8 @@ class TranslationsConnectionEn {
 }
 
 // Path: gameError
-class TranslationsGameErrorEn {
-	TranslationsGameErrorEn._(this._root);
+class Translations$gameError$en {
+	Translations$gameError$en._(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -210,6 +222,7 @@ extension on Translations {
 	dynamic _flatMapFunction(String path) {
 		return switch (path) {
 			'app.title' => 'Remote Rift',
+			'update.statusEyebrow' => 'Application update',
 			'update.installTooltip' => 'Update',
 			'update.availableTitle' => 'Update Available',
 			'update.availableDescription' => 'A new version of the application is available. Update now to access the latest features.',
@@ -222,6 +235,8 @@ extension on Translations {
 			'update.errorRetryLabel' => 'Retry',
 			'tray.openLabel' => 'Open',
 			'tray.quitLabel' => 'Quit',
+			'service.statusEyebrow' => 'Service status',
+			'service.networkSetupEyebrow' => 'Network setup',
 			'service.startingTitle' => 'Starting...',
 			'service.startingDescription' => 'Initializing application components',
 			'service.pendingMultipleAddressesTitle' => 'Multiple networks detected',
@@ -231,6 +246,7 @@ extension on Translations {
 			'service.errorNoAddressDescription' => 'No network connection was found. Please check your internet connection and try again.',
 			'service.errorUnknownDescription' => 'The application couldn\'t start. This may be due to a missing network connection or another temporary issue.',
 			'service.errorRetry' => 'Restart',
+			'connection.statusEyebrow' => 'League client',
 			'connection.connectingTitle' => 'Connecting...',
 			'connection.connectingDescription' => 'Initializing communication with the game client.',
 			'connection.connectedTitle' => 'Connected',

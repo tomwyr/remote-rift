@@ -2,6 +2,7 @@ app:
   title: "Remote Rift"
 
 update:
+  statusEyebrow: "Application update"
   installTooltip: "Update"
   availableTitle: "Update Available"
   availableDescription: "A new version of the application is available. Update now to access the latest features."
@@ -18,6 +19,8 @@ tray:
   quitLabel: "Quit"
 
 service:
+  statusEyebrow: "Service status"
+  networkSetupEyebrow: "Network setup"
   startingTitle: "Starting..."
   startingDescription: "Initializing application components"
   pendingMultipleAddressesTitle: "Multiple networks detected"
@@ -29,6 +32,7 @@ service:
   errorRetry: "Restart"
 
 connection:
+  statusEyebrow: "League client"
   connectingTitle: "Connecting..."
   connectingDescription: "Initializing communication with the game client."
   connectedTitle: "Connected"

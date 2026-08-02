@@ -5,6 +5,7 @@ import 'package:remote_rift_ui/remote_rift_ui.dart';
 import '../../app_manager.dart';
 import '../../dependencies.dart';
 import '../../i18n/strings.g.dart';
+import '../widgets/app_shell.dart';
 import '../widgets/layout.dart';
 import 'service_cubit.dart';
 import 'service_state.dart';
@@ -35,48 +36,52 @@ class ServicePage extends StatelessWidget {
         appManager.removeExitListener(cubit.dispose);
         cubit.dispose();
       },
-      child: Scaffold(
-        body: Padding(
-          padding: .symmetric(horizontal: 24, vertical: 12),
-          child: switch (cubit.state) {
-            Initial() => SizedBox.shrink(),
+      child: switch (cubit.state) {
+        Started() => startedBuilder(context),
+        _ => DesktopAppShell(
+          body: switch (cubit.state) {
+            Initial() || Started() => SizedBox.shrink(),
 
             Starting() => BasicLayout(
+              eyebrow: t.service.statusEyebrow,
               title: t.service.startingTitle,
               description: t.service.startingDescription,
-              icon: .new(
+              icon: BasicLayoutIcon(
                 data: Icons.power_outlined,
                 color: colorScheme.neutral,
               ),
+              tone: .active,
               loading: true,
             ),
 
             StartupError(:var cause, :var restartTriggered) => BasicLayout(
+              eyebrow: t.service.statusEyebrow,
               title: t.service.errorTitle,
               description: cause.description,
               icon: .error(colorScheme),
+              tone: .error,
               loading: restartTriggered,
-              action: .new(
+              action: BasicLayoutAction(
                 label: t.service.errorRetry,
                 onPressed: cubit.restart,
               ),
             ),
 
             PendingMultipleAddresses(:var starting) => BasicLayout(
+              eyebrow: t.service.networkSetupEyebrow,
               title: t.service.pendingMultipleAddressesTitle,
               description: t.service.pendingMultipleAddressesDescription,
               icon: .warning(colorScheme),
-              action: .new(
+              tone: .warning,
+              action: BasicLayoutAction(
                 label: t.service.pendingMultipleAddressesContinue,
                 onPressed: cubit.completeStartup,
               ),
               loading: starting,
             ),
-
-            Started() => startedBuilder(context),
           },
         ),
-      ),
+      },
     );
   }
 }

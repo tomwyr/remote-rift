@@ -32,7 +32,7 @@ class UpdateButton extends StatelessWidget {
           tooltip: t.update.installTooltip,
           icon: Icon(
             Icons.system_update_alt,
-            color: context.remoteRiftTheme.colorScheme.success,
+            color: context.remoteRiftTheme.colorScheme.navy,
           ),
         ),
       },
