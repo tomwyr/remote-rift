@@ -58,11 +58,11 @@ class SectionAbout extends StatelessComponent {
             [
               div(
                 classes:
-                    'rounded-[3.15rem] border-[.45rem] border-[#1b1e24] bg-[#1b1e24] p-[.18rem] shadow-[12px_12px_0_color-mix(in_srgb,var(--color-navy)_16%,transparent)]',
+                    'rounded-[clamp(1.75rem,6.3svh,3.15rem)] border-[clamp(.25rem,.9svh,.45rem)] border-[#1b1e24] bg-[#1b1e24] p-[clamp(.1rem,.36svh,.18rem)] shadow-[clamp(6px,1.5svh,12px)_clamp(6px,1.5svh,12px)_0_color-mix(in_srgb,var(--color-navy)_16%,transparent)]',
                 [
                   div(
                     classes:
-                        'h-[min(38rem,calc(100svh-12rem))] aspect-[1206/2622] overflow-hidden rounded-[2.65rem] bg-canvas max-[800px]:h-[min(36rem,74svh)] landscape:max-[800px]:h-[min(18rem,calc(100svh-8rem))]',
+                        'h-[min(38rem,calc(100svh-12rem))] aspect-[1206/2622] overflow-hidden rounded-[clamp(1.47rem,5.3svh,2.65rem)] bg-canvas max-[800px]:h-[min(36rem,74svh)] landscape:max-[800px]:h-[min(18rem,calc(100svh-8rem))]',
                     [
                       img(
                         src: 'images/showcase/showcase.png',
