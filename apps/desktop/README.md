@@ -2,9 +2,11 @@
 
 Desktop application for **Remote Rift**, an application that lets you queue for League of Legends games from your phone.
 
-<img width="250" alt="Remote Rift Desktop connecting to the League client" src="docs/images/connecting.png" />
-<img width="250" alt="Remote Rift Desktop connected to the League client" src="docs/images/connected.png" />
-<img width="250" alt="Remote Rift Desktop warning that the game client cannot be reached" src="docs/images/connected-with-warning.png" />
+<p>
+  <img width="250" alt="Remote Rift Desktop connecting to the League client" src="docs/images/connecting.png" />
+  <img width="250" alt="Remote Rift Desktop connected to the League client" src="docs/images/connected.png" />
+  <img width="250" alt="Remote Rift Desktop warning that the game client cannot be reached" src="docs/images/connected-with-warning.png" />
+</p>
 
 ## Overview
 
