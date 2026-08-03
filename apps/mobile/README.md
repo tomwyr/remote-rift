@@ -2,10 +2,12 @@
 
 Mobile application for **Remote Rift**, an application that lets you queue for League of Legends games from your phone.
 
-<img width="250" alt="Remote Rift Mobile showing an idle Ranked Solo/Duo lobby" src="docs/images/lobby-idle.png" />
-<img width="250" alt="Remote Rift Mobile showing the available game queue selection sheet" src="docs/images/queue-selection.png" />
-<img width="250" alt="Remote Rift Mobile showing a game found ready-check countdown" src="docs/images/game-found.png" />
-<img width="250" alt="Remote Rift Mobile showing a game in progress" src="docs/images/in-game.png" />
+<p>
+   <img width="250" alt="Remote Rift Mobile showing an idle Ranked Solo/Duo lobby" src="docs/images/lobby-idle.png" />
+   <img width="250" alt="Remote Rift Mobile showing the available game queue selection sheet" src="docs/images/queue-selection.png" />
+   <img width="250" alt="Remote Rift Mobile showing a game found ready-check countdown" src="docs/images/game-found.png" />
+   <img width="250" alt="Remote Rift Mobile showing a game in progress" src="docs/images/in-game.png" />
+</p>
 
 ## Overview
 
