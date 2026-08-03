@@ -22,8 +22,9 @@ Maintain polished, deterministic Remote Rift walkthrough images. Work autonomous
 2. Add a temporary local-only Flutter harness that renders real production widgets with deterministic mock data. Bypass live connectors, APIs, and time-dependent state. Disable the debug banner.
 3. Capture each state after it is stable. Hot restart after changing a temporary state when practical.
 4. Visually inspect every full-resolution image. Retake it if assets have not loaded, chrome is inconsistent, content is clipped, a countdown has changed, a spinner is barely visible, or output is blurry.
-5. Update docs and dependent website assets. Use accurate alt text and valid relative paths.
-6. Restore the production app entry point and remove the complete temporary harness. Confirm no capture-only identifiers remain and live initialization is unchanged.
+5. Bake the documentation gallery border into the final PNGs.
+6. Update docs and dependent website assets. Use accurate alt text and valid relative paths.
+7. Restore the production app entry point and remove the complete temporary harness. Confirm no capture-only identifiers remain and live initialization is unchanged.
 
 ## Platform rules
 
@@ -44,8 +45,13 @@ Maintain polished, deterministic Remote Rift walkthrough images. Work autonomous
 - Keep the screenshot's native aspect ratio. Do not add a synthetic notch when the capture already includes a real system status area.
 - Keep bezel, clipped screen, and caption as separate layout elements; never let the caption constrain or crowd the device frame.
 
+### Documentation gallery borders
+
+- Apply an inside `1px #d0d7de` border to PNGs in `apps/desktop/docs/images/` and `apps/mobile/docs/images/`; preserve their dimensions and add no padding.
+- Use the baked-in border rather than HTML or CSS, which GitHub README styling can override. Exclude the website showcase unless requested.
+
 ## Verification
 
-- Check dimensions, image paths, README references, and the website source reference.
+- Check dimensions, image paths, README references, and the website source reference. Confirm each documentation PNG has its baked-in border and original pixel dimensions.
 - Run focused formatting/build checks only when relevant. Report a blocked local daemon rather than terminating unrelated processes.
 - Do not commit or publish unless asked.
