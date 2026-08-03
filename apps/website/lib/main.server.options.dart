@@ -9,6 +9,7 @@ import 'package:remote_rift_website/components/back_to_top.dart'
     as _back_to_top;
 import 'package:remote_rift_website/components/cursor_tracker.dart'
     as _cursor_tracker;
+import 'package:remote_rift_website/components/navbar.dart' as _navbar;
 import 'package:remote_rift_website/constants/theme.dart' as _theme;
 
 /// Default [ServerOptions] for use with your Jaspr project.
@@ -34,6 +35,7 @@ ServerOptions get defaultServerOptions => ServerOptions(
     _cursor_tracker.CursorTracker: ClientTarget<_cursor_tracker.CursorTracker>(
       'cursor_tracker',
     ),
+    _navbar.Navbar: ClientTarget<_navbar.Navbar>('navbar'),
   },
   styles: () => [..._theme.styles],
 );

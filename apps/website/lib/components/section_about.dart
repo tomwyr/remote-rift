@@ -10,24 +10,23 @@ class SectionAbout extends StatelessComponent {
   Component build(BuildContext context) => header(
     id: 'overview',
     classes:
-        'min-h-screen border-b border-gold/70 bg-[linear-gradient(90deg,transparent_0,transparent_calc(100%-1px),color-mix(in_srgb,var(--color-rift-blue)_5%,transparent)_calc(100%-1px)),linear-gradient(0deg,transparent_0,transparent_calc(100%-1px),color-mix(in_srgb,var(--color-rift-blue)_3%,transparent)_calc(100%-1px))] bg-[size:8rem_8rem]',
+        'site-hero min-h-screen min-h-[100svh] border-b border-gold/70 bg-[linear-gradient(90deg,transparent_0,transparent_calc(100%-1px),color-mix(in_srgb,var(--color-rift-blue)_5%,transparent)_calc(100%-1px)),linear-gradient(0deg,transparent_0,transparent_calc(100%-1px),color-mix(in_srgb,var(--color-rift-blue)_3%,transparent)_calc(100%-1px))] bg-[size:8rem_8rem]',
     [
       const Navbar(),
       div(
         classes:
-            'mx-auto grid min-h-[calc(100vh-5rem)] max-w-304 grid-cols-[minmax(0,1fr)_minmax(22rem,.9fr)] items-center gap-16 px-6 py-12 max-[800px]:min-h-0 max-[800px]:grid-cols-1 max-[800px]:gap-10',
+            'mx-auto grid min-h-[calc(100svh-5rem)] max-w-304 grid-cols-[minmax(0,1fr)_minmax(22rem,.9fr)] items-center gap-16 px-6 py-12 max-[800px]:min-h-0 max-[800px]:grid-cols-1 max-[800px]:gap-10 landscape:max-[800px]:grid-cols-[minmax(0,1fr)_auto] landscape:max-[800px]:gap-6 landscape:max-[800px]:py-8',
         [
           div([
             span(
-              classes:
-                  'mb-[.9rem] block text-[.75rem] font-extrabold tracking-[.16em] text-gold-ink',
+              classes: 'mb-[.9rem] block text-[.75rem] font-extrabold tracking-[.16em] text-gold',
               [
                 .text('LOCAL LEAGUE COMPANION'),
               ],
             ),
             h1(
               classes:
-                  'max-w-[11ch] font-serif text-[clamp(3rem,6vw,5.6rem)] font-bold leading-[1.06] tracking-[-.035em] max-[800px]:max-w-[12ch]',
+                  'max-w-[11ch] font-serif text-[4rem] font-bold leading-[1.06] tracking-[-.035em] max-[1200px]:text-[3.25rem] max-[900px]:max-w-full max-[900px]:text-[2.5rem] max-[900px]:leading-[1.1] max-[900px]:[overflow-wrap:anywhere] max-[480px]:text-[2rem]',
               [.text('Manage League matchmaking from your phone')],
             ),
             p(classes: 'my-6 max-w-[39rem] text-[1.15rem]', [
@@ -36,25 +35,26 @@ class SectionAbout extends StatelessComponent {
               ),
             ]),
             div(
-              classes: 'mt-8 flex flex-wrap gap-3',
+              classes: 'mt-8 flex w-full flex-wrap gap-3',
               [
                 a(
                   href: '#how-it-works',
                   classes:
-                      'border border-gold bg-navy px-[1.1rem] py-[.8rem] text-[.9rem] font-extrabold tracking-[.04em] text-highlight no-underline transition-colors duration-200 hover:border-navy hover:bg-gold hover:text-navy',
+                      'max-[480px]:flex-1 border border-gold bg-navy px-[1.1rem] py-[.8rem] text-center text-[.9rem] font-bold tracking-[.04em] text-highlight no-underline transition-colors duration-200 hover:border-navy hover:bg-gold hover:text-navy',
                   [.text('How it works')],
                 ),
                 a(
                   href: '#install',
                   classes:
-                      'border border-navy px-[1.1rem] py-[.8rem] text-[.9rem] font-extrabold tracking-[.04em] no-underline transition-colors duration-200 hover:border-cyan hover:bg-cyan hover:text-navy',
+                      'max-[480px]:flex-1 border border-navy px-[1.1rem] py-[.8rem] text-center text-[.9rem] font-bold tracking-[.04em] no-underline transition-colors duration-200 hover:border-cyan hover:bg-cyan hover:text-navy',
                   [.text('Downloads')],
                 ),
               ],
             ),
           ]),
           figure(
-            classes: 'm-0 flex w-fit max-w-full justify-self-center flex-col items-center gap-4',
+            classes:
+                'm-0 flex w-fit max-w-full justify-self-center flex-col items-center gap-4 landscape:max-[800px]:gap-2',
             [
               div(
                 classes:
@@ -62,7 +62,7 @@ class SectionAbout extends StatelessComponent {
                 [
                   div(
                     classes:
-                        'h-[min(38rem,calc(100vh-12rem))] aspect-[1206/2622] overflow-hidden rounded-[2.65rem] bg-canvas max-[800px]:h-[min(36rem,74vh)]',
+                        'h-[min(38rem,calc(100svh-12rem))] aspect-[1206/2622] overflow-hidden rounded-[2.65rem] bg-canvas max-[800px]:h-[min(36rem,74svh)] landscape:max-[800px]:h-[min(18rem,calc(100svh-8rem))]',
                     [
                       img(
                         src: 'images/showcase/showcase.png',

@@ -12,7 +12,7 @@ class SectionStatus extends StatelessComponent {
   ) => section(id: 'status', classes: 'mx-auto max-w-304 px-6 py-24 max-[540px]:py-16', [
     div(classes: 'max-w-[43rem] border-l-[3px] border-gold pl-5', [
       span(
-        classes: 'mb-[.9rem] block text-[.75rem] font-extrabold tracking-[.16em] text-gold-ink',
+        classes: 'mb-[.9rem] block text-[.75rem] font-extrabold tracking-[.16em] text-gold',
         [.text('CONNECTION ISSUES')],
       ),
       h2(

@@ -29,7 +29,8 @@ class SectionDownload extends StatelessComponent {
         ]),
       ]),
       ol(
-        classes: 'mb-8 grid grid-cols-5 gap-3 p-0 max-[800px]:grid-cols-2 max-[540px]:grid-cols-1',
+        classes:
+            'site-install-steps mb-8 grid grid-cols-5 gap-3 p-0 max-[800px]:grid-cols-2 max-[540px]:grid-cols-1',
         [
           for (final step in [
             'Install Remote Rift Desktop.',
@@ -55,7 +56,7 @@ class SectionDownload extends StatelessComponent {
           .text(requirements),
         ],
       ),
-      div(classes: 'mt-10 grid grid-cols-2 gap-4 max-[540px]:grid-cols-1', [
+      div(classes: 'site-download-cards mt-10 grid grid-cols-2 gap-4 max-[540px]:grid-cols-1', [
         for (final download in downloads)
           article(
             classes:
@@ -67,7 +68,7 @@ class SectionDownload extends StatelessComponent {
                 for (final link in download.links)
                   button(
                     classes:
-                        'flex min-h-[4.3rem] flex-col justify-center gap-2 border border-gold/70 bg-navy px-4 py-3 text-left text-[.82rem] font-extrabold text-highlight opacity-100',
+                        'flex min-h-[4.3rem] flex-col justify-center gap-2 border border-gold/70 bg-navy px-4 py-3 text-left text-[.82rem] font-bold text-highlight opacity-100',
                     disabled: true,
                     [
                       span([.text(link.label!)]),

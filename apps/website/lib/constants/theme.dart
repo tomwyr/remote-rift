@@ -15,8 +15,4 @@ List<StyleRule> get styles => [
     padding: .zero,
     margin: .zero,
   ),
-  css('h1').styles(
-    margin: .unset,
-    fontSize: 4.rem,
-  ),
 ];
