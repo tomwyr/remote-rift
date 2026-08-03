@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:jaspr/dom.dart';
 import 'package:jaspr/jaspr.dart';
+import 'package:universal_web/web.dart';
 
 import '../data/site_info.dart';
 
@@ -13,11 +16,45 @@ class Navbar extends StatefulComponent {
 
 class _NavbarState extends State<Navbar> {
   bool _menuOpen = false;
+  StreamSubscription<MouseEvent>? _documentClickSubscription;
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (kIsWeb) {
+      _documentClickSubscription = EventStreamProviders.clickEvent
+          .forTarget(document)
+          .listen(
+            _closeMenuWhenClickingOutside,
+          );
+    }
+  }
+
+  @override
+  void dispose() {
+    _documentClickSubscription?.cancel();
+    super.dispose();
+  }
+
+  void _closeMenuWhenClickingOutside(MouseEvent event) {
+    if (!_menuOpen) {
+      return;
+    }
+
+    final navbar = document.querySelector('#site-navigation');
+    if (navbar?.contains(event.target as Node?) ?? false) {
+      return;
+    }
+
+    setState(() => _menuOpen = false);
+  }
 
   @override
   Component build(BuildContext context) => nav(
+    id: 'site-navigation',
     classes:
-        'mx-auto flex max-w-304 items-center justify-between gap-4 px-6 py-[1.2rem] max-[800px]:relative max-[800px]:py-4',
+        'relative z-20 mx-auto flex max-w-304 items-center justify-between gap-4 px-6 py-[1.2rem] max-[800px]:py-4',
     [
       a(
         href: '#top',
@@ -51,24 +88,24 @@ class _NavbarState extends State<Navbar> {
           ),
           div(
             classes:
-                'flex items-center gap-5 text-[.82rem] font-semibold tracking-[.06em] max-[800px]:absolute max-[800px]:top-[calc(100%+.25rem)] max-[800px]:right-6 max-[800px]:w-[min(18rem,calc(100vw-3rem))] max-[800px]:flex-col max-[800px]:items-stretch max-[800px]:gap-1 max-[800px]:border max-[800px]:border-gold max-[800px]:bg-navy max-[800px]:p-2 max-[800px]:text-highlight max-[800px]:shadow-[6px_6px_0_color-mix(in_srgb,var(--color-rift-blue)_34%,transparent)] max-[800px]:-translate-y-2 max-[800px]:opacity-0 max-[800px]:pointer-events-none max-[800px]:transition-[opacity,translate] max-[800px]:duration-200 ${_menuOpen ? 'max-[800px]:translate-y-0 max-[800px]:opacity-100 max-[800px]:pointer-events-auto' : ''}',
+                'flex items-center gap-5 text-[.82rem] font-semibold tracking-[.06em] max-[800px]:absolute max-[800px]:top-[calc(100%+.25rem)] max-[800px]:right-6 max-[800px]:w-[min(18rem,calc(100vw-3rem))] max-[800px]:flex-col max-[800px]:items-stretch max-[800px]:gap-1 max-[800px]:border max-[800px]:border-gold max-[800px]:bg-navy max-[800px]:p-2 max-[800px]:text-highlight max-[800px]:shadow-[6px_6px_0_color-mix(in_srgb,var(--color-rift-blue)_34%,transparent)] max-[800px]:-translate-y-2 max-[800px]:opacity-0 max-[800px]:transition-[opacity,translate] max-[800px]:duration-200 ${_menuOpen ? 'max-[800px]:translate-y-0 max-[800px]:opacity-100 max-[800px]:pointer-events-auto' : 'max-[800px]:pointer-events-none'}',
             [
               a(
                 href: '#how-it-works',
                 classes:
-                    'p-0 hover:text-gold-ink hover:underline hover:decoration-2 hover:underline-offset-4 max-[800px]:p-3',
+                    'p-0 hover:text-gold hover:underline hover:decoration-2 hover:underline-offset-4 max-[800px]:p-3',
                 [.text('How it works')],
               ),
               a(
                 href: '#features',
                 classes:
-                    'p-0 hover:text-gold-ink hover:underline hover:decoration-2 hover:underline-offset-4 max-[800px]:p-3',
+                    'p-0 hover:text-gold hover:underline hover:decoration-2 hover:underline-offset-4 max-[800px]:p-3',
                 [.text('Features')],
               ),
               a(
                 href: '#status',
                 classes:
-                    'p-0 hover:text-gold-ink hover:underline hover:decoration-2 hover:underline-offset-4 max-[800px]:p-3',
+                    'p-0 hover:text-gold hover:underline hover:decoration-2 hover:underline-offset-4 max-[800px]:p-3',
                 [.text('Troubleshooting')],
               ),
               a(
