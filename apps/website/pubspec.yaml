@@ -13,8 +13,6 @@ dependencies:
   universal_web: ^1.1.1
 
 dev_dependencies:
-  # Must match jaspr_cli's daemon version so both use the same metadata protocol.
-  build_daemon: 4.1.2
   build_runner: ^2.15.1
   build_web_compilers: ^4.8.0
   jaspr_builder: ^0.23.2
