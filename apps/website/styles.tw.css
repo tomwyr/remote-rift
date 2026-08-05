@@ -12,6 +12,11 @@
   --color-gold: #c8aa6e;
   --color-gold-ink: #806528;
   --color-highlight: #ffffff;
+  --color-on-panel: #d8e4ee;
+  --color-on-panel-muted: #c8d0d9;
+  --color-footer: #07101f;
+  --color-on-footer: #d9d1c2;
+  --color-on-footer-muted: #aeb6c0;
   --color-ready: #00726b;
 }
 
@@ -39,6 +44,20 @@
     pointer-events: none;
     background: radial-gradient(17rem circle at var(--cursor-x) var(--cursor-y), color-mix(in srgb, var(--color-light-blue) 11%, transparent), transparent 68%);
     transition: background .25s ease-out;
+  }
+
+  .cursor-atmosphere::before {
+    position: absolute;
+    z-index: 0;
+    inset: 0;
+    content: '';
+    pointer-events: none;
+    background: radial-gradient(17rem circle at var(--cursor-x) var(--cursor-y), color-mix(in srgb, var(--color-light-blue) 5%, transparent), transparent 68%);
+    background-attachment: fixed;
+  }
+
+  .cursor-atmosphere--cyan-wash::before {
+    background-image: radial-gradient(17rem circle at var(--cursor-x) var(--cursor-y), color-mix(in srgb, var(--color-light-blue) 5%, transparent), transparent 68%), linear-gradient(90deg, color-mix(in srgb, var(--color-cyan) 8%, transparent), transparent 28%);
   }
 }
 

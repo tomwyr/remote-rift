@@ -58,11 +58,11 @@ class SectionAbout extends StatelessComponent {
             [
               div(
                 classes:
-                    'rounded-[clamp(1.75rem,6.3svh,3.15rem)] border-[clamp(.25rem,.9svh,.45rem)] border-[#1b1e24] bg-[#1b1e24] p-[clamp(.1rem,.36svh,.18rem)] shadow-[clamp(6px,1.5svh,12px)_clamp(6px,1.5svh,12px)_0_color-mix(in_srgb,var(--color-navy)_16%,transparent)]',
+                    'rounded-[clamp(1.75rem,6.3svh,3.15rem)] border-[clamp(.25rem,.9svh,.45rem)] border-[#1b1e24] bg-[#1b1e24] p-[clamp(.1rem,.36svh,.18rem)] shadow-[clamp(6px,1.5svh,12px)_clamp(6px,1.5svh,12px)_0_color-mix(in_srgb,var(--color-navy)_16%,transparent)] landscape:max-[1000px]:rounded-[clamp(1.75rem,6.3vw,3.15rem)] landscape:max-[1000px]:border-[clamp(.25rem,.9vw,.45rem)] landscape:max-[1000px]:p-[clamp(.1rem,.36vw,.18rem)] landscape:max-[1000px]:shadow-[clamp(6px,1.5vw,12px)_clamp(6px,1.5vw,12px)_0_color-mix(in_srgb,var(--color-navy)_16%,transparent)]',
                 [
                   div(
                     classes:
-                        'h-[min(38rem,calc(100svh-12rem))] aspect-[1206/2622] overflow-hidden rounded-[clamp(1.47rem,5.3svh,2.65rem)] bg-canvas max-[800px]:h-[min(36rem,74svh)] landscape:max-[800px]:h-[min(18rem,calc(100svh-8rem))]',
+                        'h-[min(42rem,55vw)] aspect-[1206/2622] overflow-hidden rounded-[clamp(1.47rem,5.3svh,2.65rem)] bg-canvas max-[800px]:h-[min(36rem,74svh)] landscape:max-[800px]:h-[min(42rem,55vw)] landscape:max-[1000px]:rounded-[clamp(1.47rem,5.3vw,2.65rem)] min-[1001px]:h-[min(40rem,53vw)]',
                     [
                       img(
                         src: 'images/showcase/showcase.png',
@@ -71,13 +71,6 @@ class SectionAbout extends StatelessComponent {
                       ),
                     ],
                   ),
-                ],
-              ),
-              figcaption(
-                classes:
-                    'w-full max-w-[22rem] px-4 text-center text-[.8rem] leading-5 tracking-[.05em] text-highlight',
-                [
-                  .text('Accept a found match from your phone.'),
                 ],
               ),
             ],

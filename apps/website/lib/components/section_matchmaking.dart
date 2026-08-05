@@ -10,7 +10,7 @@ class SectionMatchmaking extends StatelessComponent {
   Component build(BuildContext context) => section(
     id: 'features',
     classes:
-        'relative mx-auto max-w-none bg-navy px-[max(1.5rem,calc((100vw-76rem)/2+1.5rem))] py-24 text-highlight before:absolute before:inset-0 before:bg-[radial-gradient(17rem_circle_at_var(--cursor-x)_var(--cursor-y),color-mix(in_srgb,var(--color-light-blue)_5%,transparent),transparent_68%),linear-gradient(90deg,color-mix(in_srgb,var(--color-cyan)_8%,transparent),transparent_28%)] before:bg-fixed before:content-[\'\'] [&>*]:relative [&>*]:z-10 max-[540px]:py-16',
+        'cursor-atmosphere cursor-atmosphere--cyan-wash relative mx-auto max-w-none bg-navy px-[max(1.5rem,calc((100vw-76rem)/2+1.5rem))] py-24 text-highlight [&>*]:relative [&>*]:z-10 max-[540px]:py-16',
     [
       div(classes: 'mb-11 max-w-[43rem] border-l-[3px] border-gold pl-5', [
         span(classes: 'mb-[.9rem] block text-[.75rem] font-extrabold tracking-[.16em] text-gold', [

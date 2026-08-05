@@ -11,7 +11,7 @@ class SectionDownload extends StatelessComponent {
   Component build(BuildContext context) => section(
     id: 'install',
     classes:
-        'relative bg-navy px-[max(1.5rem,calc((100vw-76rem)/2+1.5rem))] py-24 text-highlight before:absolute before:inset-0 before:bg-[radial-gradient(17rem_circle_at_var(--cursor-x)_var(--cursor-y),color-mix(in_srgb,var(--color-light-blue)_5%,transparent),transparent_68%)] before:bg-fixed before:content-[\'\'] [&>*]:relative [&>*]:z-10 max-[540px]:py-16',
+        'cursor-atmosphere relative bg-navy px-[max(1.5rem,calc((100vw-76rem)/2+1.5rem))] py-24 text-highlight [&>*]:relative [&>*]:z-10 max-[540px]:py-16',
     [
       div(classes: 'mb-11 max-w-[43rem] border-l-[3px] border-gold pl-5', [
         span(classes: 'mb-[.9rem] block text-[.75rem] font-extrabold tracking-[.16em] text-gold', [
@@ -44,7 +44,7 @@ class SectionDownload extends StatelessComponent {
       ),
       p(
         classes:
-            'my-8 flex max-w-[43rem] items-start gap-[.6rem] border-l-2 border-cyan bg-panel/60 px-4 py-3 text-[.9rem] text-[#d8e4ee]',
+            'my-8 flex max-w-[43rem] items-start gap-[.6rem] border-l-2 border-cyan bg-panel/60 px-4 py-3 text-[.9rem] text-on-panel',
         [
           span(
             classes:
@@ -63,7 +63,7 @@ class SectionDownload extends StatelessComponent {
                 'border border-gold bg-panel p-6 shadow-[6px_6px_0_color-mix(in_srgb,var(--color-rift-blue)_34%,transparent)]',
             [
               h3(classes: 'my-3 font-serif text-[1.35rem]', [.text(download.title)]),
-              p(classes: 'mb-5 text-[#c8d0d9]', [.text(download.description)]),
+              p(classes: 'mb-5 text-on-panel-muted', [.text(download.description)]),
               div(classes: 'grid grid-cols-2 gap-[.6rem]', [
                 for (final link in download.links)
                   button(
