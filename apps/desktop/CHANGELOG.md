@@ -1,3 +1,8 @@
+## [0.8.0] - 2026-08-09
+
+- Redesigned the desktop application interface
+- Fixed reporting the API service version
+
 ## [0.7.0] - 2026-02-16
 
 - Added support for application updates

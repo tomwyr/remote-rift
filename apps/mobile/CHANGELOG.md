@@ -1,3 +1,7 @@
+## [0.10.0] - 2026-08-09
+
+- Redesigned the mobile application interface
+
 ## [0.9.0] - 2026-02-16
 
 - Added check for connector API version compatibility
