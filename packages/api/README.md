@@ -10,11 +10,10 @@ When launched, the service starts an HTTP server that maps its endpoints to the 
 
 ## Address resolution
 
-When started with `--resolve-address`, the connector scans the host machine's network interfaces to find a usable local IPv4 address.
-Automatic address resolution binds the service to a single suitable local network address.
+When started with `--resolve-address`, the CLI scans the host machine's network interfaces to find a usable local IPv4 address. This CLI-only mode binds the service to one selected address.
 
 > [!important]
-> If no address or multiple addresses are detected, startup is aborted and the host must be configured manually.
+> If no address or multiple addresses are detected, startup is aborted and the host must be configured manually. This limitation does not apply to Remote Rift Desktop, which listens on all local IPv4 interfaces.
 
 ## Dependencies
 
@@ -37,8 +36,9 @@ This section describes selected third-party packages used throughout the applica
    The command will expose the service at `http://<host>:<port>` and `ws://<host>:<port>`.
 
 > [!important]
-> To be able to connect from another device, make sure to set the `host` parameter to the host device's local network address, for example:
-> `dart run remote_rift_api --host 192.168.10.52 --port 8080`
+> To accept connections through every local IPv4 interface, use the wildcard bind address:
+> `dart run remote_rift_api --host 0.0.0.0 --port 8080`
+> Do not advertise `0.0.0.0` as a client address as clients must use a reachable address for the host.
 
 2. Ensure the League client is running on the same machine.
 

@@ -1,3 +1,7 @@
+## [0.11.0] - Unreleased
+
+- Improved desktop service discovery across multiple active IPv4 networks
+
 ## [0.10.0] - 2026-08-09
 
 - Redesigned the mobile application interface

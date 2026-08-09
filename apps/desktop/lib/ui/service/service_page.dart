@@ -66,19 +66,6 @@ class ServicePage extends StatelessWidget {
                 onPressed: cubit.restart,
               ),
             ),
-
-            PendingMultipleAddresses(:var starting) => BasicLayout(
-              eyebrow: t.service.networkSetupEyebrow,
-              title: t.service.pendingMultipleAddressesTitle,
-              description: t.service.pendingMultipleAddressesDescription,
-              icon: .warning(colorScheme),
-              tone: .warning,
-              action: BasicLayoutAction(
-                label: t.service.pendingMultipleAddressesContinue,
-                onPressed: cubit.completeStartup,
-              ),
-              loading: starting,
-            ),
           },
         ),
       },

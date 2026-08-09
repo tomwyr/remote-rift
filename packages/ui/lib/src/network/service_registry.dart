@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:bonsoir/bonsoir.dart';
 
@@ -26,7 +27,7 @@ class ServiceRegistry {
     }
   }
 
-  Future<ServiceAddress?> discover({Duration? timeLimit}) async {
+  Future<List<ServiceAddress>> discover({Duration? timeLimit}) async {
     final discovery = BonsoirDiscovery(type: serviceType);
 
     try {
@@ -41,13 +42,13 @@ class ServiceRegistry {
       await discovery.start();
       return await result;
     } on TimeoutException {
-      return null;
+      return [];
     } finally {
       await discovery.ensureStopped();
     }
   }
 
-  Future<ServiceAddress?> _resolveService(BonsoirDiscovery discovery) async {
+  Future<List<ServiceAddress>> _resolveService(BonsoirDiscovery discovery) async {
     final eventStream = discovery.eventStream ?? .empty();
 
     await for (var event in eventStream) {
@@ -56,8 +57,11 @@ class ServiceRegistry {
           event.service.resolve(discovery.serviceResolver);
 
         case BonsoirDiscoveryServiceResolvedEvent():
-          if (event.service case BonsoirService(:var hostAddress?, :var port)) {
-            return ServiceAddress.normalized(host: hostAddress, port: port);
+          if (event.service case BonsoirService(:var hostAddresses, :var port)) {
+            final addresses = ServiceAddress.normalizedAll(hosts: hostAddresses, port: port);
+            if (addresses.isNotEmpty) {
+              return addresses;
+            }
           }
 
         default:
@@ -65,7 +69,7 @@ class ServiceRegistry {
       }
     }
 
-    return null;
+    return [];
   }
 }
 
@@ -88,11 +92,36 @@ class ServiceAddress {
     return .new(host: normalizedHost, port: port);
   }
 
+  static List<ServiceAddress> normalizedAll({
+    required List<String> hosts,
+    required int port,
+  }) {
+    final addresses = <ServiceAddress>[];
+    final seenHosts = <String>{};
+
+    for (final host in hosts) {
+      final address = ServiceAddress.normalized(host: host, port: port);
+      final alreadySeen = !seenHosts.add(address.host);
+      if (address.eligibleForConnection && !alreadySeen) {
+        addresses.add(address);
+      }
+    }
+
+    return addresses;
+  }
+
   final String host;
   final int port;
 
   String toAddressString() {
     return '$host:$port';
+  }
+}
+
+extension on ServiceAddress {
+  bool get eligibleForConnection {
+    final internetAddress = InternetAddress.tryParse(host);
+    return internetAddress != null && internetAddress.type == .IPv4 && !internetAddress.isLoopback;
   }
 }
 

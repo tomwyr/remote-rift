@@ -12,6 +12,11 @@ class RemoteRiftApiClient {
     : httpClient = IOClient(client),
       webSocketClient = client;
 
+  RemoteRiftApiClient.withClients({
+    required this.httpClient,
+    required this.webSocketClient,
+  });
+
   final Client httpClient;
   final HttpClient webSocketClient;
 

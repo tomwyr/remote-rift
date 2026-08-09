@@ -12,8 +12,11 @@ import '../../data/app_config.dart';
 import 'connection_state.dart';
 
 class ConnectionCubit extends Cubit<ConnectionState> {
-  ConnectionCubit({required this.appConfig, required this.apiClient, required this.serviceRegistry})
-    : super(Initial());
+  ConnectionCubit({
+    required this.appConfig,
+    required this.apiClient,
+    required this.serviceRegistry,
+  }) : super(Initial());
 
   final AppConfig appConfig;
   final RemoteRiftApiClient apiClient;
@@ -56,9 +59,6 @@ class ConnectionCubit extends Cubit<ConnectionState> {
         emit(ConnectionError(cause: .serviceNotFound));
       case .apiVersionToLow:
         emit(ConnectedIncompatible(cause: .apiVersionTooLow));
-      case .apiVersionUnknown:
-        // Already handled in `_connectApiCatching`
-        break;
     }
   }
 
@@ -150,12 +150,9 @@ extension ConnectionLifecycleListener on ConnectionCubit {
 
 extension ConnectionApiVerification on ConnectionCubit {
   Future<ConnectionApiVerificationResult> _verifyApiConnection() async {
-    if (!await _resolveApiAddress()) {
-      return .addressUnknown;
-    }
-    final serviceInfo = await _connectApiCatching(apiClient.getServiceInfo);
+    final serviceInfo = await _resolveApiAddress();
     if (serviceInfo == null) {
-      return .apiVersionUnknown;
+      return .addressUnknown;
     }
     if (!_verifyApiMinVersion(serviceInfo)) {
       return .apiVersionToLow;
@@ -163,10 +160,22 @@ extension ConnectionApiVerification on ConnectionCubit {
     return .allowed;
   }
 
-  Future<bool> _resolveApiAddress() async {
-    final apiAddress = await serviceRegistry.discover(timeLimit: Duration(seconds: 5));
-    apiClient.setApiAddress(apiAddress?.toAddressString());
-    return apiAddress != null;
+  Future<RemoteRiftApiServiceInfo?> _resolveApiAddress() async {
+    final apiAddresses = await serviceRegistry.discover(timeLimit: Duration(seconds: 5));
+
+    for (var apiAddress in apiAddresses) {
+      try {
+        final address = apiAddress.toAddressString();
+        apiClient.setApiAddress(address);
+        final serviceInfo = await apiClient.getServiceInfo().timeout(Duration(seconds: 2));
+        return serviceInfo;
+      } catch (_) {
+        // Try the next endpoint resolved for the same service instance.
+      }
+    }
+
+    apiClient.setApiAddress(null);
+    return null;
   }
 
   bool _verifyApiMinVersion(RemoteRiftApiServiceInfo info) {
@@ -181,7 +190,7 @@ extension ConnectionApiVerification on ConnectionCubit {
   }
 }
 
-enum ConnectionApiVerificationResult { addressUnknown, apiVersionToLow, allowed, apiVersionUnknown }
+enum ConnectionApiVerificationResult { addressUnknown, apiVersionToLow, allowed }
 
 extension ConnectionCubitAssertions on ConnectionCubit {
   void _assertInitializeState() {

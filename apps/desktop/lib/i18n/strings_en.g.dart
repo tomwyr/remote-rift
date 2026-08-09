@@ -128,29 +128,14 @@ class Translations$service$en {
 	/// en: 'Service status'
 	String get statusEyebrow => 'Service status';
 
-	/// en: 'Network setup'
-	String get networkSetupEyebrow => 'Network setup';
-
 	/// en: 'Starting...'
 	String get startingTitle => 'Starting...';
 
 	/// en: 'Initializing application components'
 	String get startingDescription => 'Initializing application components';
 
-	/// en: 'Multiple networks detected'
-	String get pendingMultipleAddressesTitle => 'Multiple networks detected';
-
-	/// en: 'The application found more than one network address it can use and will automatically choose one.'
-	String get pendingMultipleAddressesDescription => 'The application found more than one network address it can use and will automatically choose one.';
-
-	/// en: 'Continue'
-	String get pendingMultipleAddressesContinue => 'Continue';
-
 	/// en: 'Startup failed'
 	String get errorTitle => 'Startup failed';
-
-	/// en: 'No network connection was found. Please check your internet connection and try again.'
-	String get errorNoAddressDescription => 'No network connection was found. Please check your internet connection and try again.';
 
 	/// en: 'The application couldn't start. This may be due to a missing network connection or another temporary issue.'
 	String get errorUnknownDescription => 'The application couldn\'t start. This may be due to a missing network connection or another temporary issue.';
@@ -236,14 +221,9 @@ extension on Translations {
 			'tray.openLabel' => 'Open',
 			'tray.quitLabel' => 'Quit',
 			'service.statusEyebrow' => 'Service status',
-			'service.networkSetupEyebrow' => 'Network setup',
 			'service.startingTitle' => 'Starting...',
 			'service.startingDescription' => 'Initializing application components',
-			'service.pendingMultipleAddressesTitle' => 'Multiple networks detected',
-			'service.pendingMultipleAddressesDescription' => 'The application found more than one network address it can use and will automatically choose one.',
-			'service.pendingMultipleAddressesContinue' => 'Continue',
 			'service.errorTitle' => 'Startup failed',
-			'service.errorNoAddressDescription' => 'No network connection was found. Please check your internet connection and try again.',
 			'service.errorUnknownDescription' => 'The application couldn\'t start. This may be due to a missing network connection or another temporary issue.',
 			'service.errorRetry' => 'Restart',
 			'connection.statusEyebrow' => 'League client',

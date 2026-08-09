@@ -14,12 +14,12 @@ class RemoteRiftApiServiceRunner {
 
   var _running = false;
 
-  Future<void> run({required bool resolveAddressOnMany}) async {
+  Future<void> run() async {
     if (_running) return;
     _running = true;
 
     try {
-      final (server, broadcast) = await _runAndBroadcast(resolveAddressOnMany);
+      final (server, broadcast) = await _runAndBroadcast();
       _server = server;
       _broadcast = broadcast;
     } catch (_) {
@@ -28,16 +28,9 @@ class RemoteRiftApiServiceRunner {
     }
   }
 
-  Future<(HttpServer, ServiceBroadcast)> _runAndBroadcast(
-    bool resolveAddressOnMany,
-  ) async {
-    final configSource = RemoteRiftApiConfigSource.systemLookup(
-      resolveAddress: resolveAddressOnMany ? (addresses) => addresses.first : null,
-    );
-    final RemoteRiftApiConfig(:host, :port) = await .resolve(
-      source: configSource,
-    );
-    final server = await service.run(host: host, port: port);
+  Future<(HttpServer, ServiceBroadcast)> _runAndBroadcast() async {
+    final port = RemoteRiftApiConfig.defaultPort;
+    final server = await service.run(host: InternetAddress.anyIPv4.address, port: port);
     final broadcast = await registry.broadcast(port: port);
     return (server, broadcast);
   }

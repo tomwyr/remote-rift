@@ -37,7 +37,7 @@ class SectionDownload extends StatelessComponent {
             'Run the desktop application.',
             'Start the League Client.',
             'Install and open Remote Rift Mobile.',
-            'Connect both devices to the same local network.',
+            'Connect both devices to a local network that allows device-to-device connections.',
           ])
             li(classes: 'border-t border-gold bg-panel-muted p-4 text-[.9rem]', [.text(step)]),
         ],

@@ -48,8 +48,7 @@ To run the application on a device:
 3. Start the League of Legends client and wait for the connection to be established.
 4. Run the Remote Rift Mobile application following the [setup instructions](../mobile/README.md#usage).
 
-> [!important]
-> The service API address is resolved automatically and requires the user to be connected to a single network. At the moment, if multiple networks are available, the application will automatically select one network address to use.
+Remote Rift Desktop supports multiple active IPv4 network adapters automatically. Remote Rift Mobile must be able to reach the desktop through the same local network with multicast DNS and normal TCP connections available. Guest Wi-Fi, client isolation, VLAN or routed-network boundaries, firewalls, and networks that block multicast can prevent automatic discovery.
 
 ## Development
 

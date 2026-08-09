@@ -20,14 +20,9 @@ tray:
 
 service:
   statusEyebrow: "Service status"
-  networkSetupEyebrow: "Network setup"
   startingTitle: "Starting..."
   startingDescription: "Initializing application components"
-  pendingMultipleAddressesTitle: "Multiple networks detected"
-  pendingMultipleAddressesDescription: "The application found more than one network address it can use and will automatically choose one."
-  pendingMultipleAddressesContinue: "Continue"
   errorTitle: "Startup failed"
-  errorNoAddressDescription: "No network connection was found. Please check your internet connection and try again."
   errorUnknownDescription: "The application couldn't start. This may be due to a missing network connection or another temporary issue."
   errorRetry: "Restart"
 

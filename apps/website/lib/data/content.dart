@@ -15,14 +15,14 @@ class StatusItem {
 }
 
 const requirements =
-    'Requires Remote Rift Desktop, the League Client, and both devices on the same local network.';
+    'Requires Remote Rift Desktop, the League Client, and a local network that allows device-to-device connections.';
 
 const setupSteps = [
   SetupStep('Run Remote Rift Desktop', 'Starts the local connector.'),
   SetupStep('Start the League Client', 'Remote Rift reads the available matchmaking state.'),
   SetupStep(
     'Open Remote Rift Mobile',
-    'Remote Rift Mobile detects the desktop connector on the same local network.',
+    'Remote Rift Mobile detects the desktop connector on the local network.',
   ),
   SetupStep('Manage matchmaking', 'Available actions depend on the current client state.'),
 ];
@@ -55,18 +55,14 @@ const exceptionStates = [
     advice: 'Start both applications, then reopen Remote Rift Mobile.',
   ),
   StatusItem(
-    'Same local network required',
-    'The phone and computer are connected to different networks.',
-    advice: 'Connect both devices to the same local network, then try again.',
+    'Local network access required',
+    'The phone cannot discover or reach the computer on the local network.',
+    advice:
+        'Use a network that allows device-to-device connections. Guest Wi-Fi, client isolation, VLANs, firewalls, and blocked multicast can prevent discovery.',
   ),
   StatusItem(
     'Update required',
     'The desktop and mobile applications use incompatible versions.',
     advice: 'Update Remote Rift Desktop, then reopen the mobile application.',
-  ),
-  StatusItem(
-    'Multiple networks detected',
-    'Remote Rift Desktop found more than one possible network address.',
-    advice: 'Use one active local network connection, then restart Remote Rift Desktop.',
   ),
 ];

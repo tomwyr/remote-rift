@@ -10,40 +10,6 @@ part of 'service_state.dart';
 // DraftGenerator
 // **************************************************************************
 
-class PendingMultipleAddressesDraft implements PendingMultipleAddresses {
-  // Mutable fields
-  bool starting;
-
-  // Getters and setters for nested draftable fields
-
-  PendingMultipleAddressesDraft({required this.starting});
-
-  PendingMultipleAddresses save() =>
-      PendingMultipleAddresses(starting: starting);
-
-  @override
-  List<Object?> get props => save().props;
-  @override
-  bool? get stringify => save().stringify;
-  @override
-  int get hashCode => save().hashCode;
-
-  @override
-  String toString() => save().toString();
-}
-
-extension PendingMultipleAddressesDraftExtension on PendingMultipleAddresses {
-  PendingMultipleAddressesDraft draft() =>
-      PendingMultipleAddressesDraft(starting: this.starting);
-  PendingMultipleAddresses produce(
-    void Function(PendingMultipleAddressesDraft draft) producer,
-  ) {
-    final draft = this.draft();
-    producer(draft);
-    return draft.save();
-  }
-}
-
 class StartupErrorDraft implements StartupError {
   // Mutable fields
   ServiceErrorCause cause;

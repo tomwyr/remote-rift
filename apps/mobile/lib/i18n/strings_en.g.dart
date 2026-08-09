@@ -205,8 +205,8 @@ class Translations$connection$en {
 	/// en: 'Connection error'
 	String get errorTitle => 'Connection error';
 
-	/// en: 'Remote Rift Desktop could not be reached. Make sure it is running and both devices are on the same local network.'
-	String get errorUnableToConnectDescription => 'Remote Rift Desktop could not be reached. Make sure it is running and both devices are on the same local network.';
+	/// en: 'Remote Rift Desktop could not be reached. Make sure it is running and both devices can communicate on the same local network.'
+	String get errorUnableToConnectDescription => 'Remote Rift Desktop could not be reached. Make sure it is running and both devices can communicate on the same local network.';
 
 	/// en: 'Remote Rift Desktop could not be reached.'
 	String get errorUnknownDescription => 'Remote Rift Desktop could not be reached.';
@@ -318,7 +318,7 @@ extension on Translations {
 			'connection.incompatibleDescription' => 'Your desktop application is out of date and isn\'t compatible anymore. Please update it to continue.',
 			'connection.incompatibleRetry' => 'Refresh',
 			'connection.errorTitle' => 'Connection error',
-			'connection.errorUnableToConnectDescription' => 'Remote Rift Desktop could not be reached. Make sure it is running and both devices are on the same local network.',
+			'connection.errorUnableToConnectDescription' => 'Remote Rift Desktop could not be reached. Make sure it is running and both devices can communicate on the same local network.',
 			'connection.errorUnknownDescription' => 'Remote Rift Desktop could not be reached.',
 			'connection.errorRetry' => 'Reconnect',
 			'home.gameModeLabel' => 'Game Mode',

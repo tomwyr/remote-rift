@@ -17,16 +17,6 @@ class Starting extends ServiceState {}
 class Started extends ServiceState {}
 
 @draft
-class PendingMultipleAddresses extends ServiceState {
-  PendingMultipleAddresses({required this.starting});
-
-  final bool starting;
-
-  @override
-  List<Object?> get props => [starting];
-}
-
-@draft
 class StartupError extends ServiceState {
   StartupError({required this.cause, this.restartTriggered = false});
 
@@ -38,11 +28,9 @@ class StartupError extends ServiceState {
 }
 
 enum ServiceErrorCause {
-  addressNotFound,
   unknown;
 
   String get description => switch (this) {
-    .addressNotFound => t.service.errorNoAddressDescription,
     .unknown => t.service.errorUnknownDescription,
   };
 }

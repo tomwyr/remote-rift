@@ -1,3 +1,7 @@
+## [0.9.0] - Unreleased
+
+- Added support for multiple active IPv4 networks
+
 ## [0.8.0] - 2026-08-09
 
 - Redesigned the desktop application interface

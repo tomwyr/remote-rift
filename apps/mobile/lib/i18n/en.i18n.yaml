@@ -49,7 +49,7 @@ connection:
   incompatibleDescription: "Your desktop application is out of date and isn't compatible anymore. Please update it to continue."
   incompatibleRetry: "Refresh"
   errorTitle: "Connection error"
-  errorUnableToConnectDescription: "Remote Rift Desktop could not be reached. Make sure it is running and both devices are on the same local network."
+  errorUnableToConnectDescription: "Remote Rift Desktop could not be reached. Make sure it is running and both devices can communicate on the same local network."
   errorUnknownDescription: "Remote Rift Desktop could not be reached."
   errorRetry: "Reconnect"
 

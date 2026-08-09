@@ -54,7 +54,7 @@ class SectionHowItWorks extends StatelessComponent {
         ],
       ),
       .text(
-        'If the connector cannot be found, confirm that both devices use the same local network and that the desktop application is running.',
+        'If the connector cannot be found, confirm that both devices can communicate on the local network and that the desktop application is running.',
       ),
     ]),
   ]);
