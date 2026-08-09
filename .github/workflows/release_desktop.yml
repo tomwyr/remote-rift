@@ -9,6 +9,9 @@ permissions:
   contents: write
 
 jobs:
+  validate:
+    uses: ./.github/workflows/validate_code.yml
+
   prepare:
     runs-on: ubuntu-latest
     outputs:
@@ -24,7 +27,9 @@ jobs:
         run: scripts/release/validate-release.sh "$GITHUB_REF_NAME"
 
   build-windows:
-    needs: prepare
+    needs:
+      - validate
+      - prepare
     runs-on: windows-latest
     defaults:
       run:
@@ -58,7 +63,9 @@ jobs:
           if-no-files-found: error
 
   build-macos:
-    needs: prepare
+    needs:
+      - validate
+      - prepare
     runs-on: macos-latest
 
     steps:

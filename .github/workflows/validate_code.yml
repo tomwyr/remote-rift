@@ -1,6 +1,7 @@
 name: Validate code
 
 on:
+  workflow_call:
   pull_request:
   push:
     branches:
@@ -33,7 +34,9 @@ jobs:
         run: dart analyze
 
       - name: Test utilities package
-        run: dart test -C packages/utils
+        working-directory: packages/utils
+        run: dart test
 
       - name: Test updater package
-        run: dart test -C packages/updater
+        working-directory: packages/updater
+        run: dart test
