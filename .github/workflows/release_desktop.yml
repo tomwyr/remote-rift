@@ -1,0 +1,117 @@
+name: Release desktop
+
+on:
+  push:
+    tags:
+      - 'desktop-*'
+
+permissions:
+  contents: write
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.release.outputs.version }}
+      title: ${{ steps.release.outputs.title }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Validate release
+        id: release
+        run: scripts/release/validate-release.sh "$GITHUB_REF_NAME"
+
+  build-windows:
+    needs: prepare
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.44.3
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build Windows app
+        working-directory: apps/desktop
+        run: flutter build windows --release
+
+      - name: Package Windows asset
+        run: scripts/release/package-release.sh windows "${{ needs.prepare.outputs.version }}"
+
+      - name: Upload Windows release asset
+        uses: actions/upload-artifact@v4
+        with:
+          name: desktop-windows
+          path: dist/RemoteRift-${{ needs.prepare.outputs.version }}-windows.zip
+          if-no-files-found: error
+
+  build-macos:
+    needs: prepare
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.44.3
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build macOS app
+        working-directory: apps/desktop
+        run: flutter build macos --release
+
+      - name: Package macOS asset
+        run: scripts/release/package-release.sh macos "${{ needs.prepare.outputs.version }}"
+
+      - name: Upload macOS release asset
+        uses: actions/upload-artifact@v4
+        with:
+          name: desktop-macos
+          path: dist/RemoteRift-${{ needs.prepare.outputs.version }}-macos.zip
+          if-no-files-found: error
+
+  publish:
+    needs:
+      - prepare
+      - build-windows
+      - build-macos
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download release assets
+        uses: actions/download-artifact@v4
+        with:
+          path: release-assets
+          merge-multiple: true
+
+      - name: Extract release notes
+        run: scripts/release/extract-notes.sh "$GITHUB_REF_NAME" dist/release-notes.md
+
+      - name: Publish GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: ${{ needs.prepare.outputs.title }}
+          body_path: dist/release-notes.md
+          files: release-assets/*
+          fail_on_unmatched_files: true

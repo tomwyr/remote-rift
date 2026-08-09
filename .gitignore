@@ -4,6 +4,7 @@
 # Flutter and Dart build output.
 build/
 .build/
+dist/
 coverage/
 .flutter-plugins
 .flutter-plugins-dependencies

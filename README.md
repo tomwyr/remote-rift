@@ -41,3 +41,14 @@ The workspace is organized around user-facing applications and the packages that
 - [Utils](packages/utils) - Shared Dart utilities and common data models.
 - [Tools](packages/tools) - Scripts and utilities used during development.
 - [Updater](packages/updater) - Service enabling application updates at runtime.
+
+## Releases
+
+Remote Rift projects are built and published through GitHub Actions.
+
+Mobile and Desktop builds are available from the [GitHub Releases page](https://github.com/tomwyr/remote-rift/releases). Mobile builds can be downloaded and installed manually until the application is available through app stores.
+
+> [!NOTE]
+> iOS builds are unsigned and require an appropriate Apple distribution method before they can be installed.
+
+Website releases are published to GitHub Pages. The current website version is available at [tomwyr.github.io/remote-rift](https://tomwyr.github.io/remote-rift/).

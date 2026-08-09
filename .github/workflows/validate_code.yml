@@ -1,0 +1,39 @@
+name: Validate code
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.44.3
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Check Dart formatting
+        run: scripts/check-dart-formatting.sh
+
+      - name: Analyze workspace
+        run: dart analyze
+
+      - name: Test utilities package
+        run: dart test -C packages/utils
+
+      - name: Test updater package
+        run: dart test -C packages/updater

@@ -1,0 +1,122 @@
+name: Release mobile
+
+on:
+  push:
+    tags:
+      - 'mobile-*'
+
+permissions:
+  contents: write
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.release.outputs.version }}
+      title: ${{ steps.release.outputs.title }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Validate release
+        id: release
+        run: scripts/release/validate-release.sh "$GITHUB_REF_NAME"
+
+  build-android:
+    needs: prepare
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.44.3
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Restore Android signing key
+        run: scripts/release/restore-android-signing-key.sh
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+
+      - name: Build Android app
+        working-directory: apps/mobile
+        run: flutter build apk --release
+
+      - name: Package Android asset
+        run: scripts/release/package-release.sh android "${{ needs.prepare.outputs.version }}"
+
+      - name: Upload Android release asset
+        uses: actions/upload-artifact@v4
+        with:
+          name: mobile-android
+          path: dist/remoterift-${{ needs.prepare.outputs.version }}.apk.zip
+          if-no-files-found: error
+
+  build-ios:
+    needs: prepare
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.44.3
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build iOS app
+        working-directory: apps/mobile
+        run: flutter build ios --release --no-codesign
+
+      - name: Package iOS asset
+        run: scripts/release/package-release.sh ios "${{ needs.prepare.outputs.version }}"
+
+      - name: Upload iOS release asset
+        uses: actions/upload-artifact@v4
+        with:
+          name: mobile-ios
+          path: dist/remoterift-${{ needs.prepare.outputs.version }}.app.zip
+          if-no-files-found: error
+
+  publish:
+    needs:
+      - prepare
+      - build-android
+      - build-ios
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download release assets
+        uses: actions/download-artifact@v4
+        with:
+          path: release-assets
+          merge-multiple: true
+
+      - name: Extract release notes
+        run: scripts/release/extract-notes.sh "$GITHUB_REF_NAME" dist/release-notes.md
+
+      - name: Publish GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: ${{ needs.prepare.outputs.title }}
+          body_path: dist/release-notes.md
+          files: release-assets/*
+          fail_on_unmatched_files: true
