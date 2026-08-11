@@ -2,6 +2,17 @@
   "version": "2.0.0",
   "tasks": [
     {
+      "label": "Test: All",
+      "detail": "Runs every workspace member with tests",
+      "group": "test",
+      "type": "shell",
+      "command": "${workspaceFolder}/scripts/test-all.sh",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
       "label": "Connector: Build",
       "detail": "Compiles the Remote Rift Connector API into an executable",
       "group": "build",

@@ -33,10 +33,5 @@ jobs:
       - name: Analyze workspace
         run: dart analyze
 
-      - name: Test utilities package
-        working-directory: packages/utils
-        run: dart test
-
-      - name: Test updater package
-        working-directory: packages/updater
-        run: dart test
+      - name: Test workspace
+        run: scripts/test-all.sh
