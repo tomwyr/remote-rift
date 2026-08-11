@@ -9,7 +9,7 @@ for manifest in apps/*/pubspec.yaml packages/*/pubspec.yaml; do
   package_dir=$(dirname "$manifest")
   [[ -d "$package_dir/test" ]] || continue
 
-  if rg -q '^  flutter:' "$manifest"; then
+  if grep -q '^  flutter:' "$manifest"; then
     (cd "$package_dir" && flutter test --no-pub)
   else
     (cd "$package_dir" && dart test)
