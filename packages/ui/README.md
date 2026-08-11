@@ -8,7 +8,12 @@ The project uses mDNS to enable automatic service discovery and registration on 
 
 This is achieved through the [Bonsoir](https://pub.dev/packages/bonsoir) package, which handles broadcasting the service and discovering available instances on the network. For more information on how service discovery and registration work, see the [ServiceRegistry](./lib/src/network/service_registry.dart) class.
 
-The desktop service listens on all local IPv4 interfaces and the mobile client tries every IPv4 endpoint returned for the resolved service. Discovery remains link-local: devices must be on a network that permits mDNS and direct TCP communication. Guest Wi-Fi, client isolation, VLANs, routed-network boundaries, firewalls, and multicast filtering can prevent discovery.
+The desktop service listens on available local IPv4 and IPv6 interfaces. The mobile client discovers the service over mDNS and tries each usable endpoint in turn.
+
+Discovery requires a local network that permits mDNS and direct TCP connections. Guest Wi-Fi, client isolation, VLANs, routed-network boundaries, firewalls, and multicast filtering can prevent discovery.
+
+> [!NOTE]
+> Link-local IPv6 addresses require an interface identifier. The current Bonsoir Darwin implementation does not provide it, so Remote Rift ignores those addresses on Apple platforms. IPv4 and global IPv6 endpoints continue to work.
 
 ## Dependencies
 

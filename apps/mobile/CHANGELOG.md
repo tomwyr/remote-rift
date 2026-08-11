@@ -1,6 +1,7 @@
 ## [0.11.0] - Unreleased
 
 - Improved desktop service discovery across multiple active IPv4 networks
+- Added IPv6 service discovery and connection support
 
 ## [0.10.0] - 2026-08-09
 

@@ -1,7 +1,7 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:bonsoir/bonsoir.dart';
+import 'package:remote_rift_ui/src/network/service_address.dart';
 
 class ServiceRegistry {
   ServiceRegistry({required this.serviceName, required this.serviceType});
@@ -58,7 +58,7 @@ class ServiceRegistry {
 
         case BonsoirDiscoveryServiceResolvedEvent():
           if (event.service case BonsoirService(:var hostAddresses, :var port)) {
-            final addresses = ServiceAddress.normalizedAll(hosts: hostAddresses, port: port);
+            final addresses = ServiceAddress.resolveAll(hosts: hostAddresses, port: port);
             if (addresses.isNotEmpty) {
               return addresses;
             }
@@ -80,48 +80,6 @@ class ServiceBroadcast {
 
   Future<void> dispose() async {
     await _handler.ensureStopped();
-  }
-}
-
-class ServiceAddress {
-  ServiceAddress({required this.host, required this.port});
-
-  factory ServiceAddress.normalized({required String host, required int port}) {
-    // Remove trailing period from host if it's a fully qualified domain name.
-    final normalizedHost = host.endsWith('.') ? host.substring(0, host.length - 1) : host;
-    return .new(host: normalizedHost, port: port);
-  }
-
-  static List<ServiceAddress> normalizedAll({
-    required List<String> hosts,
-    required int port,
-  }) {
-    final addresses = <ServiceAddress>[];
-    final seenHosts = <String>{};
-
-    for (final host in hosts) {
-      final address = ServiceAddress.normalized(host: host, port: port);
-      final alreadySeen = !seenHosts.add(address.host);
-      if (address.eligibleForConnection && !alreadySeen) {
-        addresses.add(address);
-      }
-    }
-
-    return addresses;
-  }
-
-  final String host;
-  final int port;
-
-  String toAddressString() {
-    return '$host:$port';
-  }
-}
-
-extension on ServiceAddress {
-  bool get eligibleForConnection {
-    final internetAddress = InternetAddress.tryParse(host);
-    return internetAddress != null && internetAddress.type == .IPv4 && !internetAddress.isLoopback;
   }
 }
 

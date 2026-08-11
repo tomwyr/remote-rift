@@ -48,7 +48,12 @@ To run the application on a device:
 3. Start the League of Legends client and wait for the connection to be established.
 4. Run the Remote Rift Mobile application following the [setup instructions](../mobile/README.md#usage).
 
-Remote Rift Desktop supports multiple active IPv4 network adapters automatically. Remote Rift Mobile must be able to reach the desktop through the same local network with multicast DNS and normal TCP connections available. Guest Wi-Fi, client isolation, VLAN or routed-network boundaries, firewalls, and networks that block multicast can prevent automatic discovery.
+Remote Rift Desktop supports multiple active IPv4 and IPv6 network adapters automatically. Remote Rift Mobile must be on the same local network with mDNS and direct TCP connections available.
+
+Guest Wi-Fi, client isolation, VLAN or routed-network boundaries, firewalls, and networks that block multicast can prevent automatic discovery.
+
+> [!NOTE]
+> Link-local IPv6 addresses require an interface identifier. The current Bonsoir Darwin implementation does not provide it, so Remote Rift ignores those addresses on Apple platforms. IPv4 and global IPv6 endpoints continue to work.
 
 ## Development
 

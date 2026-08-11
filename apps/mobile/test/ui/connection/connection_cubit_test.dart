@@ -20,13 +20,15 @@ void main() {
 
   final timeLimit = Duration(seconds: 5);
 
+  ServiceAddress serviceAddress(String host) => .resolve(host: host, port: 8080)!;
+
   setUpAll(TestWidgetsFlutterBinding.ensureInitialized);
 
   setUp(() {
     apiClient = MockRemoteRiftApiClient();
     serviceRegistry = MockServiceRegistry();
     appConfig = MockAppConfig();
-    statusController = StreamController();
+    statusController = StreamController.broadcast();
     cubit = ConnectionCubit(
       appConfig: appConfig,
       apiClient: apiClient,
@@ -42,7 +44,7 @@ void main() {
   test('reports incompatibility when service version is below the minimum', () async {
     when(() => appConfig.apiMinVersion).thenReturn('0.12.0');
     when(() => serviceRegistry.discover(timeLimit: timeLimit)).thenAnswer(
-      (_) async => [ServiceAddress(host: '192.168.1.4', port: 8080)],
+      (_) async => [serviceAddress('192.168.1.4')],
     );
     when(() => apiClient.getServiceInfo()).thenAnswer(
       (_) async => RemoteRiftApiServiceInfo(version: '0.11.0'),
@@ -58,8 +60,8 @@ void main() {
     when(() => appConfig.apiMinVersion).thenReturn('0.12.0');
     when(() => serviceRegistry.discover(timeLimit: timeLimit)).thenAnswer(
       (_) async => [
-        ServiceAddress(host: '10.0.0.2', port: 8080),
-        ServiceAddress(host: '192.168.1.4', port: 8080),
+        serviceAddress('10.0.0.2'),
+        serviceAddress('192.168.1.4'),
       ],
     );
     when(() => apiClient.getServiceInfo()).thenAnswer(
@@ -79,8 +81,8 @@ void main() {
     when(() => appConfig.apiMinVersion).thenReturn('0.12.0');
     when(() => serviceRegistry.discover(timeLimit: timeLimit)).thenAnswer(
       (_) async => [
-        ServiceAddress(host: '10.0.0.2', port: 8080),
-        ServiceAddress(host: '192.168.1.4', port: 8080),
+        serviceAddress('10.0.0.2'),
+        serviceAddress('192.168.1.4'),
       ],
     );
     var serviceInfoRequests = 0;
@@ -108,8 +110,8 @@ void main() {
     when(() => appConfig.apiMinVersion).thenReturn('0.12.0');
     when(() => serviceRegistry.discover(timeLimit: timeLimit)).thenAnswer(
       (_) async => [
-        ServiceAddress(host: '10.0.0.2', port: 8080),
-        ServiceAddress(host: '192.168.1.4', port: 8080),
+        serviceAddress('10.0.0.2'),
+        serviceAddress('192.168.1.4'),
       ],
     );
     var serviceInfoRequests = 0;
@@ -131,5 +133,30 @@ void main() {
     expect(cubit.state, isA<Connected>());
     verify(() => apiClient.setApiAddress('10.0.0.2:8080')).called(1);
     verify(() => apiClient.setApiAddress('192.168.1.4:8080')).called(1);
+  });
+
+  test('uses an IPv6 endpoint during ordered connection attempts', () async {
+    when(() => appConfig.apiMinVersion).thenReturn('0.12.0');
+    when(() => serviceRegistry.discover(timeLimit: timeLimit)).thenAnswer(
+      (_) async => [
+        serviceAddress('2001:db8::4'),
+        serviceAddress('192.168.1.4'),
+      ],
+    );
+    when(() => apiClient.getServiceInfo()).thenAnswer(
+      (_) async => RemoteRiftApiServiceInfo(version: '0.12.0'),
+    );
+    when(() => apiClient.getStatusStream(timeLimit: timeLimit * 2)).thenAnswer(
+      (_) => statusController.stream,
+    );
+
+    cubit.initialize();
+    await pumpEventQueue();
+    statusController.add(RemoteRiftData(.ready));
+    await pumpEventQueue();
+
+    expect(cubit.state, isA<Connected>());
+    verify(() => apiClient.setApiAddress('[2001:db8::4]:8080')).called(1);
+    verifyNever(() => apiClient.setApiAddress('192.168.1.4:8080'));
   });
 }

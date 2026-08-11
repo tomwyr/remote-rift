@@ -1,6 +1,7 @@
 ## [0.9.0] - Unreleased
 
 - Added support for multiple active IPv4 networks
+- Added IPv6 API listener support
 
 ## [0.8.0] - 2026-08-09
 

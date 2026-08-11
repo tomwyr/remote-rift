@@ -14,7 +14,7 @@ void main() {
     webSocketClient = HttpClient();
     serviceInfoHandler = (_) async => throw UnimplementedError();
     apiClient = RemoteRiftApiClient.withClients(
-      httpClient: MockClient(serviceInfoHandler),
+      httpClient: MockClient((request) => serviceInfoHandler(request)),
       webSocketClient: webSocketClient,
     );
   });
@@ -42,5 +42,31 @@ void main() {
     final serviceInfo = apiClient.getServiceInfo();
 
     expect(serviceInfo, throwsA(isA<FormatException>()));
+  });
+
+  test('gets service information from a bracketed IPv6 endpoint', () async {
+    final requestedUrls = <String>[];
+    serviceInfoHandler = (request) async {
+      requestedUrls.add(request.url.toString());
+      return Response('{"version":"0.12.1"}', 200);
+    };
+    apiClient.setApiAddress('[2001:db8::4]:8080');
+
+    await apiClient.getServiceInfo();
+
+    expect(requestedUrls, ['http://[2001:db8::4]:8080/service/info']);
+  });
+
+  test('gets service information from a scoped IPv6 endpoint', () async {
+    final requestedUrls = <String>[];
+    serviceInfoHandler = (request) async {
+      requestedUrls.add(request.url.toString());
+      return Response('{"version":"0.12.1"}', 200);
+    };
+    apiClient.setApiAddress('[fe80::4%25en0]:8080');
+
+    await apiClient.getServiceInfo();
+
+    expect(requestedUrls, ['http://[fe80::4%25en0]:8080/service/info']);
   });
 }
