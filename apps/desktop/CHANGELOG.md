@@ -1,4 +1,4 @@
-## [0.9.0] - Unreleased
+## [0.9.0] - 2026-08-12
 
 - Added support for multiple active IPv4 networks
 - Added IPv6 API listener support

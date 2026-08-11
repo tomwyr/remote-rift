@@ -1,4 +1,4 @@
-## [0.11.0] - Unreleased
+## [0.11.0] - 2026-08-12
 
 - Improved desktop service discovery across multiple active IPv4 networks
 - Added IPv6 service discovery and connection support
