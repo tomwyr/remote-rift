@@ -4,13 +4,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'update_state.dart';
 
 class UpdateCubit({
-  required final ApplicationUpdater updater,
+  required final ApplicationUpdater _updater,
 }) extends Cubit<UpdateState> {
   this : super(Initial());
 
   void initialize() async {
     _assertInitializeState();
-    final update = await updater.checkUpdateAvailable();
+    final update = await _updater.checkUpdateAvailable();
     if (update != null) {
       emit(UpdateAvailable(update: update));
     } else {
@@ -22,7 +22,7 @@ class UpdateCubit({
     final update = _assertInstallUpdateState();
     try {
       emit(UpdateInProgress());
-      await updater.installUpdate(update: update);
+      await _updater.installUpdate(update: update);
     } catch (_) {
       emit(UpdateError(update: update));
     }

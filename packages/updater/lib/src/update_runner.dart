@@ -6,8 +6,8 @@ import 'file_utils.dart';
 import 'platform.dart';
 
 abstract class UpdateRunner({
-  required final String applicationLabel,
-  required final FileUtils fileUtils,
+  required final String _applicationLabel,
+  required final FileUtils _fileUtils,
 }) implements PlatformUpdateRunner {
   factory UpdateRunner.platform({
     required String applicationLabel,
@@ -30,14 +30,14 @@ abstract class UpdateRunner({
   }
 
   Future<void> startProcess({required String archivePath}) async {
-    final applicationPath = fileUtils.getApplicationDirectory();
+    final applicationPath = _fileUtils.getApplicationDirectory();
     final updateDirPath = Directory.systemTemp.path;
     final updaterPath = await _copyUpdater(updateDirPath);
 
     final updateArgs = [
       archivePath,
       applicationPath,
-      applicationLabel,
+      _applicationLabel,
       ...updateExtraArgs,
     ];
 
@@ -55,10 +55,10 @@ abstract class UpdateRunner({
     // Wait to ensure the app has fully quit before replacing
     await Future.delayed(Duration(seconds: 1));
 
-    final unzippedPath = await fileUtils.unzipFile(archivePath);
+    final unzippedPath = await _fileUtils.unzipFile(archivePath);
     final paths = getUpdatePaths(unzippedPath, applicationPath);
 
-    await fileUtils.replaceWithBackup(
+    await _fileUtils.replaceWithBackup(
       sourcePath: paths.source,
       targetPath: paths.target,
       backupPath: paths.backup,
@@ -69,7 +69,7 @@ abstract class UpdateRunner({
   }
 
   Future<String> _copyUpdater(String targetDirPath) async {
-    final assetsPath = fileUtils.getAssetsDirectory();
+    final assetsPath = _fileUtils.getAssetsDirectory();
     final updaterPath = path.join(assetsPath, updaterFileName);
 
     final updater = File(updaterPath);
@@ -79,7 +79,7 @@ abstract class UpdateRunner({
 
     final updateTempPath = path.join(
       targetDirPath,
-      '${applicationLabel}_$updaterFileName',
+      '${_applicationLabel}_$updaterFileName',
     );
     await updater.copy(updateTempPath);
     return updateTempPath;
@@ -95,11 +95,11 @@ abstract interface class PlatformUpdateRunner {
 
 class WindowsUpdateRunner({
   required super.applicationLabel,
-  required final String executableName,
+  required final String _executableName,
   super.fileUtils = const FileUtils(),
 }) extends UpdateRunner {
   @override
-  List<String> get updateExtraArgs => [executableName];
+  List<String> get updateExtraArgs => [_executableName];
 
   @override
   String get updaterFileName => 'run_update.exe';
@@ -110,7 +110,7 @@ class WindowsUpdateRunner({
       source: sourcePath,
       target: targetPath,
       backup: '$targetPath.bak',
-      executable: path.join(targetPath, executableName),
+      executable: path.join(targetPath, _executableName),
     );
   }
 
@@ -126,19 +126,19 @@ class WindowsUpdateRunner({
 
 class MacosUpdateRunner({
   required super.applicationLabel,
-  required final String bundleName,
+  required final String _bundleName,
   super.fileUtils = const FileUtils(),
 }) extends UpdateRunner {
   @override
   String get updaterFileName => 'run_update';
 
   @override
-  List<String> get updateExtraArgs => [bundleName];
+  List<String> get updateExtraArgs => [_bundleName];
 
   @override
   UpdateRunnerPaths getUpdatePaths(String sourcePath, String targetPath) {
     return .new(
-      source: path.join(sourcePath, bundleName),
+      source: path.join(sourcePath, _bundleName),
       target: targetPath,
       backup: '$targetPath.bak',
       executable: targetPath,

@@ -7,8 +7,8 @@ import 'lcu_connection.dart';
 import 'lcu_models.dart';
 
 class LcuApiClient({
-  required final LcuConnection lcuConnection,
-  required final Client httpClient,
+  required final LcuConnection _lcuConnection,
+  required final Client _httpClient,
 }) {
   Future<HeartbeatConnection> getHeartbeatConnection() async {
     final response = await _request(.post, 'lol-heartbeat/v1/connection-status');
@@ -70,7 +70,7 @@ class LcuApiClient({
 
   Future<Response> _request(HttpMethod method, String path, [Map<String, dynamic>? body]) async {
     Future<Response> execute() async {
-      final lockfileData = lcuConnection.getLockfileData();
+      final lockfileData = _lcuConnection.getLockfileData();
       return await _runRequest(method, path, body, lockfileData);
     }
 
@@ -78,7 +78,7 @@ class LcuApiClient({
       return await execute();
     } on SocketException catch (_) {
       // Retry once in case the error was caused by a stale lockfile.
-      lcuConnection.refreshLockfileData();
+      _lcuConnection.refreshLockfileData();
       try {
         return await execute();
       } on SocketException catch (_) {
@@ -104,9 +104,9 @@ class LcuApiClient({
     final headers = {'Authorization': 'Basic $authorization', 'Content-Type': 'application/json'};
 
     return await switch (method) {
-      .get => httpClient.get(url, headers: headers),
-      .post => httpClient.post(url, headers: headers, body: jsonEncode(body)),
-      .delete => httpClient.delete(url, headers: headers),
+      .get => _httpClient.get(url, headers: headers),
+      .post => _httpClient.post(url, headers: headers, body: jsonEncode(body)),
+      .delete => _httpClient.delete(url, headers: headers),
     };
   }
 

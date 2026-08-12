@@ -13,7 +13,7 @@ import 'models/state.dart';
 import 'models/status.dart';
 
 class RemoteRiftConnector._init({
-  required final LcuApiClient lcuApi,
+  required final LcuApiClient _lcuApi,
 }) {
   factory RemoteRiftConnector() {
     return RemoteRiftConnector._init(
@@ -29,7 +29,7 @@ class RemoteRiftConnector._init({
   Stream<RemoteRiftResponse<RemoteRiftStatus>> getStatusStream() async* {
     await for (var _ in _tickStream(seconds: 1)) {
       yield await _runCatching(() async {
-        final connection = await lcuApi.getHeartbeatConnection();
+        final connection = await _lcuApi.getHeartbeatConnection();
         return connection.stableConnection ? .ready : .unavailable;
       });
     }
@@ -56,7 +56,7 @@ class RemoteRiftConnector._init({
 
   Future<String?> _getQueueNameOrNull({bool retry = false}) async {
     try {
-      final session = await lcuApi.getGameflowSession();
+      final session = await _lcuApi.getGameflowSession();
       final queue = session.gameData.queue;
 
       // Retry fetching in rare cases where session data gets desynced
@@ -74,7 +74,7 @@ class RemoteRiftConnector._init({
   }
 
   Future<RemoteRiftState> _getCurrentState() async {
-    final gameflowPhase = await lcuApi.getGameflowPhase();
+    final gameflowPhase = await _lcuApi.getGameflowPhase();
     switch (gameflowPhase) {
       case .none:
         final availableQueues = await _getAvailableQueues();
@@ -84,14 +84,14 @@ class RemoteRiftConnector._init({
         return Lobby(state: .idle);
 
       case .matchmaking:
-        final matchmakingSearch = await lcuApi.getMatchmakingSearch();
+        final matchmakingSearch = await _lcuApi.getMatchmakingSearch();
         return switch (matchmakingSearch.searchState) {
           .searching => Lobby(state: .searching),
           .found || .invalid => Unknown(),
         };
 
       case .readyCheck:
-        final readyCheck = await lcuApi.getReadyCheck();
+        final readyCheck = await _lcuApi.getReadyCheck();
         switch (readyCheck.state) {
           case .inProgress:
             final GameFoundState state = switch (readyCheck.playerResponse) {
@@ -116,13 +116,13 @@ class RemoteRiftConnector._init({
   }
 
   Future<List<GameQueue>> _getAvailableQueues() async {
-    final queues = await lcuApi.getGameQueues();
+    final queues = await _lcuApi.getGameQueues();
     return queues.where(GameQueueFilter.shouldDisplay).map(GameQueueMapper.fromLcu).toList();
   }
 
   Future<void> createLobby({required int queueId}) async {
     if (await _getCurrentState() case PreGame()) {
-      await lcuApi.createLobby(queueId: queueId);
+      await _lcuApi.createLobby(queueId: queueId);
     } else {
       throw RemoteRiftStateError.notPreGame;
     }
@@ -130,7 +130,7 @@ class RemoteRiftConnector._init({
 
   Future<void> leaveLobby() async {
     if (await _getCurrentState() case Lobby(state: .idle)) {
-      await lcuApi.deleteLobby();
+      await _lcuApi.deleteLobby();
     } else {
       throw RemoteRiftStateError.notIdleState;
     }
@@ -138,7 +138,7 @@ class RemoteRiftConnector._init({
 
   Future<void> searchMatch() async {
     if (await _getCurrentState() case Lobby(state: .idle)) {
-      await lcuApi.startMatchmakingSearch();
+      await _lcuApi.startMatchmakingSearch();
     } else {
       throw RemoteRiftStateError.notIdleState;
     }
@@ -146,7 +146,7 @@ class RemoteRiftConnector._init({
 
   Future<void> stopMatchSearch() async {
     if (await _getCurrentState() case Lobby(state: .searching)) {
-      await lcuApi.stopMatchmakingSearch();
+      await _lcuApi.stopMatchmakingSearch();
     } else {
       throw RemoteRiftStateError.notSearchingState;
     }
@@ -154,7 +154,7 @@ class RemoteRiftConnector._init({
 
   Future<void> acceptMatch() async {
     if (await _getCurrentState() case Found(state: .pending)) {
-      await lcuApi.acceptReadyCheck();
+      await _lcuApi.acceptReadyCheck();
     } else {
       throw RemoteRiftStateError.notPendingState;
     }
@@ -162,7 +162,7 @@ class RemoteRiftConnector._init({
 
   Future<void> declineMatch() async {
     if (await _getCurrentState() case Found(state: .pending)) {
-      await lcuApi.declineReadyCheck();
+      await _lcuApi.declineReadyCheck();
     } else {
       throw RemoteRiftStateError.notPendingState;
     }

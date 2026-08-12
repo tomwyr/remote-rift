@@ -12,9 +12,9 @@ import '../../data/app_config.dart';
 import 'connection_state.dart';
 
 class ConnectionCubit({
-  required final AppConfig appConfig,
-  required final RemoteRiftApiClient apiClient,
-  required final ServiceRegistry serviceRegistry,
+  required final AppConfig _appConfig,
+  required final RemoteRiftApiClient _apiClient,
+  required final ServiceRegistry _serviceRegistry,
 }) extends Cubit<ConnectionState> {
   this : super(Initial());
 
@@ -59,7 +59,7 @@ class ConnectionCubit({
   }
 
   void _restartStatusStream() {
-    final stream = apiClient
+    final stream = _apiClient
         .getStatusStream(timeLimit: Duration(seconds: 10))
         .peek(onDone: _connectToGameApi)
         .cancelable();
@@ -157,26 +157,26 @@ extension ConnectionApiVerification on ConnectionCubit {
   }
 
   Future<RemoteRiftApiServiceInfo?> _resolveApiAddress() async {
-    final addressCandidates = await serviceRegistry.discover(timeLimit: Duration(seconds: 5));
+    final addressCandidates = await _serviceRegistry.discover(timeLimit: Duration(seconds: 5));
 
     for (var next in addressCandidates) {
       try {
-        apiClient.setApiAddress(next.addressString);
-        final serviceInfo = await apiClient.getServiceInfo().timeout(Duration(seconds: 2));
+        _apiClient.setApiAddress(next.addressString);
+        final serviceInfo = await _apiClient.getServiceInfo().timeout(Duration(seconds: 2));
         return serviceInfo;
       } catch (_) {
         // Try the next endpoint resolved for the same service instance.
       }
     }
 
-    apiClient.setApiAddress(null);
+    _apiClient.setApiAddress(null);
     return null;
   }
 
   bool _verifyApiMinVersion(RemoteRiftApiServiceInfo info) {
     try {
       final apiVersion = Version.parse(info.version);
-      final minVersion = Version.parse(appConfig.apiMinVersion);
+      final minVersion = Version.parse(_appConfig.apiMinVersion);
       return apiVersion.isAtLeast(minVersion);
     } on VersionError {
       // Give the benefit of the doubt and allow connection attempt

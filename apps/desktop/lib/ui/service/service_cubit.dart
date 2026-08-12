@@ -6,7 +6,7 @@ import '../../services/api_service_runner.dart';
 import 'service_state.dart';
 
 class ServiceCubit({
-  required final RemoteRiftApiServiceRunner runner,
+  required final RemoteRiftApiServiceRunner _runner,
 }) extends Cubit<ServiceState> {
   this : super(Initial());
 
@@ -35,7 +35,7 @@ class ServiceCubit({
 
   Future<void> _startService() async {
     try {
-      await runner.run();
+      await _runner.run();
       emit(Started());
     } catch (error) {
       final newState = switch (error) {
@@ -46,6 +46,6 @@ class ServiceCubit({
   }
 
   Future<void> dispose() async {
-    await runner.close();
+    await _runner.close();
   }
 }

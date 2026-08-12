@@ -9,7 +9,7 @@ import 'package:remote_rift_utils/remote_rift_utils.dart';
 import 'connection_state.dart';
 
 class ConnectionCubit({
-  required final RemoteRiftConnector connector,
+  required final RemoteRiftConnector _connector,
 }) extends Cubit<ConnectionState> {
   this : super(Initial());
 
@@ -56,7 +56,7 @@ class ConnectionCubit({
   }
 
   void _resetStatusListener({VoidCallback? onConnectionAttempted}) {
-    final stream = connector
+    final stream = _connector
         .getStatusStream()
         .peek(
           onFirstOrError: onConnectionAttempted,

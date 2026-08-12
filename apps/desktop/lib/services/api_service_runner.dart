@@ -4,8 +4,8 @@ import 'package:remote_rift_api/remote_rift_api.dart';
 import 'package:remote_rift_ui/remote_rift_ui.dart';
 
 class RemoteRiftApiServiceRunner({
-  required final RemoteRiftApiService service,
-  required final ServiceRegistry registry,
+  required final RemoteRiftApiService _service,
+  required final ServiceRegistry _registry,
 }) {
   List<HttpServer> _servers = [];
   ServiceBroadcast? _broadcast;
@@ -32,7 +32,7 @@ class RemoteRiftApiServiceRunner({
 
     Future<void> runServerOn(InternetAddress address) async {
       final host = address.address;
-      final server = await service.run(host: host, port: port);
+      final server = await _service.run(host: host, port: port);
       servers.add(server);
     }
 
@@ -44,7 +44,7 @@ class RemoteRiftApiServiceRunner({
         // Keep the IPv4 listener available on hosts where IPv6 is disabled.
       }
 
-      final broadcast = await registry.broadcast(port: port);
+      final broadcast = await _registry.broadcast(port: port);
       return (servers, broadcast);
     } catch (_) {
       await servers.map((server) => server.close()).wait;

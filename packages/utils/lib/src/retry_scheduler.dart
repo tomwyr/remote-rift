@@ -5,8 +5,8 @@ import 'types.dart';
 enum RetrySchedulerStatus { idle, pending, running }
 
 class RetryScheduler({
-  required final RetryBackoff backoff,
-  required final AsyncCallback onRetry,
+  required final RetryBackoff _backoff,
+  required final AsyncCallback _onRetry,
 }) {
   RetrySchedulerStatus get status => _status;
 
@@ -29,21 +29,21 @@ class RetryScheduler({
   void reset() {
     _timer?.cancel();
     _status = .idle;
-    backoff.reset();
+    _backoff.reset();
   }
 
   void _scheduleRetry() {
-    _timer = Timer(backoff.currentDelay(), _runRetry);
+    _timer = Timer(_backoff.currentDelay(), _runRetry);
     _status = .pending;
   }
 
   Future<void> _runRetry({bool countAttempt = true}) async {
     _status = .running;
     try {
-      await onRetry();
+      await _onRetry();
     } finally {
       if (_status != .idle) {
-        if (countAttempt) backoff.tick();
+        if (countAttempt) _backoff.tick();
         _scheduleRetry();
       }
     }

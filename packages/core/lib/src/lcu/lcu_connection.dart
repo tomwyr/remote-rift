@@ -1,8 +1,8 @@
 import 'dart:io';
 
 class LcuConnection({
-  required final LcuLockfileParser parser,
-  required final LcuLockfileLoader loader,
+  required final LcuLockfileParser _parser,
+  required final LcuLockfileLoader _loader,
 }) {
   LcuLockfileData? _lockfileData;
 
@@ -15,7 +15,7 @@ class LcuConnection({
 
   LcuLockfileData refreshLockfileData() {
     try {
-      final data = parser.parseLockfile(loader.loadLockfile());
+      final data = _parser.parseLockfile(_loader.loadLockfile());
       _lockfileData = data;
       return data;
     } catch (_) {

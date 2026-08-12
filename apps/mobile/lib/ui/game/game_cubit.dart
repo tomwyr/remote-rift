@@ -10,7 +10,7 @@ import '../../data/api_client.dart';
 import 'game_state.dart';
 
 class GameCubit({
-  required final RemoteRiftApiClient apiClient,
+  required final RemoteRiftApiClient _apiClient,
 }) extends Cubit<GameState> {
   this : super(Loading());
 
@@ -28,37 +28,37 @@ class GameCubit({
 
   void createLobby({required int queueId}) {
     _runGameAction(() async {
-      await apiClient.createLobby(queueId: queueId);
+      await _apiClient.createLobby(queueId: queueId);
     });
   }
 
   void searchMatch() {
     _runGameAction(() async {
-      await apiClient.searchMatch();
+      await _apiClient.searchMatch();
     });
   }
 
   void leaveLobby() {
     _runGameAction(() async {
-      await apiClient.leaveLobby();
+      await _apiClient.leaveLobby();
     });
   }
 
   void stopMatchSearch() {
     _runGameAction(() async {
-      await apiClient.stopMatchSearch();
+      await _apiClient.stopMatchSearch();
     });
   }
 
   void acceptMatch() {
     _runGameAction(() async {
-      await apiClient.acceptMatch();
+      await _apiClient.acceptMatch();
     });
   }
 
   void declineMatch() {
     _runGameAction(() async {
-      await apiClient.declineMatch();
+      await _apiClient.declineMatch();
     });
   }
 
@@ -71,7 +71,7 @@ class GameCubit({
   }
 
   Future<void> _listenGameState() async {
-    final stream = apiClient.getCurrentSessionStream().cancelable();
+    final stream = _apiClient.getCurrentSessionStream().cancelable();
     _gameSessionStream = stream;
 
     await for (var gameSession in stream) {

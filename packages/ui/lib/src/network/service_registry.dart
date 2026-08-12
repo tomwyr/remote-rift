@@ -4,15 +4,15 @@ import 'package:bonsoir/bonsoir.dart';
 import 'package:remote_rift_ui/src/network/service_address.dart';
 
 class ServiceRegistry({
-  required final String serviceName,
-  required final String serviceType,
+  required final String _serviceName,
+  required final String _serviceType,
 }) {
   factory ServiceRegistry.remoteRift() =>
       ServiceRegistry(serviceName: 'Remote Rift', serviceType: '_remoterift._tcp');
 
   Future<ServiceBroadcast> broadcast({required int port}) async {
     final broadcast = BonsoirBroadcast(
-      service: BonsoirService(name: serviceName, type: serviceType, port: port),
+      service: BonsoirService(name: _serviceName, type: _serviceType, port: port),
     );
 
     try {
@@ -26,7 +26,7 @@ class ServiceRegistry({
   }
 
   Future<List<ServiceAddress>> discover({Duration? timeLimit}) async {
-    final discovery = BonsoirDiscovery(type: serviceType);
+    final discovery = BonsoirDiscovery(type: _serviceType);
 
     try {
       await discovery.initialize();

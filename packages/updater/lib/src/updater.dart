@@ -12,8 +12,8 @@ abstract interface class ApplicationUpdater {
 }
 
 class DesktopUpdater({
-  required final GitHubReleases releases,
-  required final UpdateRunner updateRunner,
+  required final GitHubReleases _releases,
+  required final UpdateRunner _updateRunner,
 }) implements ApplicationUpdater {
   @override
   Future<AvailableUpdate?> checkUpdateAvailable() async {
@@ -27,7 +27,7 @@ class DesktopUpdater({
 
   @override
   Future<void> installUpdate({required AvailableUpdate update}) async {
-    final downloadPath = await releases.downloadRelease(
+    final downloadPath = await _releases.downloadRelease(
       releaseTag: update.releaseTag,
     );
     if (downloadPath == null) {
@@ -35,7 +35,7 @@ class DesktopUpdater({
     }
 
     try {
-      await updateRunner.startProcess(archivePath: downloadPath);
+      await _updateRunner.startProcess(archivePath: downloadPath);
       exit(0);
     } catch (_) {
       throw ApplicationUpdaterError.installerStartupFailed;
@@ -44,11 +44,11 @@ class DesktopUpdater({
 
   Future<AvailableUpdate> _getLatestUpdate() async {
     try {
-      final latestTag = await releases.getLatestReleaseTag();
+      final latestTag = await _releases.getLatestReleaseTag();
       if (latestTag == null) {
         throw ApplicationUpdaterError.latestVersionUnavailable;
       }
-      final versionTag = latestTag.substring(releases.tagPrefix.length);
+      final versionTag = _releases.versionFromTag(latestTag);
       return AvailableUpdate(
         version: .parse(versionTag),
         releaseTag: latestTag,

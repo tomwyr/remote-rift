@@ -6,21 +6,27 @@ import 'package:path/path.dart';
 
 typedef GitHubNameResolver = String Function(String releaseTag);
 
-class GitHubReleases({
-  required final String repoName,
-  required final String userName,
-  required final String tagPrefix,
-  required final GitHubNameResolver resolveArtifactName,
-  Client? client,
-}) {
-  final Client client = client ?? Client();
+class GitHubReleases {
+  GitHubReleases({
+    required this._repoName,
+    required this._userName,
+    required this._tagPrefix,
+    required this._resolveArtifactName,
+    Client? client,
+  }) : _client = client ?? Client();
 
-  late final _baseUrl = 'https://github.com/$userName/$repoName';
-  late final _apiBaseUrl = 'https://api.github.com/repos/$userName/$repoName';
+  final String _repoName;
+  final String _userName;
+  final String _tagPrefix;
+  final GitHubNameResolver _resolveArtifactName;
+  final Client _client;
+
+  late final _baseUrl = 'https://github.com/$_userName/$_repoName';
+  late final _apiBaseUrl = 'https://api.github.com/repos/$_userName/$_repoName';
 
   Future<String?> getLatestReleaseTag() async {
     final url = '$_apiBaseUrl/releases';
-    final response = await client.get(Uri.parse(url));
+    final response = await _client.get(Uri.parse(url));
 
     if (response.statusCode != 200) {
       return null;
@@ -28,7 +34,7 @@ class GitHubReleases({
     final releases = (jsonDecode(response.body) as List).cast<Map<String, dynamic>>();
     for (var release in releases) {
       final tagName = release['tag_name'];
-      if (tagName case String value when value.startsWith(tagPrefix)) {
+      if (tagName case String value when value.startsWith(_tagPrefix)) {
         return value;
       }
     }
@@ -36,10 +42,10 @@ class GitHubReleases({
   }
 
   Future<String?> downloadRelease({required String releaseTag}) async {
-    final artifactName = resolveArtifactName(releaseTag);
+    final artifactName = _resolveArtifactName(releaseTag);
     final url = '$_baseUrl/releases/download/$releaseTag/$artifactName';
 
-    final response = await client.get(Uri.parse(url));
+    final response = await _client.get(Uri.parse(url));
     if (response.statusCode != 200) {
       return null;
     }
@@ -48,4 +54,6 @@ class GitHubReleases({
     await File(downloadPath).writeAsBytes(response.bodyBytes);
     return downloadPath;
   }
+
+  String versionFromTag(String releaseTag) => releaseTag.substring(_tagPrefix.length);
 }
