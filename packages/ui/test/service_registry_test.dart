@@ -19,7 +19,7 @@ void main() {
       port: 8080,
     );
 
-    expect(addresses.map((address) => address.toAddressString()), [
+    expect(addresses.map((address) => address.addressString), [
       '192.168.1.4:8080',
       '[2001:db8::4]:8080',
       '[fe80::4%25en0]:8080',
@@ -33,10 +33,38 @@ void main() {
       port: 8080,
     );
 
-    expect(addresses.map((address) => address.toAddressString()), [
+    expect(addresses.map((address) => address.addressString), [
       '[2001:db8::4]:8080',
       '[fe80::4%25en0]:8080',
       '[fe80::4%25en1]:8080',
     ]);
+  });
+
+  test('normalizes trailing dots on IPv6 addresses', () {
+    final address = ServiceAddress.resolve(host: '2001:db8::4.', port: 8080);
+
+    expect(address?.addressString, '[2001:db8::4]:8080');
+  });
+
+  test('rejects malformed and unusable IPv6 addresses', () {
+    final addresses = ServiceAddress.resolveAll(
+      hosts: [
+        '2001:db8:::4',
+        '2001:db8::4%',
+        'fe80::4',
+        'fe80::4%',
+        '::1',
+        '::',
+      ],
+      port: 8080,
+    );
+
+    expect(addresses, isEmpty);
+  });
+
+  test('escapes reserved characters in IPv6 scopes', () {
+    final address = ServiceAddress.resolve(host: 'fe80::4%en 0', port: 8080);
+
+    expect(address?.addressString, '[fe80::4%25en%200]:8080');
   });
 }

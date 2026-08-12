@@ -161,12 +161,11 @@ extension ConnectionApiVerification on ConnectionCubit {
   }
 
   Future<RemoteRiftApiServiceInfo?> _resolveApiAddress() async {
-    final apiAddresses = await serviceRegistry.discover(timeLimit: Duration(seconds: 5));
+    final addressCandidates = await serviceRegistry.discover(timeLimit: Duration(seconds: 5));
 
-    for (var apiAddress in apiAddresses) {
+    for (var next in addressCandidates) {
       try {
-        final address = apiAddress.toAddressString();
-        apiClient.setApiAddress(address);
+        apiClient.setApiAddress(next.addressString);
         final serviceInfo = await apiClient.getServiceInfo().timeout(Duration(seconds: 2));
         return serviceInfo;
       } catch (_) {
