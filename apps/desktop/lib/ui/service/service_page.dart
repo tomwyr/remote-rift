@@ -10,11 +10,10 @@ import '../widgets/layout.dart';
 import 'service_cubit.dart';
 import 'service_state.dart';
 
-class ServicePage extends StatelessWidget {
-  const ServicePage({super.key, required this.startedBuilder});
-
-  final WidgetBuilder startedBuilder;
-
+class const ServicePage({
+  super.key,
+  required final WidgetBuilder startedBuilder,
+}) extends StatelessWidget {
   static Widget builder({required WidgetBuilder startedBuilder}) {
     return BlocProvider(
       create: Dependencies.serviceCubit,

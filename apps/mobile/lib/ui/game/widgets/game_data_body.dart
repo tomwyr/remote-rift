@@ -3,26 +3,16 @@ import 'package:flutter/material.dart';
 import '../../../i18n/strings.g.dart';
 import '../../widgets/layout.dart';
 
-class GameDataBody extends StatelessWidget {
-  const GameDataBody({
-    super.key,
-    this.queueName,
-    this.queueNamePlaceholder,
-    required this.title,
-    required this.description,
-    this.child,
-    this.tone = .neutral,
-    this.icon,
-  });
-
-  final String? queueName;
-  final Widget? queueNamePlaceholder;
-  final String title;
-  final String description;
-  final Widget? child;
-  final RiftStatusTone tone;
-  final IconData? icon;
-
+class const GameDataBody({
+  super.key,
+  final String? queueName,
+  final Widget? queueNamePlaceholder,
+  required final String title,
+  required final String description,
+  final Widget? child,
+  final RiftStatusTone tone = .neutral,
+  final IconData? icon,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var effectiveQueueName = queueName;

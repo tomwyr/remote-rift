@@ -9,10 +9,10 @@ import 'package:remote_rift_utils/remote_rift_utils.dart';
 import '../../data/api_client.dart';
 import 'game_state.dart';
 
-class GameCubit extends Cubit<GameState> {
-  GameCubit({required this.apiClient}) : super(Loading());
-
-  final RemoteRiftApiClient apiClient;
+class GameCubit({
+  required final RemoteRiftApiClient apiClient,
+}) extends Cubit<GameState> {
+  this : super(Loading());
 
   final _retryBackoff = RetryBackoff.standard;
   CancelableStream<RemoteRiftSession>? _gameSessionStream;

@@ -4,11 +4,9 @@ class AppLifecycle {
   static AppLifecycleState? get currentState => WidgetsBinding.instance.lifecycleState;
 }
 
-class AppLifecycleListener with WidgetsBindingObserver {
-  AppLifecycleListener({required AppLifecycleStateChangeListener listener}) : _listener = listener;
-
-  final AppLifecycleStateChangeListener _listener;
-
+class AppLifecycleListener({
+  required final AppLifecycleStateChangeListener _listener,
+}) with WidgetsBindingObserver {
   var _registered = false;
   AppLifecycleState? _previous;
 
@@ -43,5 +41,7 @@ class AppLifecycleListener with WidgetsBindingObserver {
   }
 }
 
-typedef AppLifecycleStateChangeListener =
-    void Function(AppLifecycleState from, AppLifecycleState to);
+typedef AppLifecycleStateChangeListener = void Function(
+  AppLifecycleState from,
+  AppLifecycleState to,
+);

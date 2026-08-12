@@ -11,12 +11,10 @@ abstract interface class ApplicationUpdater {
   Future<AvailableUpdate?> checkUpdateAvailable();
 }
 
-class DesktopUpdater implements ApplicationUpdater {
-  DesktopUpdater({required this.releases, required this.updateRunner});
-
-  final GitHubReleases releases;
-  final UpdateRunner updateRunner;
-
+class DesktopUpdater({
+  required final GitHubReleases releases,
+  required final UpdateRunner updateRunner,
+}) implements ApplicationUpdater {
   @override
   Future<AvailableUpdate?> checkUpdateAvailable() async {
     final latest = await _getLatestUpdate();
@@ -70,12 +68,10 @@ class DesktopUpdater implements ApplicationUpdater {
   }
 }
 
-class AvailableUpdate {
-  AvailableUpdate({required this.version, required this.releaseTag});
-
-  final Version version;
-  final String releaseTag;
-}
+class AvailableUpdate({
+  required final Version version,
+  required final String releaseTag,
+}) {}
 
 enum ApplicationUpdaterError implements Exception {
   latestVersionUnavailable,

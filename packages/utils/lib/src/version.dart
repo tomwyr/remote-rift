@@ -1,8 +1,10 @@
 import 'package:equatable/equatable.dart';
 
-class Version extends Equatable {
-  Version({required this.major, required this.minor, required this.patch});
-
+class Version({
+  required final int major,
+  required final int minor,
+  required final int patch,
+}) extends Equatable {
   String get stringValue => '$major.$minor.$patch';
 
   factory Version.parse(String input) {
@@ -17,10 +19,6 @@ class Version extends Equatable {
     final patch = int.parse(match.group(3)!);
     return Version(major: major, minor: minor, patch: patch);
   }
-
-  final int major;
-  final int minor;
-  final int patch;
 
   bool isAtLeast(Version other, {VersionComponent upTo = .patch}) {
     return switch (upTo) {

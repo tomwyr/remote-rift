@@ -35,11 +35,9 @@ sealed class RemoteRiftState extends Equatable {
 }
 
 @JsonSerializable()
-class PreGame extends RemoteRiftState {
-  PreGame({required this.availableQueues});
-
-  final List<GameQueue> availableQueues;
-
+class PreGame({
+  required final List<GameQueue> availableQueues,
+}) extends RemoteRiftState {
   factory PreGame.fromJson(Map<String, dynamic> json) => _$PreGameFromJson(json);
 
   Map<String, dynamic> toJson() => _$PreGameToJson(this);
@@ -49,11 +47,9 @@ class PreGame extends RemoteRiftState {
 }
 
 @JsonSerializable()
-class Lobby extends RemoteRiftState {
-  const Lobby({required this.state});
-
-  final GameLobbyState state;
-
+class const Lobby({
+  required final GameLobbyState state,
+}) extends RemoteRiftState {
   factory Lobby.fromJson(Map<String, dynamic> json) => _$LobbyFromJson(json);
 
   Map<String, dynamic> toJson() => _$LobbyToJson(this);
@@ -63,13 +59,11 @@ class Lobby extends RemoteRiftState {
 }
 
 @JsonSerializable()
-class Found extends RemoteRiftState {
-  const Found({required this.state, required this.answerMaxTime, required this.answerTimeLeft});
-
-  final GameFoundState state;
-  final double answerMaxTime;
-  final double answerTimeLeft;
-
+class const Found({
+  required final GameFoundState state,
+  required final double answerMaxTime,
+  required final double answerTimeLeft,
+}) extends RemoteRiftState {
   factory Found.fromJson(Map<String, dynamic> json) => _$FoundFromJson(json);
 
   Map<String, dynamic> toJson() => _$FoundToJson(this);

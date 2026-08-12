@@ -5,9 +5,10 @@ import 'package:path/path.dart' as path;
 import 'file_utils.dart';
 import 'platform.dart';
 
-abstract class UpdateRunner implements PlatformUpdateRunner {
-  UpdateRunner({required this.applicationLabel, required this.fileUtils});
-
+abstract class UpdateRunner({
+  required final String applicationLabel,
+  required final FileUtils fileUtils,
+}) implements PlatformUpdateRunner {
   factory UpdateRunner.platform({
     required String applicationLabel,
     required String macosBundleName,
@@ -27,9 +28,6 @@ abstract class UpdateRunner implements PlatformUpdateRunner {
       ),
     };
   }
-
-  final String applicationLabel;
-  final FileUtils fileUtils;
 
   Future<void> startProcess({required String archivePath}) async {
     final applicationPath = fileUtils.getApplicationDirectory();
@@ -95,15 +93,11 @@ abstract interface class PlatformUpdateRunner {
   Future<void> runAppExecutable(String executablePath);
 }
 
-class WindowsUpdateRunner extends UpdateRunner {
-  WindowsUpdateRunner({
-    required super.applicationLabel,
-    required this.executableName,
-    super.fileUtils = const FileUtils(),
-  });
-
-  final String executableName;
-
+class WindowsUpdateRunner({
+  required super.applicationLabel,
+  required final String executableName,
+  super.fileUtils = const FileUtils(),
+}) extends UpdateRunner {
   @override
   List<String> get updateExtraArgs => [executableName];
 
@@ -130,15 +124,11 @@ class WindowsUpdateRunner extends UpdateRunner {
   }
 }
 
-class MacosUpdateRunner extends UpdateRunner {
-  MacosUpdateRunner({
-    required super.applicationLabel,
-    required this.bundleName,
-    super.fileUtils = const FileUtils(),
-  });
-
-  final String bundleName;
-
+class MacosUpdateRunner({
+  required super.applicationLabel,
+  required final String bundleName,
+  super.fileUtils = const FileUtils(),
+}) extends UpdateRunner {
   @override
   String get updaterFileName => 'run_update';
 
@@ -161,16 +151,9 @@ class MacosUpdateRunner extends UpdateRunner {
   }
 }
 
-class UpdateRunnerPaths {
-  UpdateRunnerPaths({
-    required this.source,
-    required this.target,
-    required this.backup,
-    required this.executable,
-  });
-
-  final String source;
-  final String target;
-  final String backup;
-  final String executable;
-}
+class UpdateRunnerPaths({
+  required final String source,
+  required final String target,
+  required final String backup,
+  required final String executable,
+}) {}

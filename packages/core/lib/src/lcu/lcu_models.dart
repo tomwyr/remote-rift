@@ -20,64 +20,46 @@ enum GameflowPhase {
 }
 
 @JsonSerializable()
-class GameflowSession {
-  GameflowSession({required this.gameData});
-
-  final GameflowGameData gameData;
-
+class GameflowSession({
+  required final GameflowGameData gameData,
+}) {
   factory GameflowSession.fromJson(Map<String, dynamic> json) => _$GameflowSessionFromJson(json);
 
   Map<String, dynamic> toJson() => _$GameflowSessionToJson(this);
 }
 
 @JsonSerializable()
-class GameflowGameData {
-  GameflowGameData({required this.queue});
-
-  final GameflowQueue queue;
-
+class GameflowGameData({
+  required final GameflowQueue queue,
+}) {
   factory GameflowGameData.fromJson(Map<String, dynamic> json) => _$GameflowGameDataFromJson(json);
 
   Map<String, dynamic> toJson() => _$GameflowGameDataToJson(this);
 }
 
 @JsonSerializable()
-class GameflowQueue {
-  GameflowQueue({required this.id, required this.name, required this.description});
-
-  final int id;
-  final String name;
-  final String description;
-
+class GameflowQueue({
+  required final int id,
+  required final String name,
+  required final String description,
+}) {
   factory GameflowQueue.fromJson(Map<String, dynamic> json) => _$GameflowQueueFromJson(json);
 
   Map<String, dynamic> toJson() => _$GameflowQueueToJson(this);
 }
 
 @JsonSerializable()
-class GameQueue {
-  GameQueue({
-    required this.id,
-    required this.name,
-    required this.description,
-    required this.gameMode,
-    required this.gameSelectCategory,
-    required this.gameSelectModeGroup,
-    required this.isEnabled,
-    required this.isVisible,
-    required this.isCustom,
-  });
-
-  final int id;
-  final String name;
-  final String description;
-  final String gameMode;
-  final String gameSelectCategory;
-  final String gameSelectModeGroup;
-  final bool isEnabled;
-  final bool isVisible;
-  final bool isCustom;
-
+class GameQueue({
+  required final int id,
+  required final String name,
+  required final String description,
+  required final String gameMode,
+  required final String gameSelectCategory,
+  required final String gameSelectModeGroup,
+  required final bool isEnabled,
+  required final bool isVisible,
+  required final bool isCustom,
+}) {
   factory GameQueue.fromJson(Map<String, dynamic> json) => _$GameQueueFromJson(json);
 
   Map<String, dynamic> toJson() => _$GameQueueToJson(this);
@@ -96,11 +78,9 @@ class GameSelectModeGroup {
 }
 
 @JsonSerializable()
-class MatchmakingSearch {
-  MatchmakingSearch({required this.searchState});
-
-  final MatchmakingSearchState searchState;
-
+class MatchmakingSearch({
+  required final MatchmakingSearchState searchState,
+}) {
   factory MatchmakingSearch.fromJson(Map<String, dynamic> json) =>
       _$MatchmakingSearchFromJson(json);
 
@@ -111,13 +91,11 @@ class MatchmakingSearch {
 enum MatchmakingSearchState { invalid, searching, found }
 
 @JsonSerializable()
-class ReadyCheck {
-  ReadyCheck({required this.state, required this.timer, required this.playerResponse});
-
-  final ReadyCheckState state;
-  final double timer;
-  final ReadyCheckResponse playerResponse;
-
+class ReadyCheck({
+  required final ReadyCheckState state,
+  required final double timer,
+  required final ReadyCheckResponse playerResponse,
+}) {
   factory ReadyCheck.fromJson(Map<String, dynamic> json) => _$ReadyCheckFromJson(json);
 
   Map<String, dynamic> toJson() => _$ReadyCheckToJson(this);
@@ -130,23 +108,19 @@ enum ReadyCheckState { invalid, inProgress }
 enum ReadyCheckResponse { none, accepted, declined }
 
 @JsonSerializable()
-class ReadyCheckError implements Exception {
-  ReadyCheckError({required this.httpStatus, required this.message});
-
-  final int httpStatus;
-  final String message;
-
+class ReadyCheckError({
+  required final int httpStatus,
+  required final String message,
+}) implements Exception {
   factory ReadyCheckError.fromJson(Map<String, dynamic> json) => _$ReadyCheckErrorFromJson(json);
 
   Map<String, dynamic> toJson() => _$ReadyCheckErrorToJson(this);
 }
 
 @JsonSerializable()
-class HeartbeatConnection {
-  HeartbeatConnection({required this.stableConnection});
-
-  final bool stableConnection;
-
+class HeartbeatConnection({
+  required final bool stableConnection,
+}) {
   factory HeartbeatConnection.fromJson(Map<String, dynamic> json) =>
       _$HeartbeatConnectionFromJson(json);
 

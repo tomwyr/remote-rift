@@ -1,18 +1,11 @@
-class SetupStep {
-  const SetupStep(this.title, this.description);
+class const SetupStep(final String title, final String description);
 
-  final String title;
-  final String description;
-}
-
-class StatusItem {
-  const StatusItem(this.title, this.description, {this.advice, this.active = false});
-
-  final String title;
-  final String description;
-  final String? advice;
-  final bool active;
-}
+class const StatusItem(
+  final String title,
+  final String description, {
+  final String? advice,
+  final bool active = false,
+});
 
 const requirements =
     'Requires Remote Rift Desktop, the League Client, and a local network that allows device-to-device connections.';
@@ -57,8 +50,7 @@ const exceptionStates = [
   StatusItem(
     'Local network access required',
     'The phone cannot discover or reach the computer on the local network.',
-    advice:
-        'Use a network that allows device-to-device connections. Guest Wi-Fi, client isolation, VLANs, firewalls, and blocked multicast can prevent discovery.',
+    advice: 'Use a network that allows device-to-device connections. Guest Wi-Fi, client isolation, VLANs, firewalls, and blocked multicast can prevent discovery.',
   ),
   StatusItem(
     'Update required',

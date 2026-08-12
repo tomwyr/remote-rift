@@ -3,30 +3,22 @@ import 'package:remote_rift_ui/remote_rift_ui.dart';
 
 import 'fit_viewport_scroll_view.dart';
 
-class BasicLayout extends StatelessWidget {
-  const BasicLayout({
-    super.key,
-    this.title,
-    this.description,
-    this.body,
-    this.loading = false,
-    this.tone = .neutral,
-    this.icon,
-    this.action,
-    this.secondaryAction,
-  }) : assert(
-         title != null || description == null,
-         'Description must not be provided unless the title is set.',
-       );
-
-  final String? title;
-  final String? description;
-  final Widget? body;
-  final bool loading;
-  final RiftStatusTone tone;
-  final IconData? icon;
-  final BasicLayoutAction? action;
-  final BasicLayoutAction? secondaryAction;
+class const BasicLayout({
+  super.key,
+  final String? title,
+  final String? description,
+  final Widget? body,
+  final bool loading = false,
+  final RiftStatusTone tone = .neutral,
+  final IconData? icon,
+  final BasicLayoutAction? action,
+  final BasicLayoutAction? secondaryAction,
+}) extends StatelessWidget {
+  this
+    : assert(
+        title != null || description == null,
+        'Description must not be provided unless the title is set.',
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -86,39 +78,30 @@ class BasicLayout extends StatelessWidget {
   }
 }
 
-class BasicLayoutAction {
-  BasicLayoutAction({required this.label, required this.onPressed});
-
-  final String label;
-  final VoidCallback? onPressed;
-}
+class BasicLayoutAction({
+  required final String label,
+  required final VoidCallback? onPressed,
+});
 
 enum RiftStatusTone { neutral, active, ready, warning, error }
 
 enum BasicLayoutSectionFontSize { medium, large }
 
-class BasicLayoutSection extends StatelessWidget {
-  const BasicLayoutSection({
-    super.key,
-    this.label,
-    this.title,
-    this.titlePlaceholder,
-    this.titleFontSize = .medium,
-    this.description,
-    this.tone = .neutral,
-    this.icon,
-  }) : assert(
-         title != null || titlePlaceholder != null,
-         'Either the title or title placeholder must be provided.',
-       );
-
-  final String? label;
-  final String? title;
-  final Widget? titlePlaceholder;
-  final BasicLayoutSectionFontSize titleFontSize;
-  final String? description;
-  final RiftStatusTone tone;
-  final IconData? icon;
+class const BasicLayoutSection({
+  super.key,
+  final String? label,
+  final String? title,
+  final Widget? titlePlaceholder,
+  final BasicLayoutSectionFontSize titleFontSize = .medium,
+  final String? description,
+  final RiftStatusTone tone = .neutral,
+  final IconData? icon,
+}) extends StatelessWidget {
+  this
+    : assert(
+        title != null || titlePlaceholder != null,
+        'Either the title or title placeholder must be provided.',
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -190,12 +173,10 @@ class BasicLayoutSection extends StatelessWidget {
   }
 }
 
-class _StatusSectionIcon extends StatelessWidget {
-  const _StatusSectionIcon({required this.icon, required this.color});
-
-  final IconData icon;
-  final Color color;
-
+class const _StatusSectionIcon({
+  required final IconData icon,
+  required final Color color,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(

@@ -6,20 +6,14 @@ import 'package:path/path.dart';
 
 typedef GitHubNameResolver = String Function(String releaseTag);
 
-class GitHubReleases {
-  GitHubReleases({
-    required this.repoName,
-    required this.userName,
-    required this.tagPrefix,
-    required this.resolveArtifactName,
-    Client? client,
-  }) : client = client ?? Client();
-
-  final String repoName;
-  final String userName;
-  final String tagPrefix;
-  final GitHubNameResolver resolveArtifactName;
-  final Client client;
+class GitHubReleases({
+  required final String repoName,
+  required final String userName,
+  required final String tagPrefix,
+  required final GitHubNameResolver resolveArtifactName,
+  Client? client,
+}) {
+  final Client client = client ?? Client();
 
   late final _baseUrl = 'https://github.com/$userName/$repoName';
   late final _apiBaseUrl = 'https://api.github.com/repos/$userName/$repoName';

@@ -8,10 +8,10 @@ import 'package:remote_rift_utils/remote_rift_utils.dart';
 
 import 'connection_state.dart';
 
-class ConnectionCubit extends Cubit<ConnectionState> {
-  ConnectionCubit({required this.connector}) : super(Initial());
-
-  final RemoteRiftConnector connector;
+class ConnectionCubit({
+  required final RemoteRiftConnector connector,
+}) extends Cubit<ConnectionState> {
+  this : super(Initial());
 
   CancelableStream<RemoteRiftStatusResponse>? _statusStream;
   RetryScheduler? _reconnectScheduler;

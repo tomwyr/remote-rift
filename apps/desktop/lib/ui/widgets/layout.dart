@@ -1,28 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:remote_rift_ui/remote_rift_ui.dart';
 
-class BasicLayout extends StatelessWidget {
-  const BasicLayout({
-    super.key,
-    required this.eyebrow,
-    this.title,
-    this.description,
-    this.icon,
-    this.tone = .neutral,
-    this.loading = false,
-    this.action,
-    this.secondaryAction,
-  });
-
-  final String eyebrow;
-  final String? title;
-  final String? description;
-  final BasicLayoutIcon? icon;
-  final DesktopStatusTone tone;
-  final bool loading;
-  final BasicLayoutAction? action;
-  final BasicLayoutAction? secondaryAction;
-
+class const BasicLayout({
+  super.key,
+  required final String eyebrow,
+  final String? title,
+  final String? description,
+  final BasicLayoutIcon? icon,
+  final DesktopStatusTone tone = .neutral,
+  final bool loading = false,
+  final BasicLayoutAction? action,
+  final BasicLayoutAction? secondaryAction,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.remoteRiftTheme.colorScheme;
@@ -82,17 +71,11 @@ class BasicLayout extends StatelessWidget {
   }
 }
 
-class _StatusEyebrow extends StatelessWidget {
-  const _StatusEyebrow({
-    required this.label,
-    required this.accent,
-    required this.colors,
-  });
-
-  final String label;
-  final Color accent;
-  final RemoteRiftColorScheme colors;
-
+class const _StatusEyebrow({
+  required final String label,
+  required final Color accent,
+  required final RemoteRiftColorScheme colors,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -112,19 +95,12 @@ class _StatusEyebrow extends StatelessWidget {
   }
 }
 
-class _StatusDetails extends StatelessWidget {
-  const _StatusDetails({
-    required this.title,
-    required this.description,
-    required this.icon,
-    required this.accent,
-  });
-
-  final String? title;
-  final String? description;
-  final BasicLayoutIcon? icon;
-  final Color accent;
-
+class const _StatusDetails({
+  required final String? title,
+  required final String? description,
+  required final BasicLayoutIcon? icon,
+  required final Color accent,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -164,12 +140,10 @@ class _StatusDetails extends StatelessWidget {
   }
 }
 
-class _StatusIcon extends StatelessWidget {
-  const _StatusIcon({required this.icon, required this.accent});
-
-  final BasicLayoutIcon icon;
-  final Color accent;
-
+class const _StatusIcon({
+  required final BasicLayoutIcon icon,
+  required final Color accent,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget child = Icon(icon.data, size: 22, color: icon.color);
@@ -191,17 +165,11 @@ class _StatusIcon extends StatelessWidget {
   }
 }
 
-class _StatusFooter extends StatelessWidget {
-  const _StatusFooter({
-    required this.loading,
-    required this.action,
-    required this.secondaryAction,
-  });
-
-  final bool loading;
-  final BasicLayoutAction? action;
-  final BasicLayoutAction? secondaryAction;
-
+class const _StatusFooter({
+  required final bool loading,
+  required final BasicLayoutAction? action,
+  required final BasicLayoutAction? secondaryAction,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (loading) {
@@ -220,12 +188,10 @@ class _StatusFooter extends StatelessWidget {
   }
 }
 
-class _StatusActions extends StatelessWidget {
-  const _StatusActions({required this.action, required this.secondaryAction});
-
-  final BasicLayoutAction? action;
-  final BasicLayoutAction? secondaryAction;
-
+class const _StatusActions({
+  required final BasicLayoutAction? action,
+  required final BasicLayoutAction? secondaryAction,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (action == null && secondaryAction == null) {
@@ -251,9 +217,11 @@ class _StatusActions extends StatelessWidget {
 
 enum DesktopStatusTone { neutral, active, ready, warning, error }
 
-class BasicLayoutIcon {
-  BasicLayoutIcon({required this.data, required this.color, this.offset});
-
+class BasicLayoutIcon({
+  required final IconData data,
+  required final Color color,
+  final Offset? offset,
+}) {
   factory BasicLayoutIcon.warning(RemoteRiftColorScheme colorScheme) {
     return BasicLayoutIcon(
       data: Icons.warning_amber_rounded,
@@ -275,15 +243,9 @@ class BasicLayoutIcon {
       color: colorScheme.success,
     );
   }
-
-  final IconData data;
-  final Color color;
-  final Offset? offset;
 }
 
-class BasicLayoutAction {
-  BasicLayoutAction({required this.label, required this.onPressed});
-
-  final String label;
-  final VoidCallback? onPressed;
-}
+class BasicLayoutAction({
+  required final String label,
+  required final VoidCallback? onPressed,
+});

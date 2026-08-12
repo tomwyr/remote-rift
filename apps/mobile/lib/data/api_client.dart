@@ -7,18 +7,14 @@ import 'package:remote_rift_core/remote_rift_core.dart';
 import 'package:remote_rift_utils/remote_rift_utils.dart';
 import 'package:web_socket_channel/io.dart';
 
-class RemoteRiftApiClient {
-  RemoteRiftApiClient({required HttpClient client})
-    : httpClient = IOClient(client),
-      webSocketClient = client;
-
-  RemoteRiftApiClient.withClients({
-    required this.httpClient,
-    required this.webSocketClient,
-  });
-
-  final Client httpClient;
-  final HttpClient webSocketClient;
+class RemoteRiftApiClient.withClients({
+  required final Client httpClient,
+  required final HttpClient webSocketClient,
+}) {
+  factory RemoteRiftApiClient({required HttpClient client}) => RemoteRiftApiClient.withClients(
+    httpClient: IOClient(client),
+    webSocketClient: client,
+  );
 
   String? _apiAddress;
   void setApiAddress(String? value) {

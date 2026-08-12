@@ -17,12 +17,10 @@ class Starting extends ServiceState {}
 class Started extends ServiceState {}
 
 @draft
-class StartupError extends ServiceState {
-  StartupError({required this.cause, this.restartTriggered = false});
-
-  final ServiceErrorCause cause;
-  final bool restartTriggered;
-
+class StartupError({
+  required final ServiceErrorCause cause,
+  final bool restartTriggered = false,
+}) extends ServiceState {
   @override
   List<Object?> get props => [cause, restartTriggered];
 }

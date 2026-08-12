@@ -10,9 +10,7 @@ import '../connection/connection_cubit.dart';
 import '../connection/connection_state.dart';
 import '../game/game_component.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
-
+class const HomePage({super.key}) extends StatelessWidget {
   static Widget builder() {
     return BlocProvider(
       create: Dependencies.connectionCubit,
@@ -47,11 +45,9 @@ class HomePage extends StatelessWidget {
   }
 }
 
-class _ConnectionStatusIcon extends StatelessWidget {
-  const _ConnectionStatusIcon({required this.state});
-
-  final ConnectionState state;
-
+class const _ConnectionStatusIcon({
+  required final ConnectionState state,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.remoteRiftTheme.colorScheme;

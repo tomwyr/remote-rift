@@ -3,12 +3,10 @@ import 'dart:io';
 import 'config_error.dart';
 import 'config_source.dart';
 
-class RemoteRiftApiConfig {
-  RemoteRiftApiConfig({required this.host, required this.port});
-
-  final String host;
-  final int port;
-
+class RemoteRiftApiConfig({
+  required final String host,
+  required final int port,
+}) {
   static const envHostKey = 'API_HOST';
   static const envPortKey = 'API_PORT';
   static const defaultPort = 8080;

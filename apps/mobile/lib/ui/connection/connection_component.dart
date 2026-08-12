@@ -12,11 +12,10 @@ import '../widgets/layout.dart';
 import 'connection_cubit.dart';
 import 'connection_state.dart';
 
-class ConnectionComponent extends StatelessWidget {
-  const ConnectionComponent({super.key, required this.connectedBuilder});
-
-  final WidgetBuilder connectedBuilder;
-
+class const ConnectionComponent({
+  super.key,
+  required final WidgetBuilder connectedBuilder,
+}) extends StatelessWidget {
   static Widget builder({required WidgetBuilder connectedBuilder}) {
     return BlocProvider(
       create: Dependencies.connectionCubit,

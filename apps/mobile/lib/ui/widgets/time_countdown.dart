@@ -4,30 +4,18 @@ import '../common/duration.dart';
 
 typedef TimeCountdownBuilder = Widget Function(double progress, double seconds);
 
-class TimeCountdown extends StatefulWidget {
-  const TimeCountdown({
-    super.key,
-    required this.start,
-    required this.current,
-    required this.drift,
-    required this.builder,
-  }) : assert(
-         current >= 0 && start > 0 && current <= start,
-         'Current time cannot be negative or exceed start.',
-       );
-
-  /// Initial value when the countdown starts.
-  final double start;
-
-  /// Current value of the countdown.
-  final double current;
-
-  /// The maximum allowed divergence from [current] before the animation
-  /// is snapped back to the [current] value.
-  final double drift;
-
-  /// Builder for the current countdown state.
-  final TimeCountdownBuilder builder;
+class const TimeCountdown({
+  super.key,
+  required final double start,
+  required final double current,
+  required final double drift,
+  required final TimeCountdownBuilder builder,
+}) extends StatefulWidget {
+  this
+    : assert(
+        current >= 0 && start > 0 && current <= start,
+        'Current time cannot be negative or exceed start.',
+      );
 
   @override
   State<TimeCountdown> createState() => _TimeCountdownState();

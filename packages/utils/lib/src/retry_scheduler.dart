@@ -4,12 +4,10 @@ import 'types.dart';
 
 enum RetrySchedulerStatus { idle, pending, running }
 
-class RetryScheduler {
-  RetryScheduler({required this.backoff, required this.onRetry});
-
-  final RetryBackoff backoff;
-  final AsyncCallback onRetry;
-
+class RetryScheduler({
+  required final RetryBackoff backoff,
+  required final AsyncCallback onRetry,
+}) {
   RetrySchedulerStatus get status => _status;
 
   var _status = RetrySchedulerStatus.idle;

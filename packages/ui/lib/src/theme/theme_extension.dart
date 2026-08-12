@@ -2,17 +2,11 @@ import 'package:flutter/material.dart';
 
 import 'theme_types.dart';
 
-class RemoteRiftThemeExtension extends ThemeExtension<RemoteRiftThemeExtension> {
-  RemoteRiftThemeExtension({
-    required this.buttonVariant,
-    required this.appBarLeadingPadding,
-    required this.colorScheme,
-  });
-
-  final RemoteRiftButtonVariant buttonVariant;
-  final EdgeInsets appBarLeadingPadding;
-  final RemoteRiftColorScheme colorScheme;
-
+class RemoteRiftThemeExtension({
+  required final RemoteRiftButtonVariant buttonVariant,
+  required final EdgeInsets appBarLeadingPadding,
+  required final RemoteRiftColorScheme colorScheme,
+}) extends ThemeExtension<RemoteRiftThemeExtension> {
   static RemoteRiftThemeExtension of(BuildContext context) {
     return Theme.of(context).extension<RemoteRiftThemeExtension>()!;
   }

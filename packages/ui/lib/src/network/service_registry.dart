@@ -3,14 +3,12 @@ import 'dart:async';
 import 'package:bonsoir/bonsoir.dart';
 import 'package:remote_rift_ui/src/network/service_address.dart';
 
-class ServiceRegistry {
-  ServiceRegistry({required this.serviceName, required this.serviceType});
-
+class ServiceRegistry({
+  required final String serviceName,
+  required final String serviceType,
+}) {
   factory ServiceRegistry.remoteRift() =>
       ServiceRegistry(serviceName: 'Remote Rift', serviceType: '_remoterift._tcp');
-
-  final String serviceName;
-  final String serviceType;
 
   Future<ServiceBroadcast> broadcast({required int port}) async {
     final broadcast = BonsoirBroadcast(
@@ -73,11 +71,7 @@ class ServiceRegistry {
   }
 }
 
-class ServiceBroadcast {
-  ServiceBroadcast(this._handler);
-
-  final BonsoirBroadcast _handler;
-
+class ServiceBroadcast(final BonsoirBroadcast _handler) {
   Future<void> dispose() async {
     await _handler.ensureStopped();
   }

@@ -17,11 +17,9 @@ class AddressPortMissing implements RemoteRiftApiConfigError {
   String toString() => '$_portKey must be provided';
 }
 
-class AddressPortInvalid implements RemoteRiftApiConfigError {
-  AddressPortInvalid({required this.input});
-
-  final String input;
-
+class AddressPortInvalid({
+  required final String input,
+}) implements RemoteRiftApiConfigError {
   @override
   String toString() => 'Invalid $_portKey: "$input"';
 }

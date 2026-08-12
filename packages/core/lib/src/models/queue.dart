@@ -4,21 +4,13 @@ import 'package:json_annotation/json_annotation.dart';
 part 'queue.g.dart';
 
 @JsonSerializable()
-class GameQueue extends Equatable {
-  GameQueue({
-    required this.id,
-    required this.name,
-    required this.enabled,
-    required this.category,
-    required this.group,
-  });
-
-  final int id;
-  final String name;
-  final bool enabled;
-  final GameQueueCategory category;
-  final GameQueueGroup group;
-
+class GameQueue({
+  required final int id,
+  required final String name,
+  required final bool enabled,
+  required final GameQueueCategory category,
+  required final GameQueueGroup group,
+}) extends Equatable {
   factory GameQueue.fromJson(Map<String, dynamic> json) => _$GameQueueFromJson(json);
 
   Map<String, dynamic> toJson() => _$GameQueueToJson(this);

@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 
-class TextFieldSuffixButton extends StatelessWidget {
-  const TextFieldSuffixButton({super.key, required this.icon, required this.onTap});
-
-  final IconData icon;
-  final VoidCallback onTap;
-
+class const TextFieldSuffixButton({
+  super.key,
+  required final IconData icon,
+  required final VoidCallback onTap,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(

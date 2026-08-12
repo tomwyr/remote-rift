@@ -29,11 +29,7 @@ extension RemoteRiftStatusResponseToJson on RemoteRiftResponse<RemoteRiftStatus>
   }
 }
 
-class RemoteRiftData<T> extends RemoteRiftResponse<T> {
-  RemoteRiftData(this.value);
-
-  final T value;
-}
+class RemoteRiftData<T>(final T value) extends RemoteRiftResponse<T> {}
 
 @JsonEnum(alwaysCreate: true)
 enum RemoteRiftError<T extends Never> implements RemoteRiftResponse<T> {

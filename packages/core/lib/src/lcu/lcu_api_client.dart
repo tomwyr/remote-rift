@@ -6,12 +6,10 @@ import 'package:http/http.dart';
 import 'lcu_connection.dart';
 import 'lcu_models.dart';
 
-class LcuApiClient {
-  LcuApiClient({required this.lcuConnection, required this.httpClient});
-
-  final LcuConnection lcuConnection;
-  final Client httpClient;
-
+class LcuApiClient({
+  required final LcuConnection lcuConnection,
+  required final Client httpClient,
+}) {
   Future<HeartbeatConnection> getHeartbeatConnection() async {
     final response = await _request(.post, 'lol-heartbeat/v1/connection-status');
     return .fromJson(jsonDecode(response.body));

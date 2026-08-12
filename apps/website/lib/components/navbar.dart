@@ -7,9 +7,7 @@ import 'package:universal_web/web.dart';
 import '../data/site_info.dart';
 
 @client
-class Navbar extends StatefulComponent {
-  const Navbar({super.key});
-
+class const Navbar({super.key}) extends StatefulComponent {
   @override
   State<Navbar> createState() => _NavbarState();
 }
@@ -53,8 +51,7 @@ class _NavbarState extends State<Navbar> {
   @override
   Component build(BuildContext context) => nav(
     id: 'site-navigation',
-    classes:
-        'relative z-20 mx-auto flex max-w-304 items-center justify-between gap-4 px-6 py-[1.2rem] max-[800px]:py-4',
+    classes: 'relative z-20 mx-auto flex max-w-304 items-center justify-between gap-4 px-6 py-[1.2rem] max-[800px]:py-4',
     [
       a(
         href: '#top',
@@ -68,8 +65,7 @@ class _NavbarState extends State<Navbar> {
         classes: 'group',
         [
           button(
-            classes:
-                'hidden size-11 cursor-pointer items-center justify-center border border-gold bg-navy text-highlight max-[800px]:flex',
+            classes: 'hidden size-11 cursor-pointer items-center justify-center border border-gold bg-navy text-highlight max-[800px]:flex',
             type: ButtonType.button,
             onClick: () => setState(() => _menuOpen = !_menuOpen),
             attributes: {'aria-label': 'Navigation menu', 'aria-expanded': '$_menuOpen'},
@@ -92,26 +88,22 @@ class _NavbarState extends State<Navbar> {
             [
               a(
                 href: '#how-it-works',
-                classes:
-                    'p-0 hover:text-gold hover:underline hover:decoration-2 hover:underline-offset-4 max-[800px]:p-3',
+                classes: 'p-0 hover:text-gold hover:underline hover:decoration-2 hover:underline-offset-4 max-[800px]:p-3',
                 [.text('How it works')],
               ),
               a(
                 href: '#features',
-                classes:
-                    'p-0 hover:text-gold hover:underline hover:decoration-2 hover:underline-offset-4 max-[800px]:p-3',
+                classes: 'p-0 hover:text-gold hover:underline hover:decoration-2 hover:underline-offset-4 max-[800px]:p-3',
                 [.text('Features')],
               ),
               a(
                 href: '#status',
-                classes:
-                    'p-0 hover:text-gold hover:underline hover:decoration-2 hover:underline-offset-4 max-[800px]:p-3',
+                classes: 'p-0 hover:text-gold hover:underline hover:decoration-2 hover:underline-offset-4 max-[800px]:p-3',
                 [.text('Troubleshooting')],
               ),
               a(
                 href: '#install',
-                classes:
-                    'border border-gold bg-navy px-[.85rem] py-[.55rem] text-highlight font-bold transition-colors duration-200 hover:border-navy hover:bg-gold hover:text-navy max-[800px]:p-3 max-[800px]:text-center',
+                classes: 'border border-gold bg-navy px-[.85rem] py-[.55rem] text-highlight font-bold transition-colors duration-200 hover:border-navy hover:bg-gold hover:text-navy max-[800px]:p-3 max-[800px]:text-center',
                 [.text('Install')],
               ),
             ],

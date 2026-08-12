@@ -1,32 +1,18 @@
 import 'package:flutter/material.dart';
 
-class RemoteRiftColorScheme {
-  RemoteRiftColorScheme({
-    required this.canvas,
-    required this.navy,
-    required this.panel,
-    required this.gold,
-    required this.cyan,
-    required this.lightBlue,
-    required this.ready,
-    required this.neutral,
-    required this.success,
-    required this.warning,
-    required this.error,
-  });
-
-  final Color canvas;
-  final Color navy;
-  final Color panel;
-  final Color gold;
-  final Color cyan;
-  final Color lightBlue;
-  final Color ready;
-  final Color neutral;
-  final Color success;
-  final Color warning;
-  final Color error;
-
+class RemoteRiftColorScheme({
+  required final Color canvas,
+  required final Color navy,
+  required final Color panel,
+  required final Color gold,
+  required final Color cyan,
+  required final Color lightBlue,
+  required final Color ready,
+  required final Color neutral,
+  required final Color success,
+  required final Color warning,
+  required final Color error,
+}) {
   factory RemoteRiftColorScheme.light() => RemoteRiftColorScheme(
     canvas: const .fromARGB(255, 255, 255, 255),
     navy: const .fromARGB(255, 10, 20, 40),

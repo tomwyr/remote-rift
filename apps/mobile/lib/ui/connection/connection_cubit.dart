@@ -11,16 +11,12 @@ import '../../data/api_client.dart';
 import '../../data/app_config.dart';
 import 'connection_state.dart';
 
-class ConnectionCubit extends Cubit<ConnectionState> {
-  ConnectionCubit({
-    required this.appConfig,
-    required this.apiClient,
-    required this.serviceRegistry,
-  }) : super(Initial());
-
-  final AppConfig appConfig;
-  final RemoteRiftApiClient apiClient;
-  final ServiceRegistry serviceRegistry;
+class ConnectionCubit({
+  required final AppConfig appConfig,
+  required final RemoteRiftApiClient apiClient,
+  required final ServiceRegistry serviceRegistry,
+}) extends Cubit<ConnectionState> {
+  this : super(Initial());
 
   CancelableStream<RemoteRiftStatusResponse>? _statusStream;
   RetryScheduler? _reconnectScheduler;

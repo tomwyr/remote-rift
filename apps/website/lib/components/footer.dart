@@ -4,9 +4,7 @@ import 'package:jaspr/jaspr.dart';
 import '../data/footer_links.dart';
 import '../data/site_info.dart';
 
-class Footer extends StatelessComponent {
-  const Footer({super.key});
-
+class const Footer({super.key}) extends StatelessComponent {
   @override
   Component build(
     BuildContext context,
@@ -15,8 +13,7 @@ class Footer extends StatelessComponent {
       for (final link in footerLinks)
         a(
           href: link.url,
-          classes:
-              'font-extrabold text-highlight underline decoration-gold/70 underline-offset-4 transition-colors hover:text-gold focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan',
+          classes: 'font-extrabold text-highlight underline decoration-gold/70 underline-offset-4 transition-colors hover:text-gold focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan',
           [
             .text(link.title),
           ],

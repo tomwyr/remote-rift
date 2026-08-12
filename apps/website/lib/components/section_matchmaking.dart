@@ -3,22 +3,18 @@ import 'package:jaspr/jaspr.dart';
 
 import '../data/content.dart';
 
-class SectionMatchmaking extends StatelessComponent {
-  const SectionMatchmaking({super.key});
-
+class const SectionMatchmaking({super.key}) extends StatelessComponent {
   @override
   Component build(BuildContext context) => section(
     id: 'features',
-    classes:
-        'cursor-atmosphere cursor-atmosphere--cyan-wash relative mx-auto max-w-none bg-navy px-[max(1.5rem,calc((100vw-76rem)/2+1.5rem))] py-24 text-highlight [&>*]:relative [&>*]:z-10 max-[540px]:py-16',
+    classes: 'cursor-atmosphere cursor-atmosphere--cyan-wash relative mx-auto max-w-none bg-navy px-[max(1.5rem,calc((100vw-76rem)/2+1.5rem))] py-24 text-highlight [&>*]:relative [&>*]:z-10 max-[540px]:py-16',
     [
       div(classes: 'mb-11 max-w-[43rem] border-l-[3px] border-gold pl-5', [
         span(classes: 'mb-[.9rem] block text-[.75rem] font-extrabold tracking-[.16em] text-gold', [
           .text('REMOTE CONTROLS'),
         ]),
         h2(
-          classes:
-              'font-serif text-[clamp(2.25rem,4vw,3.7rem)] font-bold leading-[1.06] tracking-[-.035em]',
+          classes: 'font-serif text-[clamp(2.25rem,4vw,3.7rem)] font-bold leading-[1.06] tracking-[-.035em]',
           [
             .text('Manage matchmaking from your phone'),
           ],
@@ -28,12 +24,10 @@ class SectionMatchmaking extends StatelessComponent {
         ]),
       ]),
       div(
-        classes:
-            'grid grid-cols-[minmax(17rem,.8fr)_1fr] gap-12 max-[800px]:grid-cols-1 max-[800px]:gap-10',
+        classes: 'grid grid-cols-[minmax(17rem,.8fr)_1fr] gap-12 max-[800px]:grid-cols-1 max-[800px]:gap-10',
         [
           div(
-            classes:
-                'border border-gold bg-panel p-6 shadow-[6px_6px_0_color-mix(in_srgb,var(--color-rift-blue)_34%,transparent)]',
+            classes: 'border border-gold bg-panel p-6 shadow-[6px_6px_0_color-mix(in_srgb,var(--color-rift-blue)_34%,transparent)]',
             [
               h3(classes: 'my-3 font-serif text-[1.35rem]', [.text('Matchmaking controls')]),
               ul(

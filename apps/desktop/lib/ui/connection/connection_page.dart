@@ -10,9 +10,7 @@ import '../widgets/layout.dart';
 import 'connection_cubit.dart';
 import 'connection_state.dart';
 
-class ConnectionPage extends StatelessWidget {
-  const ConnectionPage({super.key});
-
+class const ConnectionPage({super.key}) extends StatelessWidget {
   static Widget builder() {
     return BlocProvider(
       create: Dependencies.connectionCubit,
@@ -84,11 +82,10 @@ class ConnectionPage extends StatelessWidget {
   }
 }
 
-class ConnectionStatusIcon extends StatelessWidget {
-  const ConnectionStatusIcon({super.key, required this.state});
-
-  final ConnectionState state;
-
+class const ConnectionStatusIcon({
+  super.key,
+  required final ConnectionState state,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.remoteRiftTheme.colorScheme;

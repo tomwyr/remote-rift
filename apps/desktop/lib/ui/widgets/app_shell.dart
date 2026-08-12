@@ -6,18 +6,12 @@ import '../../common/platform.dart';
 import '../../i18n/strings.g.dart';
 import '../update/update_button.dart';
 
-class DesktopAppShell extends StatelessWidget {
-  const DesktopAppShell({
-    super.key,
-    required this.body,
-    this.trailing,
-    this.showUpdateAction = true,
-  });
-
-  final Widget body;
-  final Widget? trailing;
-  final bool showUpdateAction;
-
+class const DesktopAppShell({
+  super.key,
+  required final Widget body,
+  final Widget? trailing,
+  final bool showUpdateAction = true,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.remoteRiftTheme.colorScheme;

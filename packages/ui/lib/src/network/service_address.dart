@@ -1,10 +1,6 @@
 import 'dart:io';
 
-class ServiceAddress {
-  ServiceAddress(this.addressString);
-
-  final String addressString;
-
+class ServiceAddress(final String addressString) {
   static ServiceAddress? resolve({required String host, required int port}) {
     final normalizedHost = host.endsWith('.') ? host.substring(0, host.length - 1) : host;
     return normalizedHost.contains(':')

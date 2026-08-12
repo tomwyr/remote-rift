@@ -5,9 +5,7 @@ import 'package:jaspr/jaspr.dart';
 import 'package:universal_web/web.dart';
 
 @client
-class CursorTracker extends StatefulComponent {
-  const CursorTracker({super.key});
-
+class const CursorTracker({super.key}) extends StatefulComponent {
   @override
   State<CursorTracker> createState() => _CursorTrackerState();
 }

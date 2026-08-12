@@ -1,9 +1,4 @@
-class FooterLink {
-  const FooterLink({
-    required this.title,
-    required this.url,
-  });
-
-  final String title;
-  final String url;
-}
+class const FooterLink({
+  required final String title,
+  required final String url,
+});

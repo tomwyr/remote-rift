@@ -1,12 +1,11 @@
 import 'package:flutter/widgets.dart';
 
-class Lifecycle extends StatefulWidget {
-  const Lifecycle({super.key, required this.child, this.onInit, this.onDispose});
-
-  final Widget child;
-  final VoidCallback? onInit;
-  final VoidCallback? onDispose;
-
+class const Lifecycle({
+  super.key,
+  required final Widget child,
+  final VoidCallback? onInit,
+  final VoidCallback? onDispose,
+}) extends StatefulWidget {
   @override
   State<Lifecycle> createState() => _LifecycleState();
 }

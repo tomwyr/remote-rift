@@ -10,14 +10,11 @@ import 'components/section_how_it_works.dart';
 import 'components/section_matchmaking.dart';
 import 'components/section_status.dart';
 
-class App extends StatelessComponent {
-  const App({super.key});
-
+class const App({super.key}) extends StatelessComponent {
   @override
   Component build(BuildContext context) => div(
     id: 'top',
-    classes:
-        'cursor-glow isolate min-h-screen bg-canvas [&>*:not(.back-to-top)]:relative [&>*:not(.back-to-top)]:z-10',
+    classes: 'cursor-glow isolate min-h-screen bg-canvas [&>*:not(.back-to-top)]:relative [&>*:not(.back-to-top)]:z-10',
     [
       const CursorTracker(),
       const SectionAbout(),

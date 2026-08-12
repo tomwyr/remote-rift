@@ -3,18 +3,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class BlocTransitionListener<S> extends StatefulWidget {
-  const BlocTransitionListener({
-    super.key,
-    required this.bloc,
-    required this.listener,
-    required this.child,
-  });
-
-  final BlocBase<S> bloc;
-  final void Function(S previous, S current) listener;
-  final Widget child;
-
+class const BlocTransitionListener<S>({
+  super.key,
+  required final BlocBase<S> bloc,
+  required final void Function(S previous, S current) listener,
+  required final Widget child,
+}) extends StatefulWidget {
   @override
   State<BlocTransitionListener<S>> createState() => _BlocTransitionListenerState<S>();
 }

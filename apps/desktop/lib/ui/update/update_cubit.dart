@@ -3,10 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'update_state.dart';
 
-class UpdateCubit extends Cubit<UpdateState> {
-  UpdateCubit({required this.updater}) : super(Initial());
-
-  final ApplicationUpdater updater;
+class UpdateCubit({
+  required final ApplicationUpdater updater,
+}) extends Cubit<UpdateState> {
+  this : super(Initial());
 
   void initialize() async {
     _assertInitializeState();

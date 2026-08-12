@@ -5,10 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../services/api_service_runner.dart';
 import 'service_state.dart';
 
-class ServiceCubit extends Cubit<ServiceState> {
-  ServiceCubit({required this.runner}) : super(Initial());
-
-  final RemoteRiftApiServiceRunner runner;
+class ServiceCubit({
+  required final RemoteRiftApiServiceRunner runner,
+}) extends Cubit<ServiceState> {
+  this : super(Initial());
 
   void initialize() async {
     if (state is! Initial) {

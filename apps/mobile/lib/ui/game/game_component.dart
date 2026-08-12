@@ -15,9 +15,7 @@ import 'widgets/game_data_body.dart';
 import 'widgets/game_found_countdown.dart';
 import 'widgets/game_queue_selection.dart';
 
-class GameComponent extends StatelessWidget {
-  const GameComponent({super.key});
-
+class const GameComponent({super.key}) extends StatelessWidget {
   static Widget builder() {
     return BlocProvider(create: Dependencies.gameCubit, child: GameComponent());
   }

@@ -8,16 +8,11 @@ import '../../../data/models.dart';
 import '../../../i18n/strings.g.dart';
 import '../game_cubit.dart';
 
-class GameQueueSelectionButton extends StatelessWidget {
-  const GameQueueSelectionButton({
-    super.key,
-    required this.loading,
-    required this.availableQueues,
-  });
-
-  final bool loading;
-  final List<GameQueue> availableQueues;
-
+class const GameQueueSelectionButton({
+  super.key,
+  required final bool loading,
+  required final List<GameQueue> availableQueues,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.remoteRiftTheme.colorScheme;
@@ -45,11 +40,10 @@ class GameQueueSelectionButton extends StatelessWidget {
   }
 }
 
-class GameQueueSelectionModal extends StatelessWidget {
-  const GameQueueSelectionModal({super.key, required this.availableQueues});
-
-  final List<GameQueue> availableQueues;
-
+class const GameQueueSelectionModal({
+  super.key,
+  required final List<GameQueue> availableQueues,
+}) extends StatelessWidget {
   static Future<void> selectAndUpdateQueue(
     BuildContext context, {
     required List<GameQueue> availableQueues,
@@ -136,9 +130,7 @@ class GameQueueSelectionModal extends StatelessWidget {
   }
 }
 
-class _QueueSelectionHeader extends StatelessWidget {
-  const _QueueSelectionHeader();
-
+class const _QueueSelectionHeader() extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -165,17 +157,11 @@ class _QueueSelectionHeader extends StatelessWidget {
   }
 }
 
-class _QueuesSection extends StatelessWidget {
-  const _QueuesSection({
-    required this.title,
-    required this.queues,
-    required this.onSelect,
-  });
-
-  final String title;
-  final Iterable<GameQueue> queues;
-  final void Function(GameQueue queueId) onSelect;
-
+class const _QueuesSection({
+  required final String title,
+  required final Iterable<GameQueue> queues,
+  required final void Function(GameQueue queueId) onSelect,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(

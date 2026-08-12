@@ -7,13 +7,10 @@ import 'state.dart';
 part 'session.g.dart';
 
 @JsonSerializable()
-class RemoteRiftSession extends Equatable {
-  RemoteRiftSession({required this.queueName, required this.state});
-
-  final String? queueName;
-  @RemoteRiftStateConverter()
-  final RemoteRiftState state;
-
+class RemoteRiftSession({
+  required final String? queueName,
+  @RemoteRiftStateConverter() required final RemoteRiftState state,
+}) extends Equatable {
   factory RemoteRiftSession.fromJson(Map<String, dynamic> json) =>
       _$RemoteRiftSessionFromJson(json);
 

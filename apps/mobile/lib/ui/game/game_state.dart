@@ -12,13 +12,11 @@ sealed class GameState extends Equatable {
 class Loading extends GameState {}
 
 @draft
-class Data extends GameState {
-  Data({required this.queueName, required this.state, this.loading = false});
-
-  final String? queueName;
-  final RemoteRiftState state;
-  final bool loading;
-
+class Data({
+  required final String? queueName,
+  required final RemoteRiftState state,
+  final bool loading = false,
+}) extends GameState {
   @override
   List<Object?> get props => [queueName, state, loading];
 }

@@ -3,12 +3,10 @@ import 'dart:io';
 import 'package:remote_rift_api/remote_rift_api.dart';
 import 'package:remote_rift_ui/remote_rift_ui.dart';
 
-class RemoteRiftApiServiceRunner {
-  RemoteRiftApiServiceRunner({required this.service, required this.registry});
-
-  final RemoteRiftApiService service;
-  final ServiceRegistry registry;
-
+class RemoteRiftApiServiceRunner({
+  required final RemoteRiftApiService service,
+  required final ServiceRegistry registry,
+}) {
   List<HttpServer> _servers = [];
   ServiceBroadcast? _broadcast;
 

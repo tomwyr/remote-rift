@@ -6,12 +6,11 @@ import 'package:remote_rift_ui/remote_rift_ui.dart';
 import '../../../i18n/strings.g.dart';
 import '../../widgets/time_countdown.dart';
 
-class GameFoundCountdown extends StatelessWidget {
-  const GameFoundCountdown({super.key, required this.maxTime, required this.timeLeft});
-
-  final double maxTime;
-  final double timeLeft;
-
+class const GameFoundCountdown({
+  super.key,
+  required final double maxTime,
+  required final double timeLeft,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Reduce time left slightly to account for the async communication delay

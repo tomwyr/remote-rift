@@ -12,7 +12,9 @@ import 'models/session.dart';
 import 'models/state.dart';
 import 'models/status.dart';
 
-class RemoteRiftConnector {
+class RemoteRiftConnector._init({
+  required final LcuApiClient lcuApi,
+}) {
   factory RemoteRiftConnector() {
     return RemoteRiftConnector._init(
       lcuApi: LcuApiClient(
@@ -21,10 +23,6 @@ class RemoteRiftConnector {
       ),
     );
   }
-
-  RemoteRiftConnector._init({required this.lcuApi});
-
-  final LcuApiClient lcuApi;
 
   static const _readyCheckMaxTimeSeconds = 10.0;
 

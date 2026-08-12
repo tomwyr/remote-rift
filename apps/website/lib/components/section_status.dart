@@ -3,9 +3,7 @@ import 'package:jaspr/jaspr.dart';
 
 import '../data/content.dart';
 
-class SectionStatus extends StatelessComponent {
-  const SectionStatus({super.key});
-
+class const SectionStatus({super.key}) extends StatelessComponent {
   @override
   Component build(
     BuildContext context,
@@ -16,8 +14,7 @@ class SectionStatus extends StatelessComponent {
         [.text('CONNECTION ISSUES')],
       ),
       h2(
-        classes:
-            'font-serif text-[clamp(2.25rem,4vw,3.7rem)] font-bold leading-[1.06] tracking-[-.035em]',
+        classes: 'font-serif text-[clamp(2.25rem,4vw,3.7rem)] font-bold leading-[1.06] tracking-[-.035em]',
         [.text('When Remote Rift cannot connect')],
       ),
       p(classes: 'mb-0 text-[1.08rem]', [

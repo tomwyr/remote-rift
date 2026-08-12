@@ -15,21 +15,17 @@ class Connecting extends ConnectionState {}
 
 class Connected extends ConnectionState {}
 
-class ConnectedWithError extends ConnectionState {
-  ConnectedWithError({required this.cause});
-
-  final RemoteRiftError cause;
-
+class ConnectedWithError({
+  required final RemoteRiftError cause,
+}) extends ConnectionState {
   @override
   List<Object?> get props => [cause];
 }
 
 @draft
-class ConnectionError extends ConnectionState {
-  ConnectionError({this.reconnectTriggered = false});
-
-  final bool reconnectTriggered;
-
+class ConnectionError({
+  final bool reconnectTriggered = false,
+}) extends ConnectionState {
   @override
   List<Object?> get props => [reconnectTriggered];
 }

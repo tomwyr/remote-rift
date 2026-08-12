@@ -1,11 +1,9 @@
 import 'dart:io';
 
-class LcuConnection {
-  LcuConnection({required this.parser, required this.loader});
-
-  final LcuLockfileParser parser;
-  final LcuLockfileLoader loader;
-
+class LcuConnection({
+  required final LcuLockfileParser parser,
+  required final LcuLockfileLoader loader,
+}) {
   LcuLockfileData? _lockfileData;
 
   LcuLockfileData getLockfileData() {
@@ -69,12 +67,10 @@ class LcuLockfileLoader {
   }
 }
 
-class LcuLockfileData {
-  LcuLockfileData({required this.port, required this.password});
-
-  final int port;
-  final String password;
-}
+class LcuLockfileData({
+  required final int port,
+  required final String password,
+}) {}
 
 enum LcuConnectionError implements Exception {
   unsupportedPlatform,

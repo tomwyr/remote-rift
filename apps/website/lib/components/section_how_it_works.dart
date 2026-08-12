@@ -3,9 +3,7 @@ import 'package:jaspr/jaspr.dart';
 
 import '../data/content.dart';
 
-class SectionHowItWorks extends StatelessComponent {
-  const SectionHowItWorks({super.key});
-
+class const SectionHowItWorks({super.key}) extends StatelessComponent {
   @override
   Component build(
     BuildContext context,
@@ -18,21 +16,18 @@ class SectionHowItWorks extends StatelessComponent {
         ],
       ),
       h2(
-        classes:
-            'font-serif text-[clamp(2.25rem,4vw,3.7rem)] font-bold leading-[1.06] tracking-[-.035em]',
+        classes: 'font-serif text-[clamp(2.25rem,4vw,3.7rem)] font-bold leading-[1.06] tracking-[-.035em]',
         [
           .text('How the connection works'),
         ],
       ),
     ]),
     ol(
-      classes:
-          'grid grid-cols-4 gap-px border border-gold bg-gold p-0 max-[800px]:grid-cols-2 max-[540px]:grid-cols-1',
+      classes: 'grid grid-cols-4 gap-px border border-gold bg-gold p-0 max-[800px]:grid-cols-2 max-[540px]:grid-cols-1',
       [
         for (var i = 0; i < setupSteps.length; i++)
           li(
-            classes:
-                'min-h-52 bg-highlight p-6 shadow-[inset_0_3px_0_color-mix(in_srgb,var(--color-rift-blue)_36%,transparent)]',
+            classes: 'min-h-52 bg-highlight p-6 shadow-[inset_0_3px_0_color-mix(in_srgb,var(--color-rift-blue)_36%,transparent)]',
             [
               span(classes: 'text-[.8rem] font-extrabold tracking-[.12em] text-gold-ink', [
                 .text('0${i + 1}'),
