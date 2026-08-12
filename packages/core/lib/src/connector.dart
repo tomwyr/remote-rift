@@ -65,7 +65,7 @@ class RemoteRiftConnector {
       // from the state before the queue has been initialized.
       if (queue.id == -1 && !retry) {
         await Future.delayed(Duration(milliseconds: 100));
-        return _getQueueNameOrNull(retry: true);
+        return await _getQueueNameOrNull(retry: true);
       }
 
       final description = queue.description;
