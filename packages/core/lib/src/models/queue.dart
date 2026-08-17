@@ -11,7 +11,7 @@ class GameQueue({
   required final GameQueueCategory category,
   required final GameQueueGroup group,
 }) extends Equatable {
-  factory GameQueue.fromJson(Map<String, dynamic> json) => _$GameQueueFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$GameQueueFromJson(json);
 
   Map<String, dynamic> toJson() => _$GameQueueToJson(this);
 

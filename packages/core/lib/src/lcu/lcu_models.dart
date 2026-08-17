@@ -14,7 +14,7 @@ enum GameflowPhase {
   preEndOfGame,
   endOfGame;
 
-  factory GameflowPhase.fromJson(String json) {
+  factory fromJson(String json) {
     return $enumDecode(_$GameflowPhaseEnumMap, json);
   }
 }
@@ -23,7 +23,7 @@ enum GameflowPhase {
 class GameflowSession({
   required final GameflowGameData gameData,
 }) {
-  factory GameflowSession.fromJson(Map<String, dynamic> json) => _$GameflowSessionFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$GameflowSessionFromJson(json);
 
   Map<String, dynamic> toJson() => _$GameflowSessionToJson(this);
 }
@@ -32,7 +32,7 @@ class GameflowSession({
 class GameflowGameData({
   required final GameflowQueue queue,
 }) {
-  factory GameflowGameData.fromJson(Map<String, dynamic> json) => _$GameflowGameDataFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$GameflowGameDataFromJson(json);
 
   Map<String, dynamic> toJson() => _$GameflowGameDataToJson(this);
 }
@@ -43,7 +43,7 @@ class GameflowQueue({
   required final String name,
   required final String description,
 }) {
-  factory GameflowQueue.fromJson(Map<String, dynamic> json) => _$GameflowQueueFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$GameflowQueueFromJson(json);
 
   Map<String, dynamic> toJson() => _$GameflowQueueToJson(this);
 }
@@ -60,7 +60,7 @@ class GameQueue({
   required final bool isVisible,
   required final bool isCustom,
 }) {
-  factory GameQueue.fromJson(Map<String, dynamic> json) => _$GameQueueFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$GameQueueFromJson(json);
 
   Map<String, dynamic> toJson() => _$GameQueueToJson(this);
 }
@@ -81,8 +81,7 @@ class GameSelectModeGroup {
 class MatchmakingSearch({
   required final MatchmakingSearchState searchState,
 }) {
-  factory MatchmakingSearch.fromJson(Map<String, dynamic> json) =>
-      _$MatchmakingSearchFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$MatchmakingSearchFromJson(json);
 
   Map<String, dynamic> toJson() => _$MatchmakingSearchToJson(this);
 }
@@ -96,7 +95,7 @@ class ReadyCheck({
   required final double timer,
   required final ReadyCheckResponse playerResponse,
 }) {
-  factory ReadyCheck.fromJson(Map<String, dynamic> json) => _$ReadyCheckFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$ReadyCheckFromJson(json);
 
   Map<String, dynamic> toJson() => _$ReadyCheckToJson(this);
 }
@@ -112,7 +111,7 @@ class ReadyCheckError({
   required final int httpStatus,
   required final String message,
 }) implements Exception {
-  factory ReadyCheckError.fromJson(Map<String, dynamic> json) => _$ReadyCheckErrorFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$ReadyCheckErrorFromJson(json);
 
   Map<String, dynamic> toJson() => _$ReadyCheckErrorToJson(this);
 }
@@ -121,8 +120,7 @@ class ReadyCheckError({
 class HeartbeatConnection({
   required final bool stableConnection,
 }) {
-  factory HeartbeatConnection.fromJson(Map<String, dynamic> json) =>
-      _$HeartbeatConnectionFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$HeartbeatConnectionFromJson(json);
 
   Map<String, dynamic> toJson() => _$HeartbeatConnectionToJson(this);
 }

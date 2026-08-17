@@ -5,9 +5,9 @@ import 'status.dart';
 part 'response.g.dart';
 
 sealed class RemoteRiftResponse<T> {
-  RemoteRiftResponse();
+  new();
 
-  factory RemoteRiftResponse.fromJson(
+  factory fromJson(
     Map<String, dynamic> json,
     T Function(Map<String, dynamic>) dataFromJson,
   ) {
@@ -36,7 +36,7 @@ enum RemoteRiftError<T extends Never> implements RemoteRiftResponse<T> {
   unableToConnect,
   unknown;
 
-  factory RemoteRiftError.fromJson(Map<String, dynamic> json) {
+  factory fromJson(Map<String, dynamic> json) {
     return $enumDecode(_$RemoteRiftErrorEnumMap, json['value']);
   }
 

@@ -1,6 +1,6 @@
 sealed class RemoteRiftApiConfigSource {
-  factory RemoteRiftApiConfigSource.environment() = EnvironmentSource;
-  factory RemoteRiftApiConfigSource.systemLookup({
+  factory environment() = EnvironmentSource;
+  factory systemLookup({
     SystemLookupAddressResolver? resolveAddress,
   }) = SystemLookupSource;
 }

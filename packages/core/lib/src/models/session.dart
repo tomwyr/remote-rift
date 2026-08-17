@@ -11,8 +11,7 @@ class RemoteRiftSession({
   required final String? queueName,
   @RemoteRiftStateConverter() required final RemoteRiftState state,
 }) extends Equatable {
-  factory RemoteRiftSession.fromJson(Map<String, dynamic> json) =>
-      _$RemoteRiftSessionFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$RemoteRiftSessionFromJson(json);
 
   Map<String, dynamic> toJson() => _$RemoteRiftSessionToJson(this);
 

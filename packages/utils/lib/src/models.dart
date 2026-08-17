@@ -6,8 +6,7 @@ part 'models.g.dart';
 class RemoteRiftApiServiceInfo({
   required final String version,
 }) {
-  factory RemoteRiftApiServiceInfo.fromJson(Map<String, dynamic> json) =>
-      _$RemoteRiftApiServiceInfoFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$RemoteRiftApiServiceInfoFromJson(json);
 
   Map<String, dynamic> toJson() => _$RemoteRiftApiServiceInfoToJson(this);
 }

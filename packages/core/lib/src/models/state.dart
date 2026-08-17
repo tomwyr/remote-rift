@@ -6,9 +6,9 @@ import 'queue.dart';
 part 'state.g.dart';
 
 sealed class RemoteRiftState extends Equatable {
-  const RemoteRiftState();
+  const new();
 
-  factory RemoteRiftState.fromJson(Map<String, dynamic> json) {
+  factory fromJson(Map<String, dynamic> json) {
     final type = json['value'];
     return switch (type) {
       'preGame' => PreGame.fromJson(json),
@@ -38,7 +38,7 @@ sealed class RemoteRiftState extends Equatable {
 class PreGame({
   required final List<GameQueue> availableQueues,
 }) extends RemoteRiftState {
-  factory PreGame.fromJson(Map<String, dynamic> json) => _$PreGameFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$PreGameFromJson(json);
 
   Map<String, dynamic> toJson() => _$PreGameToJson(this);
 
@@ -50,7 +50,7 @@ class PreGame({
 class const Lobby({
   required final GameLobbyState state,
 }) extends RemoteRiftState {
-  factory Lobby.fromJson(Map<String, dynamic> json) => _$LobbyFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$LobbyFromJson(json);
 
   Map<String, dynamic> toJson() => _$LobbyToJson(this);
 
@@ -64,7 +64,7 @@ class const Found({
   required final double answerMaxTime,
   required final double answerTimeLeft,
 }) extends RemoteRiftState {
-  factory Found.fromJson(Map<String, dynamic> json) => _$FoundFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$FoundFromJson(json);
 
   Map<String, dynamic> toJson() => _$FoundToJson(this);
 

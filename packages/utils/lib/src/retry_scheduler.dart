@@ -51,7 +51,7 @@ class RetryScheduler({
 }
 
 class RetryBackoff {
-  RetryBackoff({required this.startDelay, this.maxDelay, required this.delayStep})
+  new({required this.startDelay, this.maxDelay, required this.delayStep})
     : assert(
         maxDelay == null || maxDelay >= startDelay,
         'Max delay must not be lower than start delay.',

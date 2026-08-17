@@ -3,7 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 import '../models/state.dart';
 
 class RemoteRiftStateConverter extends JsonConverter<RemoteRiftState, Map<String, dynamic>> {
-  const RemoteRiftStateConverter();
+  const new();
 
   @override
   RemoteRiftState fromJson(Map<String, dynamic> json) {

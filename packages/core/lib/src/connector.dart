@@ -15,7 +15,7 @@ import 'models/status.dart';
 class RemoteRiftConnector._init({
   required final LcuApiClient _lcuApi,
 }) {
-  factory RemoteRiftConnector() {
+  factory() {
     return RemoteRiftConnector._init(
       lcuApi: LcuApiClient(
         lcuConnection: LcuConnection(parser: LcuLockfileParser(), loader: LcuLockfileLoader()),

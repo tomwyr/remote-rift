@@ -7,7 +7,7 @@ class ServiceRegistry({
   required final String _serviceName,
   required final String _serviceType,
 }) {
-  factory ServiceRegistry.remoteRift() =>
+  factory remoteRift() =>
       ServiceRegistry(serviceName: 'Remote Rift', serviceType: '_remoterift._tcp');
 
   Future<ServiceBroadcast> broadcast({required int port}) async {

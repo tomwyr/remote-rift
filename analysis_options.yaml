@@ -20,6 +20,8 @@ linter:
     - empty_constructor_bodies
     - unnecessary_primary_constructor_body
     - empty_container_bodies
+    - use_declaring_parameters
+    - unnecessary_type_name_in_constructor
 
 formatter:
   page_width: 100

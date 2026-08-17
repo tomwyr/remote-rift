@@ -9,7 +9,7 @@ enum RemoteRiftStatus {
   ready,
   unavailable;
 
-  factory RemoteRiftStatus.fromJson(Map<String, dynamic> json) {
+  factory fromJson(Map<String, dynamic> json) {
     return $enumDecode(_$RemoteRiftStatusEnumMap, json['value']);
   }
 

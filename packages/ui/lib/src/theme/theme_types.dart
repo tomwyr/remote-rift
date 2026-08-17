@@ -13,7 +13,7 @@ class RemoteRiftColorScheme({
   required final Color warning,
   required final Color error,
 }) {
-  factory RemoteRiftColorScheme.light() => RemoteRiftColorScheme(
+  factory light() => RemoteRiftColorScheme(
     canvas: const .fromARGB(255, 255, 255, 255),
     navy: const .fromARGB(255, 10, 20, 40),
     panel: const .fromARGB(255, 14, 27, 43),

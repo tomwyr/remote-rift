@@ -7,7 +7,7 @@ class Version({
 }) extends Equatable {
   String get stringValue => '$major.$minor.$patch';
 
-  factory Version.parse(String input) {
+  factory parse(String input) {
     final regex = RegExp(r'^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:\+\d+)?$');
     final match = regex.firstMatch(input);
     if (match == null) {
