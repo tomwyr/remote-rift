@@ -3,9 +3,7 @@ import 'dart:io' as os;
 
 final appManager = AppManager._();
 
-class AppManager {
-  AppManager._();
-
+class AppManager._() {
   final _exitListeners = <FutureOr<void> Function()>{};
 
   void addExitListener(FutureOr<void> Function() listener) {

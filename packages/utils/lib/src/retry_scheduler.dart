@@ -50,8 +50,12 @@ class RetryScheduler({
   }
 }
 
-class RetryBackoff {
-  new({required this.startDelay, this.maxDelay, required this.delayStep})
+class RetryBackoff({
+  required final Duration startDelay,
+  final Duration? maxDelay,
+  required final Duration delayStep,
+}) {
+  this
     : assert(
         maxDelay == null || maxDelay >= startDelay,
         'Max delay must not be lower than start delay.',
@@ -62,10 +66,6 @@ class RetryBackoff {
     maxDelay: Duration(seconds: 5),
     delayStep: Duration(seconds: 1),
   );
-
-  final Duration startDelay;
-  final Duration? maxDelay;
-  final Duration delayStep;
 
   var _retries = 0;
 

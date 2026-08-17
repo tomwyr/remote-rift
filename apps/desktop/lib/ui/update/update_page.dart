@@ -8,9 +8,7 @@ import '../widgets/app_shell.dart';
 import 'update_cubit.dart';
 import 'update_state.dart';
 
-class UpdatePage extends StatelessWidget {
-  const UpdatePage({super.key});
-
+class const UpdatePage({super.key}) extends StatelessWidget {
   static void show(BuildContext context) {
     final cubit = context.read<UpdateCubit>();
     Navigator.of(context).push(

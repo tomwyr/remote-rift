@@ -4,9 +4,7 @@ import 'status.dart';
 
 part 'response.g.dart';
 
-sealed class RemoteRiftResponse<T> {
-  new();
-
+sealed class RemoteRiftResponse<T>() {
   factory fromJson(
     Map<String, dynamic> json,
     T Function(Map<String, dynamic>) dataFromJson,

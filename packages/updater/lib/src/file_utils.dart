@@ -5,9 +5,7 @@ import 'package:path/path.dart';
 
 import 'platform.dart';
 
-class FileUtils {
-  const FileUtils();
-
+class const FileUtils() {
   String getApplicationDirectory() {
     final exeDir = File(Platform.resolvedExecutable).parent;
 

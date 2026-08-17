@@ -8,9 +8,7 @@ import 'update_cubit.dart';
 import 'update_page.dart';
 import 'update_state.dart';
 
-class UpdateButton extends StatelessWidget {
-  const UpdateButton({super.key});
-
+class const UpdateButton({super.key}) extends StatelessWidget {
   static Widget builder() {
     return BlocProvider(
       create: Dependencies.updateCubit,

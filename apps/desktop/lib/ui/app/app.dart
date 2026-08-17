@@ -4,9 +4,7 @@ import 'package:remote_rift_ui/remote_rift_ui.dart';
 import '../../i18n/strings.g.dart';
 import '../home/home_page.dart';
 
-class App extends StatelessWidget {
-  const App({super.key});
-
+class const App({super.key}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

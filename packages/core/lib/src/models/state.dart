@@ -5,9 +5,7 @@ import 'queue.dart';
 
 part 'state.g.dart';
 
-sealed class RemoteRiftState extends Equatable {
-  const new();
-
+sealed class const RemoteRiftState() extends Equatable {
   factory fromJson(Map<String, dynamic> json) {
     final type = json['value'];
     return switch (type) {
