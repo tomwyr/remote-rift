@@ -1,6 +1,6 @@
 import 'config.dart';
 
-sealed class RemoteRiftApiConfigError implements Exception {}
+sealed class RemoteRiftApiConfigError implements Exception;
 
 extension on RemoteRiftApiConfigError {
   String get _hostKey => RemoteRiftApiConfig.envHostKey;
@@ -24,7 +24,7 @@ class AddressPortInvalid({
   String toString() => 'Invalid $_portKey: "$input"';
 }
 
-sealed class AddressLookupError implements Exception {}
+sealed class AddressLookupError implements Exception;
 
 class AddressNotFound implements RemoteRiftApiConfigError, AddressLookupError {
   @override

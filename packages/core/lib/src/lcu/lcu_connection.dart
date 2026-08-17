@@ -70,7 +70,7 @@ class LcuLockfileLoader {
 class LcuLockfileData({
   required final int port,
   required final String password,
-}) {}
+});
 
 enum LcuConnectionError implements Exception {
   unsupportedPlatform,

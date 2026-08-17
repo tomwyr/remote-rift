@@ -5,10 +5,10 @@ sealed class RemoteRiftApiConfigSource {
   }) = SystemLookupSource;
 }
 
-class EnvironmentSource implements RemoteRiftApiConfigSource {}
+class EnvironmentSource implements RemoteRiftApiConfigSource;
 
 typedef SystemLookupAddressResolver = String Function(List<String> availableAddresses);
 
 class SystemLookupSource({
   final SystemLookupAddressResolver? resolveAddress,
-}) implements RemoteRiftApiConfigSource {}
+}) implements RemoteRiftApiConfigSource;

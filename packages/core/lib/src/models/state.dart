@@ -72,9 +72,9 @@ class const Found({
   List<Object?> get props => [state];
 }
 
-class InGame extends RemoteRiftState {}
+class InGame extends RemoteRiftState;
 
-class Unknown extends RemoteRiftState {}
+class Unknown extends RemoteRiftState;
 
 enum GameLobbyState { idle, searching }
 

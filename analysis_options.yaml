@@ -15,6 +15,12 @@ analyzer:
         sort_children_last: true
         styles_ordering: true
 
+linter:
+  rules:
+    - empty_constructor_bodies
+    - unnecessary_primary_constructor_body
+    - empty_container_bodies
+
 formatter:
   page_width: 100
   trailing_commas: preserve
