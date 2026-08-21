@@ -13,13 +13,31 @@ void main(List<String> args) async {
 }
 
 Future<void> buildExecutable(String workingDirectory) async {
-  await Process.run('dart', [
+  final arguments = [
     'build',
     'cli',
-    'bin/run_update.dart',
+    '--target=bin/run_update.dart',
     '-o',
     'build',
-  ], workingDirectory: workingDirectory);
+  ];
+  final result = await Process.run(
+    'dart',
+    arguments,
+    workingDirectory: workingDirectory,
+  );
+  if (result.exitCode == 0) {
+    return;
+  }
+
+  stderr
+    ..writeln(result.stdout)
+    ..writeln(result.stderr);
+  throw ProcessException(
+    'dart',
+    arguments,
+    'Failed to build the updater executable.',
+    result.exitCode,
+  );
 }
 
 UpdaterBuildPaths resolvePaths(BuildInput input) {
