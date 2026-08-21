@@ -11,7 +11,7 @@ const downloads = [
   ),
   DownloadOption(
     title: 'Mobile application',
-    description: 'Check queue status, manage the lobby, and respond to a found match.',
+    description: 'Run the full solo draft loop: roles and lobby, ready check, then your champion-select actions.',
     links: [
       DownloadLink(label: 'Android'),
       DownloadLink(label: 'iOS'),

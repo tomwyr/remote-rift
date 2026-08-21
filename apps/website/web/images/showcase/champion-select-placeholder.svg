@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1206" height="2622" viewBox="0 0 1206 2622" role="img" aria-labelledby="title desc">
+  <title id="title">Champion select screenshot placeholder</title>
+  <desc id="desc">A placeholder for a future native Remote Rift Mobile personal champion select screenshot.</desc>
+  <rect width="1206" height="2622" fill="#f7f4ed"/>
+  <rect x="42" y="42" width="1122" height="2538" rx="88" fill="#17243b"/>
+  <rect x="78" y="78" width="1050" height="2466" rx="58" fill="#edf1f2"/>
+  <text x="603" y="1160" fill="#17243b" font-family="Georgia, serif" font-size="62" font-weight="700" text-anchor="middle">Native capture pending</text>
+  <text x="603" y="1250" fill="#365a75" font-family="Arial, sans-serif" font-size="38" text-anchor="middle">Personal champion-select action</text>
+  <line x1="288" x2="918" y1="1320" y2="1320" stroke="#cf9e47" stroke-width="5"/>
+  <text x="603" y="1405" fill="#365a75" font-family="Arial, sans-serif" font-size="31" text-anchor="middle">Replace with a native Mobile screenshot</text>
+</svg>

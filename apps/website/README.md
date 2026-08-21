@@ -1,6 +1,6 @@
 # Remote Rift Website
 
-Landing page for **Remote Rift**, an application that lets you queue for League of Legends games from your phone.
+Landing page for **Remote Rift**, a local companion for taking supported solo draft queues from role preferences through champion select on your phone.
 
 Visit the current version of the website at https://tomwyr.github.io/remote-rift.
 
