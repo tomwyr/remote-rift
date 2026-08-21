@@ -1,3 +1,7 @@
+## [0.10.0] - 2026-08-21
+
+- Updated the app for Flutter 3.47 and Dart 3.13
+
 ## [0.9.0] - 2026-08-12
 
 - Added support for multiple active IPv4 networks

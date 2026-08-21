@@ -1,3 +1,7 @@
+## [0.12.0] - 2026-08-21
+
+- Updated the app for Flutter 3.47 and Dart 3.13
+
 ## [0.11.0] - 2026-08-12
 
 - Improved desktop service discovery across multiple active IPv4 networks
