@@ -18,7 +18,7 @@ class const SectionHowItWorks({super.key}) extends StatelessComponent {
       h2(
         classes: 'font-serif text-[clamp(2.25rem,4vw,3.7rem)] font-bold leading-[1.06] tracking-[-.035em]',
         [
-          .text('How the connection works'),
+          .text('From local connection to loaded match'),
         ],
       ),
     ]),

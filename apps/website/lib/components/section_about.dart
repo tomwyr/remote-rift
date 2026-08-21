@@ -17,16 +17,16 @@ class const SectionAbout({super.key}) extends StatelessComponent {
             span(
               classes: 'mb-[.9rem] block text-[.75rem] font-extrabold tracking-[.16em] text-gold',
               [
-                .text('LOCAL LEAGUE COMPANION'),
+                .text('LOCAL SOLO DRAFT COMPANION'),
               ],
             ),
             h1(
               classes: 'max-w-[11ch] font-serif text-[4rem] font-bold leading-[1.06] tracking-[-.035em] max-[1200px]:text-[3.25rem] max-[900px]:max-w-full max-[900px]:text-[2.5rem] max-[900px]:leading-[1.1] max-[900px]:[overflow-wrap:anywhere] max-[480px]:text-[2rem]',
-              [.text('Manage League matchmaking from your phone')],
+              [.text('Take your solo draft from queue to lock in')],
             ),
             p(classes: 'my-6 max-w-[39rem] text-[1.15rem]', [
               .text(
-                'Use your phone to check queue and lobby status, manage supported matchmaking actions, and respond when a match is found.',
+                'Choose roles and a supported draft queue, manage your lobby, answer the ready check, then act when champion select assigns you a turn.',
               ),
             ]),
             div(
@@ -55,8 +55,8 @@ class const SectionAbout({super.key}) extends StatelessComponent {
                     classes: 'h-[min(42rem,55vw)] aspect-[1206/2622] overflow-hidden rounded-[clamp(1.47rem,5.3svh,2.65rem)] bg-canvas max-[800px]:h-[min(36rem,74svh)] landscape:max-[800px]:h-[min(42rem,55vw)] landscape:max-[1000px]:rounded-[clamp(1.47rem,5.3vw,2.65rem)] min-[1001px]:h-[min(40rem,53vw)]',
                     [
                       img(
-                        src: 'images/showcase/showcase.png',
-                        alt: 'Remote Rift Mobile showing a game found ready-check countdown',
+                        src: 'images/showcase/champion-select-placeholder.svg',
+                        alt: 'Placeholder for a native Remote Rift Mobile capture showing an assigned champion-select action with champion, spell, and lock-in controls',
                         classes: 'block h-full w-full object-cover',
                       ),
                     ],

@@ -21,7 +21,9 @@ class const SectionDownload({super.key}) extends StatelessComponent {
           ],
         ),
         p(classes: 'mb-0 text-[1.08rem]', [
-          .text('Install the desktop and mobile applications before using Remote Rift.'),
+          .text(
+            'Desktop connects locally to the League Client; Mobile carries the solo draft loop from role preferences through champion select.',
+          ),
         ]),
       ]),
       ol(

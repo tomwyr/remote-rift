@@ -19,7 +19,7 @@ class const SectionStatus({super.key}) extends StatelessComponent {
       ),
       p(classes: 'mb-0 text-[1.08rem]', [
         .text(
-          'Use the message in Remote Rift Mobile to check the desktop connection, app version, or local network.',
+          'The live League Client state is authoritative. Remote Rift hides expired or unavailable actions and keeps in-game and post-game views informational.',
         ),
       ]),
     ]),
