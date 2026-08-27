@@ -29,7 +29,7 @@ class ServiceCubit({
       ),
     };
 
-    emit(startupError.produce((draft) => draft.restartTriggered = true));
+    emit(startupError.copyWith(restartTriggered: true));
     await _startService();
   }
 

@@ -1,8 +1,8 @@
-import 'package:draft/draft.dart';
+import 'package:copy_with_extension/copy_with_extension.dart';
 import 'package:equatable/equatable.dart';
 import 'package:remote_rift_core/remote_rift_core.dart';
 
-part 'connection_state.draft.dart';
+part 'connection_state.g.dart';
 
 sealed class ConnectionState extends Equatable {
   @override
@@ -22,7 +22,7 @@ class ConnectedWithError({
   List<Object?> get props => [cause];
 }
 
-@draft
+@CopyWith()
 class ConnectionError({
   final bool reconnectTriggered = false,
 }) extends ConnectionState {

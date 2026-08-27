@@ -35,7 +35,7 @@ class ConnectionCubit({
 
   void reconnectAfterError() {
     final (connectionError, scheduler) = _assertRetryAfterErrorState();
-    emit(connectionError.produce((draft) => draft.reconnectTriggered = true));
+    emit(connectionError.copyWith(reconnectTriggered: true));
     scheduler.trigger();
   }
 

@@ -1,9 +1,9 @@
-import 'package:draft/draft.dart';
+import 'package:copy_with_extension/copy_with_extension.dart';
 import 'package:equatable/equatable.dart';
 
 import '../../i18n/strings.g.dart';
 
-part 'service_state.draft.dart';
+part 'service_state.g.dart';
 
 sealed class ServiceState extends Equatable {
   @override
@@ -16,7 +16,7 @@ class Starting extends ServiceState {}
 
 class Started extends ServiceState {}
 
-@draft
+@CopyWith()
 class StartupError({
   required final ServiceErrorCause cause,
   final bool restartTriggered = false,

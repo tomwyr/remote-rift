@@ -76,11 +76,10 @@ class GameCubit({
 
     await for (var gameSession in stream) {
       emit(switch (state) {
-        Data data => data.produce(
-          (draft) => draft
-            ..queueName = gameSession.queueName
-            ..state = gameSession.state
-            ..loading = false,
+        Data data => data.copyWith(
+          queueName: gameSession.queueName,
+          state: gameSession.state,
+          loading: false,
         ),
         Loading() => Data(queueName: gameSession.queueName, state: gameSession.state),
       });
@@ -103,10 +102,10 @@ class GameCubit({
     };
 
     try {
-      emit(currentState.produce((draft) => draft.loading = true));
+      emit(currentState.copyWith(loading: true));
       await action();
     } catch (_) {
-      emit(currentState.produce((draft) => draft.loading = false));
+      emit(currentState.copyWith(loading: false));
       rethrow;
     }
   }

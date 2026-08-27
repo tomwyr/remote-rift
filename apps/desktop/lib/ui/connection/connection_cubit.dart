@@ -40,7 +40,7 @@ class ConnectionCubit({
       );
     }
 
-    emit(connectionError.produce((draft) => draft.reconnectTriggered = true));
+    emit(connectionError.copyWith(reconnectTriggered: true));
     scheduler.trigger();
   }
 
