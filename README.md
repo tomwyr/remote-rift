@@ -23,6 +23,22 @@ Technical highlights:
 - **Local discovery** - Shared UI utilities use mDNS service discovery so mobile clients can find the desktop service automatically.
 - **Desktop updates** - The updater package uses GitHub Releases to check, download, and install new desktop application versions.
 
+## Development commands
+
+Install [Just](https://just.systems/), then run the following command to discover the available commands:
+
+```sh
+just --list
+```
+
+For example, start the website development servers with:
+
+```sh
+just website-dev
+```
+
+VS Code users can run the same commands through the [Just Recipe Runner extension](https://marketplace.visualstudio.com/items?itemName=ElijahLopez.just-recipe-runner) using **Run Task**.
+
 ## Workspace
 
 The workspace is organized around user-facing applications and the packages that support them.
