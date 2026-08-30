@@ -1,8 +1,8 @@
-import 'package:remote_rift_updater/remote_rift_updater.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:remote_rift_api/remote_rift_api.dart';
 import 'package:remote_rift_core/remote_rift_core.dart';
+import 'package:remote_rift_updater/remote_rift_updater.dart';
 
 import 'common/platform.dart';
 import 'services/api_service_runner.dart';
@@ -23,15 +23,19 @@ class Dependencies {
   );
 
   static UpdateCubit updateCubit(BuildContext context) {
-    // Disable updates in debug mode to avoid hitting GitHub API rate limits.
-    return UpdateCubit(updater: kDebugMode ? NoopUpdater() : desktupUpdater());
+    return UpdateCubit(updater: applicationUpdater());
   }
 
-  static ApplicationUpdater desktupUpdater() {
+  static ApplicationUpdater applicationUpdater() {
+    // Disable updates in debug mode to avoid hitting GitHub API rate limits.
+    if (kDebugMode) return NoopUpdater();
+
     return DesktopUpdater(
-      releases: GitHubReleases(
-        repoName: 'remote-rift',
-        userName: 'tomwyr',
+      releaseCatalog: UpdateReleaseCatalog(
+        releases: GitHubReleases(
+          repoName: 'remote-rift',
+          userName: 'tomwyr',
+        ),
         tagPrefix: 'desktop-',
         resolveArtifactName: (releaseTag) {
           final platform = switch (targetPlatform) {
@@ -41,6 +45,7 @@ class Dependencies {
           return 'RemoteRift-$releaseTag-$platform.zip';
         },
       ),
+      updateDownloader: UpdateDownloader(),
       updateRunner: .platform(
         applicationLabel: 'remote-rift',
         macosBundleName: 'Remote Rift.app',

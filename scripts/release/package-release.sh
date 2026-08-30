@@ -19,12 +19,12 @@ case "$platform" in
     ;;
   windows)
     powershell.exe -NoProfile -Command \
-      "Compress-Archive -Path 'apps/desktop/build/windows/x64/runner/Release/*' -DestinationPath 'dist/RemoteRift-$version-windows.zip' -Force"
+      "Compress-Archive -Path 'apps/desktop/build/windows/x64/runner/Release/*' -DestinationPath 'dist/RemoteRift-desktop-$version-windows.zip' -Force"
     ;;
   macos)
     ditto -c -k --keepParent \
       'apps/desktop/build/macos/Build/Products/Release/Remote Rift.app' \
-      "dist/RemoteRift-$version-macos.zip"
+      "dist/RemoteRift-desktop-$version-macos.zip"
     ;;
   *)
     echo "Unsupported release platform: $platform" >&2

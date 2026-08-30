@@ -55,11 +55,14 @@ jobs:
       - name: Package Windows asset
         run: scripts/release/package-release.sh windows "${{ needs.prepare.outputs.version }}"
 
+      - name: Validate Windows release archive
+        run: scripts/release/validate-desktop-archive.sh windows "dist/RemoteRift-desktop-${{ needs.prepare.outputs.version }}-windows.zip"
+
       - name: Upload Windows release asset
         uses: actions/upload-artifact@v4
         with:
           name: desktop-windows
-          path: dist/RemoteRift-${{ needs.prepare.outputs.version }}-windows.zip
+          path: dist/RemoteRift-desktop-${{ needs.prepare.outputs.version }}-windows.zip
           if-no-files-found: error
 
   build-macos:
@@ -88,11 +91,14 @@ jobs:
       - name: Package macOS asset
         run: scripts/release/package-release.sh macos "${{ needs.prepare.outputs.version }}"
 
+      - name: Validate macOS release archive
+        run: scripts/release/validate-desktop-archive.sh macos "dist/RemoteRift-desktop-${{ needs.prepare.outputs.version }}-macos.zip"
+
       - name: Upload macOS release asset
         uses: actions/upload-artifact@v4
         with:
           name: desktop-macos
-          path: dist/RemoteRift-${{ needs.prepare.outputs.version }}-macos.zip
+          path: dist/RemoteRift-desktop-${{ needs.prepare.outputs.version }}-macos.zip
           if-no-files-found: error
 
   publish:

@@ -11,7 +11,7 @@ class RemoteRiftApiClient.withClients({
   required final Client _httpClient,
   required final HttpClient _webSocketClient,
 }) {
-  factory RemoteRiftApiClient({required HttpClient client}) => RemoteRiftApiClient.withClients(
+  factory({required HttpClient client}) => .withClients(
     httpClient: IOClient(client),
     webSocketClient: client,
   );
@@ -105,8 +105,8 @@ class RemoteRiftApiClient.withClients({
   }
 }
 
-sealed class RemoteRiftApiError implements Exception {}
+sealed class RemoteRiftApiError implements Exception;
 
-class ApiAddressNotSet extends RemoteRiftApiError {}
+class ApiAddressNotSet extends RemoteRiftApiError;
 
-class ApiConnectionTimeout extends RemoteRiftApiError {}
+class ApiConnectionTimeout extends RemoteRiftApiError;

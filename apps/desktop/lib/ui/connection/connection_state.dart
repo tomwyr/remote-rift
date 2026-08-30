@@ -9,11 +9,11 @@ sealed class ConnectionState extends Equatable {
   List<Object?> get props => [];
 }
 
-class Initial extends ConnectionState {}
+class Initial extends ConnectionState;
 
-class Connecting extends ConnectionState {}
+class Connecting extends ConnectionState;
 
-class Connected extends ConnectionState {}
+class Connected extends ConnectionState;
 
 class ConnectedWithError({
   required final RemoteRiftError cause,

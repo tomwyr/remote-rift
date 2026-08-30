@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:remote_rift_ui/remote_rift_ui.dart';
 
 import '../../i18n/strings.g.dart';
-import '../widgets/layout.dart';
 import '../widgets/app_shell.dart';
+import '../widgets/layout.dart';
 import 'update_cubit.dart';
 import 'update_state.dart';
 
@@ -24,6 +24,7 @@ class const UpdatePage({super.key}) extends StatelessWidget {
     final state = context.watch<UpdateCubit>().state;
 
     final colorScheme = context.remoteRiftTheme.colorScheme;
+    final canRetry = state.canRetry;
 
     return Lifecycle(
       onDispose: cubit.recoverOnDismiss,
@@ -35,7 +36,7 @@ class const UpdatePage({super.key}) extends StatelessWidget {
           icon: const Icon(Icons.close),
         ),
         body: switch (state) {
-          Initial() || UpToDate() => const SizedBox.shrink(),
+          Initial() || UpToDate() || UpdateCheckFailed() => const SizedBox.shrink(),
 
           UpdateAvailable() => BasicLayout(
             eyebrow: t.update.statusEyebrow,
@@ -70,7 +71,7 @@ class const UpdatePage({super.key}) extends StatelessWidget {
             tone: .error,
             action: BasicLayoutAction(
               label: t.update.errorRetryLabel,
-              onPressed: cubit.installUpdate,
+              onPressed: canRetry ? cubit.installUpdate : null,
             ),
             secondaryAction: BasicLayoutAction(
               label: t.update.availableCancelLabel,

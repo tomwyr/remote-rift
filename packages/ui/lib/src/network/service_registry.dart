@@ -1,7 +1,8 @@
 import 'dart:async';
 
 import 'package:bonsoir/bonsoir.dart';
-import 'package:remote_rift_ui/src/network/service_address.dart';
+
+import 'service_address.dart';
 
 class ServiceRegistry({
   required final String _serviceName,

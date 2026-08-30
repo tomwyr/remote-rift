@@ -1,5 +1,5 @@
-import 'package:remote_rift_updater/remote_rift_updater.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:remote_rift_updater/remote_rift_updater.dart';
 
 import 'update_state.dart';
 
@@ -10,11 +10,15 @@ class UpdateCubit({
 
   void initialize() async {
     _assertInitializeState();
-    final update = await _updater.checkUpdateAvailable();
-    if (update != null) {
-      emit(UpdateAvailable(update: update));
-    } else {
-      emit(UpToDate());
+    try {
+      final update = await _updater.checkUpdateAvailable();
+      if (update != null) {
+        emit(UpdateAvailable(update: update));
+      } else {
+        emit(UpToDate());
+      }
+    } on ApplicationUpdaterError {
+      emit(UpdateCheckFailed());
     }
   }
 
@@ -23,7 +27,7 @@ class UpdateCubit({
     try {
       emit(UpdateInProgress());
       await _updater.installUpdate(update: update);
-    } catch (_) {
+    } on ApplicationUpdaterError {
       emit(UpdateError(update: update));
     }
   }
@@ -44,7 +48,7 @@ extension UpdateCubitAssertions on UpdateCubit {
     }
   }
 
-  AvailableUpdate _assertInstallUpdateState() {
+  UpdateRelease _assertInstallUpdateState() {
     return switch (state) {
       UpdateAvailable(:var update) || UpdateError(:var update) => update,
       _ => throw StateError(

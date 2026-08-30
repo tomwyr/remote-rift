@@ -9,7 +9,7 @@ sealed class GameState extends Equatable {
   List<Object?> get props => [];
 }
 
-class Loading extends GameState {}
+class Loading extends GameState;
 
 @CopyWith()
 class Data({

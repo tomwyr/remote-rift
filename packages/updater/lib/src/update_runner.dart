@@ -1,103 +1,227 @@
 import 'dart:io';
 
-import 'package:path/path.dart' as path;
+import 'package:path/path.dart';
 
 import 'file_utils.dart';
 import 'platform.dart';
+import 'process_utils.dart';
+import 'update_diagnostics.dart';
+import 'update_journal_store.dart';
 
 abstract class UpdateRunner({
   required final String _applicationLabel,
-  required final FileUtils _fileUtils,
+  final FileUtils _fileUtils = const FileUtils(),
+  final ProcessUtils _processUtils = const ProcessUtils(),
+  final UpdateDiagnostics _diagnostics = const UpdateDiagnostics(),
+  final UpdateJournalStore _journalStore = const UpdateJournalStore(),
 }) implements PlatformUpdateRunner {
-  factory UpdateRunner.platform({
+  factory platform({
     required String applicationLabel,
     required String macosBundleName,
     required String windowsExecutableName,
-    FileUtils fileUtils = const FileUtils(),
   }) {
     return switch (targetPlatform) {
       .windows => WindowsUpdateRunner(
         applicationLabel: applicationLabel,
         executableName: windowsExecutableName,
-        fileUtils: fileUtils,
       ),
       .macos => MacosUpdateRunner(
         applicationLabel: applicationLabel,
         bundleName: macosBundleName,
-        fileUtils: fileUtils,
       ),
     };
   }
 
-  Future<void> startProcess({required String archivePath}) async {
-    final applicationPath = _fileUtils.getApplicationDirectory();
-    final updateDirPath = Directory.systemTemp.path;
-    final updaterPath = await _copyUpdater(updateDirPath);
+  Future<void> startProcess({
+    required String archivePath,
+    required String expectedVersion,
+  }) async {
+    final updaterDirectory = await Directory.systemTemp.createTemp('updater-helper-');
+    final updaterPath = await _copyUpdater(updaterDirectory.path);
+    final applicationDirectory = _fileUtils.getApplicationDirectory();
 
     final updateArgs = [
       archivePath,
-      applicationPath,
+      applicationDirectory,
       _applicationLabel,
+      '$pid',
+      expectedVersion,
       ...updateExtraArgs,
     ];
-
-    await Process.start(
-      updaterPath,
-      updateArgs,
-      workingDirectory: updateDirPath,
-    );
+    await Process.start(updaterPath, updateArgs, workingDirectory: updaterDirectory.path);
   }
 
   Future<void> run({
     required String archivePath,
     required String applicationPath,
+    required int parentPid,
+    required String expectedVersion,
   }) async {
-    // Wait to ensure the app has fully quit before replacing
-    await Future.delayed(Duration(seconds: 1));
+    final extractionPath = join(File(archivePath).parent.path, 'extracted');
+    final paths = getUpdatePaths(extractionPath, applicationPath);
 
-    final unzippedPath = await _fileUtils.unzipFile(archivePath);
-    final paths = getUpdatePaths(unzippedPath, applicationPath);
+    final lock = File(join(dirname(applicationPath), '.$_applicationLabel-update.lock'));
+    try {
+      await lock.create(exclusive: true);
+    } on FileSystemException {
+      await _cleanupStaging(archivePath);
+      return;
+    }
 
-    await _fileUtils.replaceWithBackup(
-      sourcePath: paths.source,
-      targetPath: paths.target,
-      backupPath: paths.backup,
-      recursive: true,
+    var replacementInstalled = false;
+    try {
+      if (!await _processUtils.waitForExit(processId: parentPid)) {
+        return;
+      }
+
+      await _extractUpdate(
+        zipPath: archivePath,
+        outputPath: extractionPath,
+        sourcePath: paths.source,
+      );
+      await _replaceTransaction(paths, expectedVersion);
+      replacementInstalled = true;
+      await runAppExecutable(paths.executable);
+    } catch (_) {
+      if (replacementInstalled) {
+        await _restoreBackup(paths);
+      }
+      // The original app has exited. Relaunch the existing or restored application.
+      await _diagnostics.record(event: 'helper_failed');
+      await runAppExecutable(paths.executable);
+      rethrow;
+    } finally {
+      if (await lock.exists()) {
+        await lock.delete();
+      }
+      await _cleanupStaging(archivePath);
+    }
+  }
+
+  Future<void> acknowledgeHealthyStart({required String version}) async {
+    final path = _journalPath(_fileUtils.getApplicationDirectory());
+    await _journalStore.acknowledge(path: path, currentVersion: version);
+  }
+
+  Future<void> cleanupArchive(String archivePath) async {
+    await _cleanupStaging(archivePath);
+  }
+
+  Future<void> _extractUpdate({
+    required String zipPath,
+    required String outputPath,
+    required String sourcePath,
+  }) async {
+    await _fileUtils.unzipFile(
+      zipPath: zipPath,
+      outputPath: outputPath,
+      requiredRoot: expectedArchiveRoot,
     );
+    if (!await validateExtractedSource(sourcePath)) {
+      throw UpdateFileError.invalidArchive;
+    }
+  }
 
-    await runAppExecutable(paths.executable);
+  Future<void> _replaceTransaction(UpdateRunnerPaths paths, String expectedVersion) async {
+    final target = Directory(paths.target);
+    final backup = Directory(paths.backup);
+    final stagePath = '${paths.target}.update-${DateTime.now().microsecondsSinceEpoch}';
+    final stage = Directory(stagePath);
+
+    var targetMoved = false;
+    try {
+      await _fileUtils.copyDirectory(
+        sourcePath: paths.source,
+        targetPath: stage.path,
+      );
+
+      await _journalStore.write(
+        path: _journalPath(paths.target),
+        expectedVersion: expectedVersion,
+        backupPath: paths.backup,
+      );
+      if (await backup.exists()) {
+        await backup.delete(recursive: true);
+      }
+
+      if (await target.exists()) {
+        await target.rename(paths.backup);
+        targetMoved = true;
+      }
+      await stage.rename(paths.target);
+    } catch (_) {
+      if (targetMoved) {
+        await _restoreBackup(paths);
+      } else {
+        await _journalStore.delete(_journalPath(paths.target));
+      }
+      rethrow;
+    } finally {
+      if (await stage.exists()) {
+        await stage.delete(recursive: true);
+      }
+    }
+  }
+
+  Future<void> _restoreBackup(UpdateRunnerPaths paths) async {
+    final target = Directory(paths.target);
+    final backup = Directory(paths.backup);
+
+    if (await target.exists()) {
+      await target.delete(recursive: true);
+    }
+    if (await backup.exists()) {
+      await backup.rename(paths.target);
+    }
+    await _journalStore.delete(_journalPath(paths.target));
+  }
+
+  String _journalPath(String applicationPath) {
+    return join(dirname(applicationPath), '.$_applicationLabel-update.json');
+  }
+
+  Future<void> _cleanupStaging(String archivePath) async {
+    final directory = File(archivePath).parent;
+    if (basename(directory.path).startsWith('updater-update-') && await directory.exists()) {
+      await directory.delete(recursive: true);
+    }
   }
 
   Future<String> _copyUpdater(String targetDirPath) async {
-    final assetsPath = _fileUtils.getAssetsDirectory();
-    final updaterPath = path.join(assetsPath, updaterFileName);
-
+    final assetsDirectory = _fileUtils.getAssetsDirectory();
+    final updaterPath = join(assetsDirectory, updaterFileName);
     final updater = File(updaterPath);
     if (!await updater.exists()) {
-      throw Exception('Updater executable not found at path: $updaterPath');
+      throw UpdateFileError.updaterUnavailable;
     }
-
-    final updateTempPath = path.join(
-      targetDirPath,
-      '${_applicationLabel}_$updaterFileName',
-    );
-    await updater.copy(updateTempPath);
-    return updateTempPath;
+    final copyPath = join(targetDirPath, updaterFileName);
+    final copy = await updater.copy(copyPath);
+    if (targetPlatform == .macos) {
+      final result = await Process.run('chmod', ['+x', copy.path]);
+      if (result.exitCode != 0) {
+        throw UpdateFileError.updaterUnavailable;
+      }
+    }
+    return copy.path;
   }
 }
 
 abstract interface class PlatformUpdateRunner {
   String get updaterFileName;
+  String? get expectedArchiveRoot;
   List<String> get updateExtraArgs;
   UpdateRunnerPaths getUpdatePaths(String sourcePath, String targetPath);
+  Future<bool> validateExtractedSource(String sourcePath);
   Future<void> runAppExecutable(String executablePath);
 }
 
 class WindowsUpdateRunner({
   required super.applicationLabel,
   required final String _executableName,
-  super.fileUtils = const FileUtils(),
 }) extends UpdateRunner {
+  @override
+  String? get expectedArchiveRoot => null;
+
   @override
   List<String> get updateExtraArgs => [_executableName];
 
@@ -106,12 +230,17 @@ class WindowsUpdateRunner({
 
   @override
   UpdateRunnerPaths getUpdatePaths(String sourcePath, String targetPath) {
-    return .new(
+    return UpdateRunnerPaths(
       source: sourcePath,
       target: targetPath,
       backup: '$targetPath.bak',
-      executable: path.join(targetPath, _executableName),
+      executable: join(targetPath, _executableName),
     );
+  }
+
+  @override
+  Future<bool> validateExtractedSource(String sourcePath) {
+    return File(join(sourcePath, _executableName)).exists();
   }
 
   @override
@@ -127,22 +256,29 @@ class WindowsUpdateRunner({
 class MacosUpdateRunner({
   required super.applicationLabel,
   required final String _bundleName,
-  super.fileUtils = const FileUtils(),
 }) extends UpdateRunner {
   @override
-  String get updaterFileName => 'run_update';
+  String get expectedArchiveRoot => _bundleName;
 
   @override
   List<String> get updateExtraArgs => [_bundleName];
 
   @override
+  String get updaterFileName => 'run_update';
+
+  @override
   UpdateRunnerPaths getUpdatePaths(String sourcePath, String targetPath) {
-    return .new(
-      source: path.join(sourcePath, _bundleName),
+    return UpdateRunnerPaths(
+      source: join(sourcePath, _bundleName),
       target: targetPath,
       backup: '$targetPath.bak',
       executable: targetPath,
     );
+  }
+
+  @override
+  Future<bool> validateExtractedSource(String sourcePath) {
+    return Directory(sourcePath).exists();
   }
 
   @override
@@ -156,4 +292,4 @@ class UpdateRunnerPaths({
   required final String target,
   required final String backup,
   required final String executable,
-}) {}
+});

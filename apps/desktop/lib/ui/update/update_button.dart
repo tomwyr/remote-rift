@@ -24,7 +24,7 @@ class const UpdateButton({super.key}) extends StatelessWidget {
     return Lifecycle(
       onInit: cubit.initialize,
       child: switch (state) {
-        Initial() || UpToDate() => SizedBox.shrink(),
+        Initial() || UpToDate() || UpdateCheckFailed() => SizedBox.shrink(),
         UpdateAvailable() || UpdateInProgress() || UpdateError() => IconButton(
           onPressed: () => UpdatePage.show(context),
           tooltip: t.update.installTooltip,

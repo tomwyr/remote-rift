@@ -12,7 +12,6 @@ class const FileUtils() {
     switch (targetPlatform) {
       case .windows:
         return exeDir.path;
-
       case .macos:
         return exeDir.parent.parent.path;
     }
@@ -24,7 +23,6 @@ class const FileUtils() {
     switch (targetPlatform) {
       case .windows:
         return join(exeDir.path, 'data', 'flutter_assets', 'assets');
-
       case .macos:
         final contentsPath = normalize(join(exeDir.path, '..'));
         return join(
@@ -38,75 +36,109 @@ class const FileUtils() {
     }
   }
 
-  Future<String> unzipFile(String zipPath) async {
-    if (!zipPath.endsWith('.zip')) {
-      throw ArgumentError('Expected a file with a .zip extension');
-    }
-    if (!await File(zipPath).exists()) {
-      throw Exception('Zip file does not exist: $zipPath');
-    }
+  Future<String> unzipFile({
+    required String zipPath,
+    required String outputPath,
+    String? requiredRoot,
+    int maxEntries = 20000,
+    int maxUncompressedBytes = 4 * 1024 * 1024 * 1024,
+  }) async {
+    final archive = await _readArchive(zipPath);
 
-    final outputDir = Directory(withoutExtension(zipPath));
-    if (await outputDir.exists()) {
-      await outputDir.delete(recursive: true);
-    }
+    _validateArchive(
+      archive: archive,
+      outputPath: outputPath,
+      requiredRoot: requiredRoot,
+      maxEntries: maxEntries,
+      maxUncompressedBytes: maxUncompressedBytes,
+    );
 
-    await extractFileToDisk(zipPath, outputDir.path);
-    return outputDir.path;
+    return await _writeArchive(outputPath, archive);
   }
 
-  Future<void> replaceWithBackup({
+  Future<void> copyDirectory({
     required String sourcePath,
     required String targetPath,
-    required String backupPath,
-    bool recursive = false,
   }) async {
     final source = Directory(sourcePath);
-    if (!await source.exists()) {
-      throw ArgumentError('Source directory does not exist: $source');
-    }
-
-    print(sourcePath);
-    print(targetPath);
-    print(backupPath);
-
-    final backup = Directory(backupPath);
-    if (await backup.exists()) {
-      await backup.delete(recursive: recursive);
-    }
-
     final target = Directory(targetPath);
-    if (await target.exists()) {
-      await target.copy(backupPath, recursive: recursive);
-      await target.delete(recursive: recursive);
-    }
+    await target.create(recursive: true);
 
-    try {
-      await source.copy(targetPath, recursive: recursive);
-    } catch (error) {
-      await target.delete(recursive: recursive);
-      await backup.copy(targetPath, recursive: recursive);
-    }
-
-    if (await backup.exists()) {
-      await backup.delete(recursive: recursive);
-    }
-  }
-}
-
-extension DirectoryExtensions on Directory {
-  Future<void> copy(String newPath, {bool recursive = false}) async {
-    await Directory(newPath).create(recursive: true);
-
-    await for (var entity in list(recursive: recursive)) {
-      final relativePath = relative(entity.path, from: path);
-      final entityNewPath = normalize(join(newPath, relativePath));
+    await for (var entity in source.list(recursive: true)) {
+      final relativePath = relative(entity.path, from: source.path);
+      final destination = join(target.path, relativePath);
       switch (entity) {
         case File():
-          await entity.copy(entityNewPath);
+          final destinationFile = File(destination);
+          await destinationFile.parent.create(recursive: true);
+          await entity.copy(destinationFile.path);
         case Directory():
-          await Directory(entityNewPath).create(recursive: true);
+          await Directory(destination).create(recursive: true);
       }
     }
   }
+
+  Future<Archive> _readArchive(String zipPath) async {
+    if (!zipPath.endsWith('.zip')) {
+      throw UpdateFileError.invalidArchive;
+    }
+    final zip = File(zipPath);
+    if (!await zip.exists()) {
+      throw UpdateFileError.invalidArchive;
+    }
+    final input = InputFileStream(zipPath);
+    try {
+      return ZipDecoder().decodeStream(input);
+    } finally {
+      await input.close();
+    }
+  }
+
+  void _validateArchive({
+    required Archive archive,
+    required String outputPath,
+    required String? requiredRoot,
+    required int maxEntries,
+    required int maxUncompressedBytes,
+  }) {
+    if (archive.length > maxEntries) {
+      throw UpdateFileError.invalidArchive;
+    }
+
+    var totalSize = 0;
+    for (final entry in archive) {
+      if (entry.name.isEmpty || isAbsolute(entry.name) || entry.isSymbolicLink) {
+        throw UpdateFileError.invalidArchive;
+      }
+
+      final destination = normalize(join(outputPath, entry.name));
+      if (!isWithin(outputPath, destination)) {
+        throw UpdateFileError.invalidArchive;
+      }
+
+      if (requiredRoot case var root?) {
+        final rootPath = normalize(join(outputPath, root));
+        if (destination != rootPath && !isWithin(rootPath, destination)) {
+          throw UpdateFileError.invalidArchive;
+        }
+      }
+
+      totalSize += entry.size;
+      if (totalSize > maxUncompressedBytes) {
+        throw UpdateFileError.invalidArchive;
+      }
+    }
+  }
+
+  Future<String> _writeArchive(String outputPath, Archive archive) async {
+    await Directory(outputPath).create(recursive: true);
+    await extractArchiveToDisk(archive, outputPath);
+    return outputPath;
+  }
+}
+
+enum UpdateFileError implements Exception {
+  invalidArchive,
+  invalidInput,
+  updaterUnavailable,
 }

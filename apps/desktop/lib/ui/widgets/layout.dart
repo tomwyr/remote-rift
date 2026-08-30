@@ -222,7 +222,7 @@ class BasicLayoutIcon({
   required final Color color,
   final Offset? offset,
 }) {
-  factory BasicLayoutIcon.warning(RemoteRiftColorScheme colorScheme) {
+  factory warning(RemoteRiftColorScheme colorScheme) {
     return BasicLayoutIcon(
       data: Icons.warning_amber_rounded,
       color: colorScheme.warning,
@@ -230,14 +230,14 @@ class BasicLayoutIcon({
     );
   }
 
-  factory BasicLayoutIcon.error(RemoteRiftColorScheme colorScheme) {
+  factory error(RemoteRiftColorScheme colorScheme) {
     return BasicLayoutIcon(
       data: Icons.error_outline_rounded,
       color: colorScheme.error,
     );
   }
 
-  factory BasicLayoutIcon.update(RemoteRiftColorScheme colorScheme) {
+  factory update(RemoteRiftColorScheme colorScheme) {
     return BasicLayoutIcon(
       data: Icons.system_update_alt,
       color: colorScheme.success,

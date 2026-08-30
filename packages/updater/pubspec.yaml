@@ -9,12 +9,17 @@ environment:
 
 dependencies:
   archive: ^4.0.7
+  equatable: ^2.0.8
   path: ^1.9.1
   http: ^1.6.0
+  json_annotation: ^4.12.0
   package_info_plus: ^9.0.0
+  time: ^2.1.6
 
   remote_rift_utils: any
 
 dev_dependencies:
   lints: ^6.0.0
+  build_runner: ^2.10.4
+  json_serializable: ^6.11.3
   test: ^1.25.6

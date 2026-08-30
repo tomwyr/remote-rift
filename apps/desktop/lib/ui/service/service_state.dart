@@ -10,11 +10,11 @@ sealed class ServiceState extends Equatable {
   List<Object?> get props => [];
 }
 
-class Initial extends ServiceState {}
+class Initial extends ServiceState;
 
-class Starting extends ServiceState {}
+class Starting extends ServiceState;
 
-class Started extends ServiceState {}
+class Started extends ServiceState;
 
 @CopyWith()
 class StartupError({

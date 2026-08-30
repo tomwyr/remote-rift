@@ -1,3 +1,7 @@
+## [0.11.0] - Unreleased
+
+- Improved updater reliability
+
 ## [0.10.0] - 2026-08-21
 
 - Updated the app for Flutter 3.47 and Dart 3.13

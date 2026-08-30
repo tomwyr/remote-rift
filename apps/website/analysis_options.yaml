@@ -3,8 +3,10 @@ include: package:lints/recommended.yaml
 formatter:
   page_width: 100
   trailing_commas: preserve
+
 analyzer:
   exclude:
+    - lib/**.g.dart
     - build/**
     - android/**
     - ios/**
@@ -12,3 +14,20 @@ analyzer:
     - windows/**
     - macos/**
     - linux/**
+
+  plugins:
+    jaspr_lints:
+      version: ^0.7.1
+      diagnostics:
+        prefer_html_components: true
+        sort_children_last: true
+        styles_ordering: true
+
+linter:
+  rules:
+    - prefer_relative_imports
+    - empty_constructor_bodies
+    - unnecessary_primary_constructor_body
+    - empty_container_bodies
+    - use_declaring_parameters
+    - unnecessary_type_name_in_constructor

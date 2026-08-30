@@ -3,79 +3,105 @@ import 'dart:io';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:remote_rift_utils/remote_rift_utils.dart';
 
-import 'github_releases.dart';
+import 'file_utils.dart';
+import 'github/github_releases.dart';
+import 'models.dart';
+import 'update_diagnostics.dart';
+import 'update_downloader.dart';
+import 'update_release_catalog.dart';
 import 'update_runner.dart';
 
 abstract interface class ApplicationUpdater {
-  Future<void> installUpdate({required AvailableUpdate update});
-  Future<AvailableUpdate?> checkUpdateAvailable();
+  Future<void> acknowledgeHealthyStart();
+  Future<UpdateRelease?> checkUpdateAvailable();
+  Future<void> installUpdate({required UpdateRelease update});
 }
 
 class DesktopUpdater({
-  required final GitHubReleases _releases,
+  required final UpdateReleaseCatalog _releaseCatalog,
+  required final UpdateDownloader _updateDownloader,
   required final UpdateRunner _updateRunner,
+  final UpdateDiagnostics _diagnostics = const UpdateDiagnostics(),
 }) implements ApplicationUpdater {
   @override
-  Future<AvailableUpdate?> checkUpdateAvailable() async {
-    final latest = await _getLatestUpdate();
-    final current = await _getCurrentVersion();
-    if (latest.version.isGreaterThan(current)) {
-      return latest;
-    }
-    return null;
+  Future<void> acknowledgeHealthyStart() async {
+    final packageInfo = await PackageInfo.fromPlatform();
+    final version = packageInfo.version;
+    await _updateRunner.acknowledgeHealthyStart(version: version);
   }
 
   @override
-  Future<void> installUpdate({required AvailableUpdate update}) async {
-    final downloadPath = await _releases.downloadRelease(
-      releaseTag: update.releaseTag,
-    );
-    if (downloadPath == null) {
-      throw ApplicationUpdaterError.updateDownloadFailed;
-    }
-
+  Future<UpdateRelease?> checkUpdateAvailable() async {
     try {
-      await _updateRunner.startProcess(archivePath: downloadPath);
-      exit(0);
-    } catch (_) {
-      throw ApplicationUpdaterError.installerStartupFailed;
+      final latest = await _releaseCatalog.getLatest();
+      if (latest == null) return null;
+      final current = await _getCurrentVersion();
+      if (latest.version.isGreaterThan(current)) {
+        return latest;
+      }
+      return null;
+    } on GitHubReleaseError catch (error) {
+      await _diagnostics.record(event: 'update_check_failed', detail: error.name);
+      throw ApplicationUpdaterError.latestVersionUnavailable;
+    } on ApplicationUpdaterError catch (error) {
+      await _diagnostics.record(event: 'update_check_failed', detail: error.name);
+      rethrow;
     }
   }
 
-  Future<AvailableUpdate> _getLatestUpdate() async {
+  @override
+  Future<void> installUpdate({required UpdateRelease update}) async {
+    String? downloadPath;
     try {
-      final latestTag = await _releases.getLatestReleaseTag();
-      if (latestTag == null) {
-        throw ApplicationUpdaterError.latestVersionUnavailable;
-      }
-      final versionTag = _releases.versionFromTag(latestTag);
-      return AvailableUpdate(
-        version: .parse(versionTag),
-        releaseTag: latestTag,
+      downloadPath = await _updateDownloader.download(artifact: update.artifact);
+      final expectedVersion = update.version.stringValue;
+      await _updateRunner.startProcess(
+        archivePath: downloadPath,
+        expectedVersion: expectedVersion,
       );
-    } catch (_) {
-      throw ApplicationUpdaterError.latestVersionUnavailable;
+      exit(0);
+    } on UpdateDownloadError catch (error) {
+      await _diagnostics.record(event: 'download_failed', detail: error.name);
+      throw switch (error) {
+        .archiveTooLarge => ApplicationUpdaterError.archiveTooLarge,
+        .invalidResponse => ApplicationUpdaterError.updateDownloadInvalid,
+        _ => ApplicationUpdaterError.updateDownloadFailed,
+      };
+    } catch (error) {
+      if (error case FileSystemException() || ProcessException() || UpdateFileError()) {
+        await _failInstallerStartup(downloadPath, error);
+      }
+      rethrow;
     }
   }
 
   Future<Version> _getCurrentVersion() async {
     try {
-      final info = await PackageInfo.fromPlatform();
-      return .parse(info.version);
-    } catch (_) {
+      final packageInfo = await PackageInfo.fromPlatform();
+      return .parse(packageInfo.version);
+    } on VersionError {
       throw ApplicationUpdaterError.currentVersionUnavailable;
     }
   }
-}
 
-class AvailableUpdate({
-  required final Version version,
-  required final String releaseTag,
-}) {}
+  Future<Never> _failInstallerStartup(String? downloadPath, Object error) async {
+    if (downloadPath case var path?) {
+      await _updateRunner.cleanupArchive(path);
+    }
+    final detail = switch (error) {
+      UpdateFileError() => error.name,
+      _ => null,
+    };
+    await _diagnostics.record(event: 'installer_start_failed', detail: detail);
+    throw ApplicationUpdaterError.installerStartupFailed;
+  }
+}
 
 enum ApplicationUpdaterError implements Exception {
   latestVersionUnavailable,
   currentVersionUnavailable,
   updateDownloadFailed,
+  updateDownloadInvalid,
+  archiveTooLarge,
   installerStartupFailed,
 }
