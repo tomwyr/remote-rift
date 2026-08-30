@@ -5,7 +5,9 @@ import 'package:jaspr/jaspr.dart';
 import 'package:universal_web/web.dart';
 
 @client
-class const BackToTop({super.key}) extends StatefulComponent {
+class BackToTop extends StatefulComponent {
+  const BackToTop({super.key});
+
   @override
   State<BackToTop> createState() => BackToTopState();
 }

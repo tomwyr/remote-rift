@@ -7,7 +7,9 @@ import 'package:universal_web/web.dart';
 import '../data/site_info.dart';
 
 @client
-class const Navbar({super.key}) extends StatefulComponent {
+class Navbar extends StatefulComponent {
+  const Navbar({super.key});
+
   @override
   State<Navbar> createState() => _NavbarState();
 }

@@ -41,6 +41,10 @@ website-tailwind-watch:
 website-jaspr-serve:
     cd apps/website && jaspr serve
 
+# Builds the website with Jaspr.
+website-jaspr-build:
+    cd apps/website && jaspr build
+
 # Generates code for the core package.
 core-build-runner-build:
     cd packages/core && dart run build_runner build
