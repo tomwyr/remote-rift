@@ -1,6 +1,5 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
+import 'package:time/time.dart';
 
 class const DelayedDisplay({
   super.key,
@@ -22,7 +21,7 @@ class _DelayedDisplayState extends State<DelayedDisplay> {
   }
 
   void _startDelay() async {
-    await Future.delayed(widget.delay);
+    await widget.delay.delay;
     if (mounted) {
       setState(() => _isDelayOver = true);
     }

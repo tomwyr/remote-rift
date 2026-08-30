@@ -1,5 +1,6 @@
 ## [0.11.0] - Unreleased
 
+- Added support for champion select phase
 - Improved updater reliability
 
 ## [0.10.0] - 2026-08-21

@@ -41,3 +41,14 @@ class GameQueueFilter {
     return true;
   }
 }
+
+extension GameQueueIterableLobbyRolePreferences on Iterable<lcu.GameQueue> {
+  bool supportsLobbyRolePreferences(int queueId) {
+    for (final queue in this) {
+      if (queue.id == queueId) {
+        return GameQueueMapper.fromLcu(queue).supportsLobbyRolePreferences;
+      }
+    }
+    return false;
+  }
+}

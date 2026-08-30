@@ -1,10 +1,12 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:remote_rift_core/remote_rift_core.dart';
 import 'package:remote_rift_ui/remote_rift_ui.dart';
 
 import 'data/api_client.dart';
 import 'data/app_config.dart';
+import 'ui/champion_select/champion_select_cubit.dart';
 import 'ui/connection/connection_cubit.dart';
 import 'ui/game/game_cubit.dart';
 
@@ -16,6 +18,14 @@ class Dependencies {
   );
 
   static GameCubit gameCubit(BuildContext context) => GameCubit(apiClient: _apiClient);
+
+  static ChampionSelectCubit championSelectCubit(
+    BuildContext context, {
+    required ChampionSelect championSelect,
+  }) => ChampionSelectCubit(
+    apiClient: _apiClient,
+    championSelect: championSelect,
+  );
 
   static final _appConfig = AppConfig.defaults();
   static final _apiClient = RemoteRiftApiClient(client: HttpClient());

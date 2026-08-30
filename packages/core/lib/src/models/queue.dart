@@ -11,6 +11,10 @@ class GameQueue({
   required final GameQueueCategory category,
   required final GameQueueGroup group,
 }) extends Equatable {
+  bool get supportsLobbyRolePreferences {
+    return category == .pvp && group == .summonersRift;
+  }
+
   factory fromJson(Map<String, dynamic> json) => _$GameQueueFromJson(json);
 
   Map<String, dynamic> toJson() => _$GameQueueToJson(this);

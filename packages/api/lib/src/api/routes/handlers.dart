@@ -41,6 +41,16 @@ extension WebSocketChannelStatus on WebSocketChannel {
 }
 
 extension RequestParsers on Request {
+  Future<T?> decodeBodyOrNull<T>(T Function(Map<String, dynamic> json) fromJson) async {
+    try {
+      final body = jsonDecode(await readAsString());
+      if (body is! Map<String, dynamic>) return null;
+      return fromJson(body);
+    } catch (_) {
+      return null;
+    }
+  }
+
   int? intQueryParam(String key) {
     if (url.queryParameters[key] case var value?) {
       return int.tryParse(value);

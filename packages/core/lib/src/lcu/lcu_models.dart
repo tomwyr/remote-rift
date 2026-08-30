@@ -49,6 +49,108 @@ class GameflowQueue({
 }
 
 @JsonSerializable()
+class ChampSelectSession({
+  final int? localPlayerCellId,
+  final List<ChampSelectPlayer> myTeam = const [],
+  final List<List<ChampSelectActionAssignment>> actions = const [],
+  final ChampSelectTimer? timer,
+}) {
+  factory fromJson(Map<String, dynamic> json) => _$ChampSelectSessionFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ChampSelectSessionToJson(this);
+}
+
+@JsonSerializable()
+class ChampSelectActionAssignment({
+  final int? id,
+  final int? actorCellId,
+  final bool? completed,
+  final bool? isInProgress,
+  final ChampSelectActionType? type,
+}) {
+  factory fromJson(Map<String, dynamic> json) => _$ChampSelectActionAssignmentFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ChampSelectActionAssignmentToJson(this);
+}
+
+@JsonSerializable(includeIfNull: false)
+class ChampSelectActionUpdate({
+  final int? championId,
+  final bool? completed,
+}) {
+  factory fromJson(Map<String, dynamic> json) => _$ChampSelectActionUpdateFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ChampSelectActionUpdateToJson(this);
+}
+
+@JsonEnum(fieldRename: .snake)
+enum ChampSelectActionType { pick, ban }
+
+@JsonSerializable()
+class ChampSelectPlayer({
+  final int? cellId,
+  final int? championId,
+  final int? championPickIntent,
+  final ChampSelectAssignedPosition? assignedPosition,
+  final int? spell1Id,
+  final int? spell2Id,
+}) {
+  factory fromJson(Map<String, dynamic> json) => _$ChampSelectPlayerFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ChampSelectPlayerToJson(this);
+}
+
+@JsonSerializable(includeIfNull: false)
+class ChampSelectMySelectionUpdate({
+  final int? spell1Id,
+  final int? spell2Id,
+}) {
+  factory fromJson(Map<String, dynamic> json) => _$ChampSelectMySelectionUpdateFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ChampSelectMySelectionUpdateToJson(this);
+}
+
+@JsonEnum(fieldRename: .screamingSnake)
+enum ChampSelectAssignedPosition { top, jungle, middle, bottom, utility }
+
+@JsonSerializable()
+class ChampSelectTimer({
+  final ChampSelectTimerPhase? phase,
+  final int? adjustedTimeLeftInPhase,
+}) {
+  factory fromJson(Map<String, dynamic> json) => _$ChampSelectTimerFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ChampSelectTimerToJson(this);
+}
+
+@JsonEnum(fieldRename: .screamingSnake)
+enum ChampSelectTimerPhase {
+  planning,
+  banPick,
+  finalization,
+}
+
+@JsonSerializable()
+class ChampGridChampion({
+  final int? id,
+  final String? name,
+}) {
+  factory fromJson(Map<String, dynamic> json) => _$ChampGridChampionFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ChampGridChampionToJson(this);
+}
+
+@JsonSerializable()
+class SummonerSpell({
+  final int? id,
+  final String? name,
+}) {
+  factory fromJson(Map<String, dynamic> json) => _$SummonerSpellFromJson(json);
+
+  Map<String, dynamic> toJson() => _$SummonerSpellToJson(this);
+}
+
+@JsonSerializable()
 class GameQueue({
   required final int id,
   required final String name,
@@ -64,6 +166,37 @@ class GameQueue({
 
   Map<String, dynamic> toJson() => _$GameQueueToJson(this);
 }
+
+@JsonSerializable()
+class LobbyDetails({
+  required final LobbyGameConfig gameConfig,
+}) {
+  factory fromJson(Map<String, dynamic> json) => _$LobbyDetailsFromJson(json);
+
+  Map<String, dynamic> toJson() => _$LobbyDetailsToJson(this);
+}
+
+@JsonSerializable()
+class LobbyGameConfig({
+  required final int queueId,
+}) {
+  factory fromJson(Map<String, dynamic> json) => _$LobbyGameConfigFromJson(json);
+
+  Map<String, dynamic> toJson() => _$LobbyGameConfigToJson(this);
+}
+
+@JsonSerializable()
+class LobbyPositionPreferences({
+  final LobbyPositionPreference? firstPositionPreference,
+  final LobbyPositionPreference? secondPositionPreference,
+}) {
+  factory fromJson(Map<String, dynamic> json) => _$LobbyPositionPreferencesFromJson(json);
+
+  Map<String, dynamic> toJson() => _$LobbyPositionPreferencesToJson(this);
+}
+
+@JsonEnum(fieldRename: .screamingSnake)
+enum LobbyPositionPreference { unselected, fill, top, jungle, middle, bottom, utility }
 
 class GameSelectCategory {
   static const pvp = 'kPvP';

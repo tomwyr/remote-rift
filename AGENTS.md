@@ -73,6 +73,44 @@
 - Define typed request inputs for action arguments. Prefer request bodies over query parameters for
   structured action input. When one route supports closely related variants, model the variant with
   a finite discriminator in its input rather than duplicating routes or input types.
+## State management and UI
+
+- A sealed state's base type may expose only values valid for every variant. Do not hide an invalid
+  variant behind a getter that throws; model the differing capability in the state hierarchy instead.
+- Give state types value equality. Every value included in `Equatable.props` must also have stable
+  value equality, including nested models and collection elements.
+- When every state requires an initial snapshot, provide it when constructing the state object. Run
+  asynchronous loading from the owning component's lifecycle, not as a cubit-creation side effect.
+- Keep a feature's displayed data in its feature state. Avoid property-drilling a parallel snapshot
+  through descendants that can instead select it from the feature's state object.
+- Keep asynchronous action progress and recoverable failure in state. Do not make widgets catch
+  cubit action failures or maintain duplicate action flags.
+- When several actions share the same finite lifecycle, model their state as an action-to-status map
+  with one status per action, rather than coordinating separate pending and failure collections.
+  Let omitted entries represent the neutral status.
+- A sealed state base may provide a finite default status when that status is valid for every variant;
+  data-bearing variants override it with their resolved status so widgets do not extract a subtype.
+- Put a capability derived from an emitted state, such as whether a failed action remains retryable,
+  on the applicable state variant. Widgets consume that state capability; cubits expose commands and
+  do not take a state value solely to answer a question about it.
+- When an asynchronous action can race a state stream, retain the initiating snapshot revision and
+  discard its completion if a newer snapshot has arrived. Do not let stale completions overwrite
+  current state.
+- Model transient UI effects separately from persistent state with typed events. Widgets consume
+  those events at their UI boundary rather than deriving effects from state transitions.
+- When a modal route needs an existing bloc, re-expose that instance with `BlocProvider.value`.
+  Child widgets must not create feature cubits solely to access them from a new route context.
+- Extract a self-contained sheet or substantial state branch into a meaningful widget. Let that
+  widget own its local UI state and resolve context-available dependencies rather than forwarding
+  callbacks or blocs through constructor parameters.
+- Prefer modal-route constraints for a sheet's intended bounds and `SafeArea` for system insets.
+  Do not manually recompute available viewport height or safe-area padding in the sheet body unless
+  the interaction needs behavior that those primitives cannot express.
+- Prefer `context.select` for a narrow state dependency and `context.watch` when the complete
+  state is needed. Do not add a builder wrapper solely to read bloc state.
+- Resolve `context.select`, `context.watch`, and `context.read` calls before constructing a widget
+  subtree. Do not nest them in widget constructor arguments; extract a meaningful state branch when
+  that keeps its dependencies and presentation together.
 
 ## State management and UI
 

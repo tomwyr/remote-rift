@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart' hide ConnectionState;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:remote_rift_ui/remote_rift_ui.dart';
+import 'package:time/time.dart';
 
 import '../../data/models.dart';
 import '../../dependencies.dart';
@@ -37,7 +38,7 @@ class const ConnectionComponent({
 
           // Delay showing content to avoid flicker when loading appears for a single frame
           Connecting() => DelayedDisplay(
-            delay: Duration(milliseconds: 200),
+            delay: 200.milliseconds,
             placeholder: BasicLayout(loading: true),
             child: BasicLayout(
               title: t.connection.connectingTitle,

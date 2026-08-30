@@ -38,6 +38,164 @@ Map<String, dynamic> _$GameflowQueueToJson(GameflowQueue instance) =>
       'description': instance.description,
     };
 
+ChampSelectSession _$ChampSelectSessionFromJson(Map<String, dynamic> json) =>
+    ChampSelectSession(
+      localPlayerCellId: (json['localPlayerCellId'] as num?)?.toInt(),
+      myTeam:
+          (json['myTeam'] as List<dynamic>?)
+              ?.map(
+                (e) => ChampSelectPlayer.fromJson(e as Map<String, dynamic>),
+              )
+              .toList() ??
+          const [],
+      actions:
+          (json['actions'] as List<dynamic>?)
+              ?.map(
+                (e) => (e as List<dynamic>)
+                    .map(
+                      (e) => ChampSelectActionAssignment.fromJson(
+                        e as Map<String, dynamic>,
+                      ),
+                    )
+                    .toList(),
+              )
+              .toList() ??
+          const [],
+      timer: json['timer'] == null
+          ? null
+          : ChampSelectTimer.fromJson(json['timer'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$ChampSelectSessionToJson(ChampSelectSession instance) =>
+    <String, dynamic>{
+      'localPlayerCellId': instance.localPlayerCellId,
+      'myTeam': instance.myTeam,
+      'actions': instance.actions,
+      'timer': instance.timer,
+    };
+
+ChampSelectActionAssignment _$ChampSelectActionAssignmentFromJson(
+  Map<String, dynamic> json,
+) => ChampSelectActionAssignment(
+  id: (json['id'] as num?)?.toInt(),
+  actorCellId: (json['actorCellId'] as num?)?.toInt(),
+  completed: json['completed'] as bool?,
+  isInProgress: json['isInProgress'] as bool?,
+  type: $enumDecodeNullable(_$ChampSelectActionTypeEnumMap, json['type']),
+);
+
+Map<String, dynamic> _$ChampSelectActionAssignmentToJson(
+  ChampSelectActionAssignment instance,
+) => <String, dynamic>{
+  'id': instance.id,
+  'actorCellId': instance.actorCellId,
+  'completed': instance.completed,
+  'isInProgress': instance.isInProgress,
+  'type': _$ChampSelectActionTypeEnumMap[instance.type],
+};
+
+const _$ChampSelectActionTypeEnumMap = {
+  ChampSelectActionType.pick: 'pick',
+  ChampSelectActionType.ban: 'ban',
+};
+
+ChampSelectActionUpdate _$ChampSelectActionUpdateFromJson(
+  Map<String, dynamic> json,
+) => ChampSelectActionUpdate(
+  championId: (json['championId'] as num?)?.toInt(),
+  completed: json['completed'] as bool?,
+);
+
+Map<String, dynamic> _$ChampSelectActionUpdateToJson(
+  ChampSelectActionUpdate instance,
+) => <String, dynamic>{
+  'championId': ?instance.championId,
+  'completed': ?instance.completed,
+};
+
+ChampSelectPlayer _$ChampSelectPlayerFromJson(Map<String, dynamic> json) =>
+    ChampSelectPlayer(
+      cellId: (json['cellId'] as num?)?.toInt(),
+      championId: (json['championId'] as num?)?.toInt(),
+      championPickIntent: (json['championPickIntent'] as num?)?.toInt(),
+      assignedPosition: $enumDecodeNullable(
+        _$ChampSelectAssignedPositionEnumMap,
+        json['assignedPosition'],
+      ),
+      spell1Id: (json['spell1Id'] as num?)?.toInt(),
+      spell2Id: (json['spell2Id'] as num?)?.toInt(),
+    );
+
+Map<String, dynamic> _$ChampSelectPlayerToJson(ChampSelectPlayer instance) =>
+    <String, dynamic>{
+      'cellId': instance.cellId,
+      'championId': instance.championId,
+      'championPickIntent': instance.championPickIntent,
+      'assignedPosition':
+          _$ChampSelectAssignedPositionEnumMap[instance.assignedPosition],
+      'spell1Id': instance.spell1Id,
+      'spell2Id': instance.spell2Id,
+    };
+
+const _$ChampSelectAssignedPositionEnumMap = {
+  ChampSelectAssignedPosition.top: 'TOP',
+  ChampSelectAssignedPosition.jungle: 'JUNGLE',
+  ChampSelectAssignedPosition.middle: 'MIDDLE',
+  ChampSelectAssignedPosition.bottom: 'BOTTOM',
+  ChampSelectAssignedPosition.utility: 'UTILITY',
+};
+
+ChampSelectMySelectionUpdate _$ChampSelectMySelectionUpdateFromJson(
+  Map<String, dynamic> json,
+) => ChampSelectMySelectionUpdate(
+  spell1Id: (json['spell1Id'] as num?)?.toInt(),
+  spell2Id: (json['spell2Id'] as num?)?.toInt(),
+);
+
+Map<String, dynamic> _$ChampSelectMySelectionUpdateToJson(
+  ChampSelectMySelectionUpdate instance,
+) => <String, dynamic>{
+  'spell1Id': ?instance.spell1Id,
+  'spell2Id': ?instance.spell2Id,
+};
+
+ChampSelectTimer _$ChampSelectTimerFromJson(Map<String, dynamic> json) =>
+    ChampSelectTimer(
+      phase: $enumDecodeNullable(_$ChampSelectTimerPhaseEnumMap, json['phase']),
+      adjustedTimeLeftInPhase: (json['adjustedTimeLeftInPhase'] as num?)
+          ?.toInt(),
+    );
+
+Map<String, dynamic> _$ChampSelectTimerToJson(ChampSelectTimer instance) =>
+    <String, dynamic>{
+      'phase': _$ChampSelectTimerPhaseEnumMap[instance.phase],
+      'adjustedTimeLeftInPhase': instance.adjustedTimeLeftInPhase,
+    };
+
+const _$ChampSelectTimerPhaseEnumMap = {
+  ChampSelectTimerPhase.planning: 'PLANNING',
+  ChampSelectTimerPhase.banPick: 'BAN_PICK',
+  ChampSelectTimerPhase.finalization: 'FINALIZATION',
+};
+
+ChampGridChampion _$ChampGridChampionFromJson(Map<String, dynamic> json) =>
+    ChampGridChampion(
+      id: (json['id'] as num?)?.toInt(),
+      name: json['name'] as String?,
+    );
+
+Map<String, dynamic> _$ChampGridChampionToJson(ChampGridChampion instance) =>
+    <String, dynamic>{'id': instance.id, 'name': instance.name};
+
+SummonerSpell _$SummonerSpellFromJson(Map<String, dynamic> json) =>
+    SummonerSpell(
+      id: (json['id'] as num?)?.toInt(),
+      name: json['name'] as String?,
+    );
+
+Map<String, dynamic> _$SummonerSpellToJson(SummonerSpell instance) =>
+    <String, dynamic>{'id': instance.id, 'name': instance.name};
+
 GameQueue _$GameQueueFromJson(Map<String, dynamic> json) => GameQueue(
   id: (json['id'] as num).toInt(),
   name: json['name'] as String,
@@ -60,6 +218,53 @@ Map<String, dynamic> _$GameQueueToJson(GameQueue instance) => <String, dynamic>{
   'isEnabled': instance.isEnabled,
   'isVisible': instance.isVisible,
   'isCustom': instance.isCustom,
+};
+
+LobbyDetails _$LobbyDetailsFromJson(Map<String, dynamic> json) => LobbyDetails(
+  gameConfig: LobbyGameConfig.fromJson(
+    json['gameConfig'] as Map<String, dynamic>,
+  ),
+);
+
+Map<String, dynamic> _$LobbyDetailsToJson(LobbyDetails instance) =>
+    <String, dynamic>{'gameConfig': instance.gameConfig};
+
+LobbyGameConfig _$LobbyGameConfigFromJson(Map<String, dynamic> json) =>
+    LobbyGameConfig(queueId: (json['queueId'] as num).toInt());
+
+Map<String, dynamic> _$LobbyGameConfigToJson(LobbyGameConfig instance) =>
+    <String, dynamic>{'queueId': instance.queueId};
+
+LobbyPositionPreferences _$LobbyPositionPreferencesFromJson(
+  Map<String, dynamic> json,
+) => LobbyPositionPreferences(
+  firstPositionPreference: $enumDecodeNullable(
+    _$LobbyPositionPreferenceEnumMap,
+    json['firstPositionPreference'],
+  ),
+  secondPositionPreference: $enumDecodeNullable(
+    _$LobbyPositionPreferenceEnumMap,
+    json['secondPositionPreference'],
+  ),
+);
+
+Map<String, dynamic> _$LobbyPositionPreferencesToJson(
+  LobbyPositionPreferences instance,
+) => <String, dynamic>{
+  'firstPositionPreference':
+      _$LobbyPositionPreferenceEnumMap[instance.firstPositionPreference],
+  'secondPositionPreference':
+      _$LobbyPositionPreferenceEnumMap[instance.secondPositionPreference],
+};
+
+const _$LobbyPositionPreferenceEnumMap = {
+  LobbyPositionPreference.unselected: 'UNSELECTED',
+  LobbyPositionPreference.fill: 'FILL',
+  LobbyPositionPreference.top: 'TOP',
+  LobbyPositionPreference.jungle: 'JUNGLE',
+  LobbyPositionPreference.middle: 'MIDDLE',
+  LobbyPositionPreference.bottom: 'BOTTOM',
+  LobbyPositionPreference.utility: 'UTILITY',
 };
 
 MatchmakingSearch _$MatchmakingSearchFromJson(Map<String, dynamic> json) =>

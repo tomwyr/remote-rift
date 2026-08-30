@@ -1,27 +1,27 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:remote_rift_ui/remote_rift_ui.dart';
+import 'package:remote_rift_utils/remote_rift_utils.dart';
+import 'package:time/time.dart';
 
 import '../../../i18n/strings.g.dart';
+import '../../common/duration.dart';
 import '../../widgets/time_countdown.dart';
 
 class const GameFoundCountdown({
   super.key,
-  required final double maxTime,
-  required final double timeLeft,
+  required final Duration maxTime,
+  required final Duration timeLeft,
 }) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Reduce time left slightly to account for the async communication delay
     // to better align the countdown with the game UI.
-    final effectiveTimeLeft = max(timeLeft - 0.1, 0.0);
+    final effectiveTimeLeft = (timeLeft - 100.milliseconds).nonNegative;
 
     final colors = context.remoteRiftTheme.colorScheme;
-
     return TimeCountdown(
-      start: maxTime,
-      current: effectiveTimeLeft,
+      start: maxTime.inSecondsDouble,
+      current: effectiveTimeLeft.inSecondsDouble,
       drift: 1.5,
       builder: (progress, seconds) => Container(
         width: .infinity,

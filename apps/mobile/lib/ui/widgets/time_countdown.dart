@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../common/duration.dart';
+import 'package:time/time.dart';
 
 typedef TimeCountdownBuilder = Widget Function(double progress, double seconds);
 
@@ -55,7 +54,7 @@ class _TimeCountdownState extends State<TimeCountdown> with SingleTickerProvider
 
   AnimationController _createController() {
     return AnimationController(vsync: this)
-      ..duration = DurationFrom.secondsDouble(widget.start)
+      ..duration = widget.start.seconds
       ..value = widget.current / widget.start
       ..addListener(() => setState(() {}))
       ..reverse();

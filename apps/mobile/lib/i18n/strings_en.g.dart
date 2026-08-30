@@ -42,6 +42,8 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	// Translations
 	late final Translations$app$en app = Translations$app$en._(_root);
 	late final Translations$gameState$en gameState = Translations$gameState$en._(_root);
+	late final Translations$championSelect$en championSelect = Translations$championSelect$en._(_root);
+	late final Translations$lobbyRolePreferences$en lobbyRolePreferences = Translations$lobbyRolePreferences$en._(_root);
 	late final Translations$gameError$en gameError = Translations$gameError$en._(_root);
 	late final Translations$gameQueue$en gameQueue = Translations$gameQueue$en._(_root);
 	late final Translations$connection$en connection = Translations$connection$en._(_root);
@@ -118,6 +120,149 @@ class Translations$gameState$en {
 
 	/// en: 'The game is running, but its current state cannot be identified. Restart the League Client and Remote Rift Desktop, or join manually this time.'
 	String get unknownDescription => 'The game is running, but its current state cannot be identified. Restart the League Client and Remote Rift Desktop, or join manually this time.';
+
+	/// en: 'Action not completed'
+	String get actionFailed => 'Action not completed';
+
+	/// en: 'Review the current game state, then try again if the action is still available.'
+	String get actionRecoveryDescription => 'Review the current game state, then try again if the action is still available.';
+}
+
+// Path: championSelect
+class Translations$championSelect$en {
+	Translations$championSelect$en._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Champion select'
+	String get title => 'Champion select';
+
+	/// en: 'Review your current champion-select choices.'
+	String get description => 'Review your current champion-select choices.';
+
+	/// en: 'Choose champion'
+	String get pickTitle => 'Choose champion';
+
+	/// en: 'Choose champion to ban'
+	String get banTitle => 'Choose champion to ban';
+
+	/// en: 'Choose a champion to lock in for your turn.'
+	String get pickGuidance => 'Choose a champion to lock in for your turn.';
+
+	/// en: 'Choose a champion to ban for your turn.'
+	String get banGuidance => 'Choose a champion to ban for your turn.';
+
+	/// en: 'Choose Spell 1'
+	String get spell1Title => 'Choose Spell 1';
+
+	/// en: 'Choose Spell 2'
+	String get spell2Title => 'Choose Spell 2';
+
+	/// en: 'Choose a summoner spell for this slot.'
+	String get spellGuidance => 'Choose a summoner spell for this slot.';
+
+	/// en: 'Lock in champion?'
+	String get lockInTitle => 'Lock in champion?';
+
+	/// en: 'Confirm your champion before the timer runs out.'
+	String get lockInGuidance => 'Confirm your champion before the timer runs out.';
+
+	/// en: 'Lock In'
+	String get lockInConfirm => 'Lock In';
+
+	/// en: 'Cancel'
+	String get cancel => 'Cancel';
+
+	/// en: 'Pick champion'
+	String get pickAction => 'Pick champion';
+
+	/// en: 'Ban champion'
+	String get banAction => 'Ban champion';
+
+	/// en: 'Lock In'
+	String get lockInAction => 'Lock In';
+
+	/// en: 'Retry'
+	String get retry => 'Retry';
+
+	/// en: 'Search choices'
+	String get search => 'Search choices';
+
+	/// en: 'Search'
+	String get searchLabel => 'Search';
+
+	/// en: 'No matching choices'
+	String get noSearchResults => 'No matching choices';
+
+	/// en: 'Couldn't send that action. Try again.'
+	String get actionFailed => 'Couldn\'t send that action. Try again.';
+
+	/// en: 'Couldn't load choices. Check your connection and retry.'
+	String get catalogFailed => 'Couldn\'t load choices. Check your connection and retry.';
+
+	/// en: 'Choices unavailable'
+	String get catalogFailureTitle => 'Choices unavailable';
+
+	/// en: 'Phase'
+	String get phaseLabel => 'Phase';
+
+	/// en: 'Time left'
+	String get timeLeftLabel => 'Time left';
+
+	/// en: 'Champion'
+	String get championLabel => 'Champion';
+
+	/// en: 'Position'
+	String get positionLabel => 'Position';
+
+	/// en: 'Summoner spells'
+	String get spellsLabel => 'Summoner spells';
+
+	/// en: 'Spell 1'
+	String get spell1Label => 'Spell 1';
+
+	/// en: 'Spell 2'
+	String get spell2Label => 'Spell 2';
+
+	/// en: 'Unavailable'
+	String get unavailable => 'Unavailable';
+
+	/// en: 'No champion selected'
+	String get noChampion => 'No champion selected';
+
+	late final Translations$championSelect$phase$en phase = Translations$championSelect$phase$en._(_root);
+	late final Translations$championSelect$position$en position = Translations$championSelect$position$en._(_root);
+}
+
+// Path: lobbyRolePreferences
+class Translations$lobbyRolePreferences$en {
+	Translations$lobbyRolePreferences$en._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Role Preferences'
+	String get title => 'Role Preferences';
+
+	/// en: 'Primary'
+	String get primaryLabel => 'Primary';
+
+	/// en: 'Secondary'
+	String get secondaryLabel => 'Secondary';
+
+	/// en: 'Select Primary Role'
+	String get primarySelectionTitle => 'Select Primary Role';
+
+	/// en: 'Select Secondary Role'
+	String get secondarySelectionTitle => 'Select Secondary Role';
+
+	/// en: 'Choose your preferred role for this game.'
+	String get selectionDescription => 'Choose your preferred role for this game.';
+
+	late final Translations$lobbyRolePreferences$role$en role = Translations$lobbyRolePreferences$role$en._(_root);
 }
 
 // Path: gameError
@@ -248,6 +393,72 @@ class Translations$home$en {
 	String get declineGameButton => 'Decline Game';
 }
 
+// Path: championSelect.phase
+class Translations$championSelect$phase$en {
+	Translations$championSelect$phase$en._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Planning'
+	String get planning => 'Planning';
+
+	/// en: 'Ban / Pick'
+	String get banPick => 'Ban / Pick';
+
+	/// en: 'Finalization'
+	String get finalization => 'Finalization';
+}
+
+// Path: championSelect.position
+class Translations$championSelect$position$en {
+	Translations$championSelect$position$en._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Top'
+	String get top => 'Top';
+
+	/// en: 'Jungle'
+	String get jungle => 'Jungle';
+
+	/// en: 'Middle'
+	String get middle => 'Middle';
+
+	/// en: 'Bottom'
+	String get bottom => 'Bottom';
+
+	/// en: 'Support'
+	String get support => 'Support';
+}
+
+// Path: lobbyRolePreferences.role
+class Translations$lobbyRolePreferences$role$en {
+	Translations$lobbyRolePreferences$role$en._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Top'
+	String get top => 'Top';
+
+	/// en: 'Jungle'
+	String get jungle => 'Jungle';
+
+	/// en: 'Middle'
+	String get middle => 'Middle';
+
+	/// en: 'Bottom'
+	String get bottom => 'Bottom';
+
+	/// en: 'Support'
+	String get support => 'Support';
+}
+
 // Path: gameQueue.groupLabel
 class Translations$gameQueue$groupLabel$en {
 	Translations$gameQueue$groupLabel$en._(this._root);
@@ -295,6 +506,59 @@ extension on Translations {
 			'gameState.inGameDescription' => 'Wait for the current game to finish before queueing again.',
 			'gameState.unknownTitle' => 'Unknown game state',
 			'gameState.unknownDescription' => 'The game is running, but its current state cannot be identified. Restart the League Client and Remote Rift Desktop, or join manually this time.',
+			'gameState.actionFailed' => 'Action not completed',
+			'gameState.actionRecoveryDescription' => 'Review the current game state, then try again if the action is still available.',
+			'championSelect.title' => 'Champion select',
+			'championSelect.description' => 'Review your current champion-select choices.',
+			'championSelect.pickTitle' => 'Choose champion',
+			'championSelect.banTitle' => 'Choose champion to ban',
+			'championSelect.pickGuidance' => 'Choose a champion to lock in for your turn.',
+			'championSelect.banGuidance' => 'Choose a champion to ban for your turn.',
+			'championSelect.spell1Title' => 'Choose Spell 1',
+			'championSelect.spell2Title' => 'Choose Spell 2',
+			'championSelect.spellGuidance' => 'Choose a summoner spell for this slot.',
+			'championSelect.lockInTitle' => 'Lock in champion?',
+			'championSelect.lockInGuidance' => 'Confirm your champion before the timer runs out.',
+			'championSelect.lockInConfirm' => 'Lock In',
+			'championSelect.cancel' => 'Cancel',
+			'championSelect.pickAction' => 'Pick champion',
+			'championSelect.banAction' => 'Ban champion',
+			'championSelect.lockInAction' => 'Lock In',
+			'championSelect.retry' => 'Retry',
+			'championSelect.search' => 'Search choices',
+			'championSelect.searchLabel' => 'Search',
+			'championSelect.noSearchResults' => 'No matching choices',
+			'championSelect.actionFailed' => 'Couldn\'t send that action. Try again.',
+			'championSelect.catalogFailed' => 'Couldn\'t load choices. Check your connection and retry.',
+			'championSelect.catalogFailureTitle' => 'Choices unavailable',
+			'championSelect.phaseLabel' => 'Phase',
+			'championSelect.timeLeftLabel' => 'Time left',
+			'championSelect.championLabel' => 'Champion',
+			'championSelect.positionLabel' => 'Position',
+			'championSelect.spellsLabel' => 'Summoner spells',
+			'championSelect.spell1Label' => 'Spell 1',
+			'championSelect.spell2Label' => 'Spell 2',
+			'championSelect.unavailable' => 'Unavailable',
+			'championSelect.noChampion' => 'No champion selected',
+			'championSelect.phase.planning' => 'Planning',
+			'championSelect.phase.banPick' => 'Ban / Pick',
+			'championSelect.phase.finalization' => 'Finalization',
+			'championSelect.position.top' => 'Top',
+			'championSelect.position.jungle' => 'Jungle',
+			'championSelect.position.middle' => 'Middle',
+			'championSelect.position.bottom' => 'Bottom',
+			'championSelect.position.support' => 'Support',
+			'lobbyRolePreferences.title' => 'Role Preferences',
+			'lobbyRolePreferences.primaryLabel' => 'Primary',
+			'lobbyRolePreferences.secondaryLabel' => 'Secondary',
+			'lobbyRolePreferences.primarySelectionTitle' => 'Select Primary Role',
+			'lobbyRolePreferences.secondarySelectionTitle' => 'Select Secondary Role',
+			'lobbyRolePreferences.selectionDescription' => 'Choose your preferred role for this game.',
+			'lobbyRolePreferences.role.top' => 'Top',
+			'lobbyRolePreferences.role.jungle' => 'Jungle',
+			'lobbyRolePreferences.role.middle' => 'Middle',
+			'lobbyRolePreferences.role.bottom' => 'Bottom',
+			'lobbyRolePreferences.role.support' => 'Support',
 			'gameError.unableToConnectTitle' => 'Unable to connect',
 			'gameError.unableToConnectDescription' => 'The game client could not be reached. Make sure that it is running to interact with the game.',
 			'gameError.unknownTitle' => 'Unknown game state',

@@ -71,6 +71,67 @@
         "group": "dev"
       },
       "problemMatcher": []
+    },
+    {
+      "label": "Core: Build Runner Build",
+      "detail": "Generates code for the core package",
+      "type": "shell",
+      "command": "dart",
+      "args": [
+        "run",
+        "build_runner",
+        "build"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}/packages/core"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Core: Build Runner Watch",
+      "detail": "Watches and generates code for the core package",
+      "type": "shell",
+      "command": "dart",
+      "args": [
+        "run",
+        "build_runner",
+        "watch"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}/packages/core"
+      },
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "Mobile: Slang Generate",
+      "detail": "Generates mobile localization output",
+      "type": "shell",
+      "command": "dart",
+      "args": [
+        "run",
+        "slang"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}/apps/mobile"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Mobile: Slang Watch",
+      "detail": "Watches and generates mobile localization output",
+      "type": "shell",
+      "command": "dart",
+      "args": [
+        "run",
+        "slang",
+        "watch"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}/apps/mobile"
+      },
+      "isBackground": true,
+      "problemMatcher": []
     }
   ]
 }

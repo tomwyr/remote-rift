@@ -11,12 +11,39 @@ sealed class GameState extends Equatable {
 
 class Loading extends GameState;
 
+enum GameAction {
+  createLobby,
+  searchMatch,
+  leaveLobby,
+  updateRoles,
+  stopSearch,
+  acceptMatch,
+  declineMatch,
+}
+
 @CopyWith()
 class Data({
   required final String? queueName,
   required final RemoteRiftState state,
   final bool loading = false,
+  final GameAction? failedAction,
 }) extends GameState {
   @override
-  List<Object?> get props => [queueName, state, loading];
+  List<Object?> get props => [queueName, state, loading, failedAction];
+
+  bool get canRetry {
+    final state = this.state;
+    switch (failedAction) {
+      case .createLobby:
+        return state is PreGame;
+      case .searchMatch || .leaveLobby || .updateRoles:
+        return state is Lobby && state.state == .idle;
+      case .stopSearch:
+        return state is Lobby && state.state == .searching;
+      case .acceptMatch || .declineMatch:
+        return state is Found && state.state == .pending;
+      case null:
+        return false;
+    }
+  }
 }

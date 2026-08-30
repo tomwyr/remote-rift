@@ -1,3 +1,7 @@
+## [0.13.0] - Unreleased
+
+- Added support for champion select phase
+
 ## [0.12.0] - 2026-08-21
 
 - Updated the app for Flutter 3.47 and Dart 3.13

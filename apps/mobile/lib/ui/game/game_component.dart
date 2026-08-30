@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:remote_rift_core/remote_rift_core.dart';
 import 'package:remote_rift_ui/remote_rift_ui.dart';
+import 'package:time/time.dart';
 
 import '../../dependencies.dart';
 import '../../i18n/strings.g.dart';
+import '../champion_select/champion_select_component.dart';
 import '../common/utils.dart';
 import '../widgets/bloc_listener.dart';
 import '../widgets/delayed_display.dart';
@@ -14,6 +16,7 @@ import 'game_state.dart';
 import 'widgets/game_data_body.dart';
 import 'widgets/game_found_countdown.dart';
 import 'widgets/game_queue_selection.dart';
+import 'widgets/lobby_role_preferences.dart';
 
 class const GameComponent({super.key}) extends StatelessWidget {
   static Widget builder() {
@@ -33,7 +36,7 @@ class const GameComponent({super.key}) extends StatelessWidget {
         child: switch (cubit.state) {
           // Delay showing content to avoid flicker when loading appears for a single frame
           Loading() => DelayedDisplay(
-            delay: Duration(milliseconds: 200),
+            delay: 200.milliseconds,
             placeholder: BasicLayout(loading: true),
             child: BasicLayout(
               title: t.connection.loadingTitle,
@@ -67,13 +70,20 @@ class const GameComponent({super.key}) extends StatelessWidget {
               ),
             ),
 
-            Lobby(state: .idle) => BasicLayout(
+            Lobby(state: .idle, :var rolePreferences) => BasicLayout(
               body: GameDataBody(
                 queueName: queueName,
                 title: t.gameState.lobbyIdleTitle,
                 description: t.gameState.lobbyIdleDescription,
                 tone: .neutral,
                 icon: Icons.groups_outlined,
+                child: switch (rolePreferences) {
+                  LobbyRoleSelection preferences => LobbyRolePreferencesCard(
+                    loading: loading,
+                    preferences: preferences,
+                  ),
+                  _ => null,
+                },
               ),
               action: .new(
                 label: t.home.searchGameButton,
@@ -135,6 +145,11 @@ class const GameComponent({super.key}) extends StatelessWidget {
                 icon: Icons.cancel_outlined,
               ),
               loading: true,
+            ),
+
+            ChampionSelect() => ChampionSelectComponent.builder(
+              queueName: queueName,
+              championSelect: state,
             ),
 
             InGame() => BasicLayout(

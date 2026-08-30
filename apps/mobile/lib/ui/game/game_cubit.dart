@@ -17,6 +17,8 @@ class GameCubit({
   final _retryBackoff = RetryBackoff.standard;
   CancelableStream<RemoteRiftSession>? _gameSessionStream;
   Timer? _retryTimer;
+  var _sessionRevision = 0;
+  AsyncCallback? _retryAction;
 
   void initialize() {
     _listenGameStateWithRetry();
@@ -27,37 +29,46 @@ class GameCubit({
   }
 
   void createLobby({required int queueId}) {
-    _runGameAction(() async {
+    _runGameAction(.createLobby, () async {
       await _apiClient.createLobby(queueId: queueId);
     });
   }
 
   void searchMatch() {
-    _runGameAction(() async {
+    _runGameAction(.searchMatch, () async {
       await _apiClient.searchMatch();
     });
   }
 
   void leaveLobby() {
-    _runGameAction(() async {
+    _runGameAction(.leaveLobby, () async {
       await _apiClient.leaveLobby();
     });
   }
 
+  void updateLobbyRolePreferences({
+    required LobbyRole first,
+    required LobbyRole second,
+  }) {
+    _runGameAction(.updateRoles, () async {
+      await _apiClient.updateLobbyRolePreferences(first: first, second: second);
+    });
+  }
+
   void stopMatchSearch() {
-    _runGameAction(() async {
+    _runGameAction(.stopSearch, () async {
       await _apiClient.stopMatchSearch();
     });
   }
 
   void acceptMatch() {
-    _runGameAction(() async {
+    _runGameAction(.acceptMatch, () async {
       await _apiClient.acceptMatch();
     });
   }
 
   void declineMatch() {
-    _runGameAction(() async {
+    _runGameAction(.declineMatch, () async {
       await _apiClient.declineMatch();
     });
   }
@@ -65,7 +76,7 @@ class GameCubit({
   Future<void> _listenGameStateWithRetry() async {
     try {
       await _listenGameState();
-    } catch (_) {
+    } on RemoteRiftApiError {
       _retryTimer = Timer(_retryBackoff.tick(), _listenGameStateWithRetry);
     }
   }
@@ -75,14 +86,9 @@ class GameCubit({
     _gameSessionStream = stream;
 
     await for (var gameSession in stream) {
-      emit(switch (state) {
-        Data data => data.copyWith(
-          queueName: gameSession.queueName,
-          state: gameSession.state,
-          loading: false,
-        ),
-        Loading() => Data(queueName: gameSession.queueName, state: gameSession.state),
-      });
+      _sessionRevision++;
+      _retryAction = null;
+      emit(Data(queueName: gameSession.queueName, state: gameSession.state));
     }
   }
 
@@ -93,20 +99,35 @@ class GameCubit({
     _gameSessionStream = null;
   }
 
-  Future<void> _runGameAction(AsyncCallback action) async {
+  void retry() {
+    _retryAction?.call();
+  }
+
+  Future<void> _runGameAction(GameAction actionType, AsyncCallback action) async {
     final currentState = switch (state) {
       Data data => data,
       _ => throw StateError(
         'Tried to run game action while not connected to the game api (was ${state.runtimeType})',
       ),
     };
+    final requestRevision = _sessionRevision;
+    _retryAction = null;
 
     try {
-      emit(currentState.copyWith(loading: true));
+      emit(currentState.copyWith(loading: true, failedAction: null));
       await action();
     } catch (_) {
-      emit(currentState.copyWith(loading: false));
-      rethrow;
+      if (requestRevision != _sessionRevision || state is! Data) {
+        return;
+      }
+      _retryAction = () => _runGameAction(actionType, action);
+      emit(currentState.copyWith(loading: false, failedAction: actionType));
+      return;
     }
+    final latestState = state;
+    if (requestRevision != _sessionRevision || latestState is! Data) {
+      return;
+    }
+    emit(latestState.copyWith(loading: false));
   }
 }

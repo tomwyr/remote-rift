@@ -10,7 +10,8 @@ Router configureRouter() {
     ..configureStatus()
     ..configureSession()
     ..configureLobby()
-    ..configureQueue();
+    ..configureQueue()
+    ..configureChampSelect();
 }
 
 extension on Router {
@@ -60,6 +61,17 @@ extension on Router {
       await RemoteRiftConnector().leaveLobby();
       return .noContent();
     });
+
+    postJson(route('role-preferences'), (request) async {
+      final input = await request.decodeBodyOrNull(RolePreferenceInput.fromJson);
+      if (input == null || input.first == input.second) return .badRequest();
+
+      await RemoteRiftConnector().updateLobbyRolePreferences(
+        first: input.first,
+        second: input.second,
+      );
+      return .noContent();
+    });
   }
 
   void configureQueue() {
@@ -82,6 +94,45 @@ extension on Router {
 
     postJson(route('decline'), (request) async {
       await RemoteRiftConnector().declineMatch();
+      return .noContent();
+    });
+  }
+
+  void configureChampSelect() {
+    String route(String value) => '/champ-select/$value';
+
+    getJson(route('catalog'), (request) async {
+      final catalog = await RemoteRiftConnector().getChampionSelectCatalog();
+      return .ok(catalog.toJson());
+    });
+
+    postJson(route('champion'), (request) async {
+      final input = await request.decodeBodyOrNull(ChampionSelectChampionInput.fromJson);
+      if (input == null || input.championId <= 0) {
+        return .badRequest();
+      }
+      final connector = RemoteRiftConnector();
+      await switch (input.action) {
+        .pick => connector.pickChampion(championId: input.championId),
+        .ban => connector.banChampion(championId: input.championId),
+      };
+      return .noContent();
+    });
+
+    postJson(route('lock-in'), (request) async {
+      await RemoteRiftConnector().lockInChampion();
+      return .noContent();
+    });
+
+    postJson(route('spell'), (request) async {
+      final input = await request.decodeBodyOrNull(ChangeSummonerSpellInput.fromJson);
+      if (input == null || input.spellId <= 0) {
+        return .badRequest();
+      }
+      await RemoteRiftConnector().changeSummonerSpell(
+        spellId: input.spellId,
+        slot: input.slot,
+      );
       return .noContent();
     });
   }

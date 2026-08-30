@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../i18n/strings.g.dart';
 import '../../widgets/layout.dart';
+import '../game_cubit.dart';
+import '../game_state.dart';
 
 class const GameDataBody({
   super.key,
@@ -38,8 +41,36 @@ class const GameDataBody({
           tone: tone,
           icon: icon,
         ),
+        const _GameActionRecovery(),
         ?child,
       ],
+    );
+  }
+}
+
+class const _GameActionRecovery() extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final cubit = context.watch<GameCubit>();
+    final state = cubit.state;
+
+    if (state is! Data || state.failedAction == null) {
+      return const SizedBox.shrink();
+    }
+
+    return BasicLayoutSection(
+      label: t.gameState.actionFailed,
+      description: t.gameState.actionRecoveryDescription,
+      tone: .warning,
+      titlePlaceholder: state.canRetry
+          ? Align(
+              alignment: .centerLeft,
+              child: TextButton(
+                onPressed: cubit.retry,
+                child: Text(t.championSelect.retry),
+              ),
+            )
+          : null,
     );
   }
 }

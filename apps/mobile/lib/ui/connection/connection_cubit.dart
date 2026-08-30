@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:remote_rift_core/remote_rift_core.dart';
 import 'package:remote_rift_ui/remote_rift_ui.dart';
 import 'package:remote_rift_utils/remote_rift_utils.dart';
+import 'package:time/time.dart';
 
 import '../../data/api_client.dart';
 import '../../data/app_config.dart';
@@ -60,7 +61,7 @@ class ConnectionCubit({
 
   void _restartStatusStream() {
     final stream = _apiClient
-        .getStatusStream(timeLimit: Duration(seconds: 10))
+        .getStatusStream(timeLimit: 10.seconds)
         .peek(onDone: _connectToGameApi)
         .cancelable();
     _statusStream?.cancel();
@@ -157,12 +158,12 @@ extension ConnectionApiVerification on ConnectionCubit {
   }
 
   Future<RemoteRiftApiServiceInfo?> _resolveApiAddress() async {
-    final addressCandidates = await _serviceRegistry.discover(timeLimit: Duration(seconds: 5));
+    final addressCandidates = await _serviceRegistry.discover(timeLimit: 5.seconds);
 
     for (var next in addressCandidates) {
       try {
         _apiClient.setApiAddress(next.addressString);
-        final serviceInfo = await _apiClient.getServiceInfo().timeout(Duration(seconds: 2));
+        final serviceInfo = await _apiClient.getServiceInfo().timeout(2.seconds);
         return serviceInfo;
       } catch (_) {
         // Try the next endpoint resolved for the same service instance.
