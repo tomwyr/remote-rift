@@ -27,10 +27,18 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
+      - name: Install website dependencies
+        working-directory: apps/website
+        run: dart pub get
+
       - name: Check Dart formatting
         run: scripts/check-dart-formatting.sh
 
       - name: Analyze workspace
+        run: dart analyze apps/mobile apps/desktop packages
+
+      - name: Analyze website
+        working-directory: apps/website
         run: dart analyze
 
       - name: Test workspace
