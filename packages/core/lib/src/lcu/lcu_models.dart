@@ -187,8 +187,8 @@ class LobbyGameConfig({
 
 @JsonSerializable()
 class LobbyPositionPreferences({
-  final LobbyPositionPreference? firstPositionPreference,
-  final LobbyPositionPreference? secondPositionPreference,
+  final LobbyPositionPreference? firstPreference,
+  final LobbyPositionPreference? secondPreference,
 }) {
   factory fromJson(Map<String, dynamic> json) => _$LobbyPositionPreferencesFromJson(json);
 

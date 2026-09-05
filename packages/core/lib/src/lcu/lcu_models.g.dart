@@ -238,23 +238,22 @@ Map<String, dynamic> _$LobbyGameConfigToJson(LobbyGameConfig instance) =>
 LobbyPositionPreferences _$LobbyPositionPreferencesFromJson(
   Map<String, dynamic> json,
 ) => LobbyPositionPreferences(
-  firstPositionPreference: $enumDecodeNullable(
+  firstPreference: $enumDecodeNullable(
     _$LobbyPositionPreferenceEnumMap,
-    json['firstPositionPreference'],
+    json['firstPreference'],
   ),
-  secondPositionPreference: $enumDecodeNullable(
+  secondPreference: $enumDecodeNullable(
     _$LobbyPositionPreferenceEnumMap,
-    json['secondPositionPreference'],
+    json['secondPreference'],
   ),
 );
 
 Map<String, dynamic> _$LobbyPositionPreferencesToJson(
   LobbyPositionPreferences instance,
 ) => <String, dynamic>{
-  'firstPositionPreference':
-      _$LobbyPositionPreferenceEnumMap[instance.firstPositionPreference],
-  'secondPositionPreference':
-      _$LobbyPositionPreferenceEnumMap[instance.secondPositionPreference],
+  'firstPreference': _$LobbyPositionPreferenceEnumMap[instance.firstPreference],
+  'secondPreference':
+      _$LobbyPositionPreferenceEnumMap[instance.secondPreference],
 };
 
 const _$LobbyPositionPreferenceEnumMap = {

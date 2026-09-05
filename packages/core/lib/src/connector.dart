@@ -82,11 +82,11 @@ class RemoteRiftConnector._init({
       throw RemoteRiftStateError.rolePreferencesUnavailable;
     }
 
-    final firstPositionPreference = first.toLcuLobbyPositionPreference();
-    final secondPositionPreference = second.toLcuLobbyPositionPreference();
+    final firstPreference = first.toLcuLobbyPositionPreference();
+    final secondPreference = second.toLcuLobbyPositionPreference();
     final preferences = lcu.LobbyPositionPreferences(
-      firstPositionPreference: firstPositionPreference,
-      secondPositionPreference: secondPositionPreference,
+      firstPreference: firstPreference,
+      secondPreference: secondPreference,
     );
     await _lcuApi.updateLocalMemberPositionPreferences(preferences);
   }
@@ -326,10 +326,7 @@ class RemoteRiftConnector._init({
     ).wait;
     if (!queues.supportsLobbyRolePreferences(lobby.gameConfig.queueId)) return null;
 
-    final rolePreferences = preferences.toLobbyRolePreferencesOrNull();
-    if (rolePreferences == null) throw RemoteRiftStateError.invalidRolePreferences;
-
-    return rolePreferences;
+    return preferences.toLobbyRolePreferencesOrNull();
   }
 
   Future<void> _selectChampion({
