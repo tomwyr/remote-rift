@@ -20,7 +20,7 @@ dependencies:
   slang_flutter: ^4.8.0
   tray_manager: ^0.5.2
   equatable: ^2.0.8
-  package_info_plus: ^9.0.0
+  package_info_plus: ^10.2.1
   path: ^1.9.1
   hooks: ^1.0.1
 
