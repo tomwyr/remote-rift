@@ -6,6 +6,7 @@ import 'package:http/io_client.dart';
 import 'package:remote_rift_core/remote_rift_core.dart';
 import 'package:remote_rift_utils/remote_rift_utils.dart';
 import 'package:web_socket_channel/io.dart';
+import 'package:web_socket_channel/web_socket_channel.dart' show WebSocketChannelException;
 
 class RemoteRiftApiClient.withClients({
   required final Client _httpClient,
@@ -30,7 +31,7 @@ class RemoteRiftApiClient.withClients({
   Stream<RemoteRiftResponse<RemoteRiftStatus>> getStatusStream({Duration? timeLimit}) async* {
     final url = '${await _webSocketBaseUrl}/status/watch';
     final ws = IOWebSocketChannel.connect(Uri.parse(url), customClient: _webSocketClient);
-    final stream = _applyTimeLimit(ws.stream, timeLimit);
+    final stream = ws.stream.applyTimeLimit(timeLimit).handleErrors();
     await for (var message in stream) {
       yield .fromJson(jsonDecode(message), RemoteRiftStatus.fromJson);
     }
@@ -39,7 +40,8 @@ class RemoteRiftApiClient.withClients({
   Stream<RemoteRiftSession> getCurrentSessionStream() async* {
     final url = '${await _webSocketBaseUrl}/session/watch';
     final ws = IOWebSocketChannel.connect(Uri.parse(url), customClient: _webSocketClient);
-    await for (var message in ws.stream) {
+    final stream = ws.stream.handleErrors();
+    await for (var message in stream) {
       yield .fromJson(jsonDecode(message));
     }
   }
@@ -139,18 +141,6 @@ class RemoteRiftApiClient.withClients({
     }
   }
 
-  Stream<T> _applyTimeLimit<T>(Stream<T> stream, Duration? timeLimit) {
-    if (timeLimit == null) return stream;
-
-    return stream.timeout(
-      timeLimit,
-      onTimeout: (sink) {
-        sink.addError(ApiConnectionTimeout());
-        sink.close();
-      },
-    );
-  }
-
   Future<Response> _post(Uri url, {String? body}) async {
     return _request(() => _httpClient.post(url, body: body));
   }
@@ -183,3 +173,26 @@ class ApiConnectionTimeout extends RemoteRiftApiError;
 class ApiRequestError(final int statusCode) extends RemoteRiftApiError;
 
 class ApiTransportError extends RemoteRiftApiError;
+
+extension<T> on Stream<T> {
+  Stream<T> applyTimeLimit(Duration? timeLimit) {
+    if (timeLimit == null) return this;
+
+    return timeout(
+      timeLimit,
+      onTimeout: (sink) {
+        sink.addError(ApiConnectionTimeout());
+        sink.close();
+      },
+    );
+  }
+
+  Stream<T> handleErrors() {
+    return handleError((error, stackTrace) {
+      if (error is WebSocketChannelException) {
+        throw ApiTransportError();
+      }
+      Error.throwWithStackTrace(error, stackTrace);
+    });
+  }
+}

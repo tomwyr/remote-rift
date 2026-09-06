@@ -45,9 +45,17 @@ class RemoteRiftConnector._init({
   Stream<RemoteRiftSession> getCurrentSessionStream() async* {
     RemoteRiftSession? previousSession;
     await for (var _ in _tickStream(seconds: 1)) {
-      if (await _getCurrentSession() case var session when session != previousSession) {
-        yield session;
-        previousSession = session;
+      try {
+        if (await _getCurrentSession() case var session when session != previousSession) {
+          yield session;
+          previousSession = session;
+        }
+      } catch (error) {
+        if (error case LcuConnectionError() || LcuApiClientError()) {
+          previousSession = null;
+          continue;
+        }
+        rethrow;
       }
     }
   }
@@ -214,7 +222,7 @@ class RemoteRiftConnector._init({
   }
 
   Future<RemoteRiftSession> _getCurrentSession() async {
-    var (queueName, state) = await (_getQueueNameOrNull(), _getCurrentState()).wait;
+    var (queueName, state) = await (_getQueueNameOrNull(), _getCurrentState()).waitUnwrapped;
     if (state case PreGame()) {
       // Clear the queue if the session data is out of sync with the state.
       queueName = null;
@@ -236,8 +244,11 @@ class RemoteRiftConnector._init({
 
       final description = queue.description;
       return description.isNotEmpty ? description : null;
-    } catch (_) {
-      return null;
+    } on LcuApiClientError catch (error) {
+      if (error == .requestRejected) {
+        return null;
+      }
+      rethrow;
     }
   }
 

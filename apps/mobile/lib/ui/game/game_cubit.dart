@@ -19,6 +19,7 @@ class GameCubit({
   CancelableStream<RemoteRiftSession>? _gameSessionStream;
   Timer? _retryTimer;
   var _sessionRevision = 0;
+  var _disposed = false;
   AsyncCallback? _retryAction;
 
   void initialize() {
@@ -26,6 +27,7 @@ class GameCubit({
   }
 
   void dispose() {
+    _disposed = true;
     _stopGameStateStream();
   }
 
@@ -97,8 +99,18 @@ class GameCubit({
     try {
       await _listenGameState();
     } on RemoteRiftApiError {
-      _retryTimer = Timer(_retryBackoff.tick(), _listenGameStateWithRetry);
+      // Retry expected desktop session-stream failures.
     }
+    _scheduleGameStateRetry();
+  }
+
+  void _scheduleGameStateRetry() {
+    if (_disposed) return;
+    _retryTimer = Timer(_retryBackoff.tick(), () {
+      _retryTimer = null;
+      if (_disposed) return;
+      _listenGameStateWithRetry();
+    });
   }
 
   Future<void> _listenGameState() async {

@@ -44,25 +44,19 @@ class LcuApiClient({
     required int actionId,
     required ChampSelectActionUpdate update,
   }) async {
-    final response = await _request(
+    await _request(
       .patch,
       'lol-champ-select/v1/session/actions/$actionId',
       update.toJson(),
     );
-    if (!response.isSuccessful) {
-      throw LcuApiClientError.requestRejected;
-    }
   }
 
   Future<void> updateMyChampSelectSelection(ChampSelectMySelectionUpdate update) async {
-    final response = await _request(
+    await _request(
       .patch,
       'lol-champ-select/v1/session/my-selection',
       update.toJson(),
     );
-    if (!response.isSuccessful) {
-      throw LcuApiClientError.requestRejected;
-    }
   }
 
   Future<List<GameQueue>> getGameQueues() async {
@@ -85,37 +79,39 @@ class LcuApiClient({
   }
 
   Future<void> updateLocalMemberPositionPreferences(LobbyPositionPreferences preferences) async {
-    final response = await _request(
+    await _request(
       .put,
       'lol-lobby/v2/lobby/members/localMember/position-preferences',
       preferences.toJson(),
     );
-    if (!response.isSuccessful) throw LcuApiClientError.requestRejected;
   }
 
   Future<void> createLobby({required int queueId}) async {
-    await _requestSuccess(.post, 'lol-lobby/v2/lobby', {'queueId': queueId});
+    await _request(.post, 'lol-lobby/v2/lobby', {'queueId': queueId});
   }
 
   Future<void> deleteLobby() async {
-    await _requestSuccess(.delete, 'lol-lobby/v2/lobby');
+    await _request(.delete, 'lol-lobby/v2/lobby');
   }
 
   Future<MatchmakingSearch> getMatchmakingSearch() async {
-    final response = await _request(.get, 'lol-lobby/v2/lobby/matchmaking/search-state');
+    final response = await _request(
+      .get,
+      'lol-lobby/v2/lobby/matchmaking/search-state',
+    );
     return .fromJson(jsonDecode(response.body));
   }
 
   Future<void> startMatchmakingSearch() async {
-    await _requestSuccess(.post, 'lol-lobby/v2/lobby/matchmaking/search');
+    await _request(.post, 'lol-lobby/v2/lobby/matchmaking/search');
   }
 
   Future<void> stopMatchmakingSearch() async {
-    await _requestSuccess(.delete, 'lol-lobby/v2/lobby/matchmaking/search');
+    await _request(.delete, 'lol-lobby/v2/lobby/matchmaking/search');
   }
 
   Future<ReadyCheck> getReadyCheck() async {
-    final response = await _request(.get, 'lol-matchmaking/v1/ready-check');
+    final response = await _performRequest(.get, 'lol-matchmaking/v1/ready-check');
     if (response.isSuccessful) {
       return .fromJson(jsonDecode(response.body));
     } else {
@@ -124,24 +120,30 @@ class LcuApiClient({
   }
 
   Future<void> acceptReadyCheck() async {
-    await _requestSuccess(.post, 'lol-matchmaking/v1/ready-check/accept');
+    await _request(.post, 'lol-matchmaking/v1/ready-check/accept');
   }
 
   Future<void> declineReadyCheck() async {
-    await _requestSuccess(.post, 'lol-matchmaking/v1/ready-check/decline');
+    await _request(.post, 'lol-matchmaking/v1/ready-check/decline');
   }
 
-  Future<void> _requestSuccess(
+  Future<Response> _request(
     HttpMethod method,
     String path, [
     Map<String, dynamic>? body,
   ]) async {
-    if (!(await _request(method, path, body)).isSuccessful) {
+    final response = await _performRequest(method, path, body);
+    if (!response.isSuccessful) {
       throw LcuApiClientError.requestRejected;
     }
+    return response;
   }
 
-  Future<Response> _request(HttpMethod method, String path, [Map<String, dynamic>? body]) async {
+  Future<Response> _performRequest(
+    HttpMethod method,
+    String path, [
+    Map<String, dynamic>? body,
+  ]) async {
     Future<Response> execute() async {
       final lockfileData = _lcuConnection.getLockfileData();
       return await _runRequest(method, path, body, lockfileData);
