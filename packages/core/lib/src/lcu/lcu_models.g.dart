@@ -224,37 +224,35 @@ LobbyDetails _$LobbyDetailsFromJson(Map<String, dynamic> json) => LobbyDetails(
   gameConfig: LobbyGameConfig.fromJson(
     json['gameConfig'] as Map<String, dynamic>,
   ),
+  localMember: json['localMember'] == null
+      ? null
+      : LobbyMember.fromJson(json['localMember'] as Map<String, dynamic>),
 );
 
 Map<String, dynamic> _$LobbyDetailsToJson(LobbyDetails instance) =>
-    <String, dynamic>{'gameConfig': instance.gameConfig};
+    <String, dynamic>{
+      'gameConfig': instance.gameConfig,
+      'localMember': instance.localMember,
+    };
 
-LobbyGameConfig _$LobbyGameConfigFromJson(Map<String, dynamic> json) =>
-    LobbyGameConfig(queueId: (json['queueId'] as num).toInt());
-
-Map<String, dynamic> _$LobbyGameConfigToJson(LobbyGameConfig instance) =>
-    <String, dynamic>{'queueId': instance.queueId};
-
-LobbyPositionPreferences _$LobbyPositionPreferencesFromJson(
-  Map<String, dynamic> json,
-) => LobbyPositionPreferences(
-  firstPreference: $enumDecodeNullable(
+LobbyMember _$LobbyMemberFromJson(Map<String, dynamic> json) => LobbyMember(
+  firstPositionPreference: $enumDecode(
     _$LobbyPositionPreferenceEnumMap,
-    json['firstPreference'],
+    normalizePositionPreference(json, 'firstPositionPreference'),
   ),
-  secondPreference: $enumDecodeNullable(
+  secondPositionPreference: $enumDecode(
     _$LobbyPositionPreferenceEnumMap,
-    json['secondPreference'],
+    normalizePositionPreference(json, 'secondPositionPreference'),
   ),
 );
 
-Map<String, dynamic> _$LobbyPositionPreferencesToJson(
-  LobbyPositionPreferences instance,
-) => <String, dynamic>{
-  'firstPreference': _$LobbyPositionPreferenceEnumMap[instance.firstPreference],
-  'secondPreference':
-      _$LobbyPositionPreferenceEnumMap[instance.secondPreference],
-};
+Map<String, dynamic> _$LobbyMemberToJson(LobbyMember instance) =>
+    <String, dynamic>{
+      'firstPositionPreference':
+          _$LobbyPositionPreferenceEnumMap[instance.firstPositionPreference]!,
+      'secondPositionPreference':
+          _$LobbyPositionPreferenceEnumMap[instance.secondPositionPreference]!,
+    };
 
 const _$LobbyPositionPreferenceEnumMap = {
   LobbyPositionPreference.unselected: 'UNSELECTED',
@@ -264,6 +262,40 @@ const _$LobbyPositionPreferenceEnumMap = {
   LobbyPositionPreference.middle: 'MIDDLE',
   LobbyPositionPreference.bottom: 'BOTTOM',
   LobbyPositionPreference.utility: 'UTILITY',
+};
+
+LobbyGameConfig _$LobbyGameConfigFromJson(Map<String, dynamic> json) =>
+    LobbyGameConfig(
+      queueId: (json['queueId'] as num).toInt(),
+      showPositionSelector: json['showPositionSelector'] as bool,
+    );
+
+Map<String, dynamic> _$LobbyGameConfigToJson(LobbyGameConfig instance) =>
+    <String, dynamic>{
+      'queueId': instance.queueId,
+      'showPositionSelector': instance.showPositionSelector,
+    };
+
+LobbyPositionPreferences _$LobbyPositionPreferencesFromJson(
+  Map<String, dynamic> json,
+) => LobbyPositionPreferences(
+  firstPreference: $enumDecode(
+    _$LobbyPositionPreferenceEnumMap,
+    normalizePositionPreference(json, 'firstPreference'),
+  ),
+  secondPreference: $enumDecode(
+    _$LobbyPositionPreferenceEnumMap,
+    normalizePositionPreference(json, 'secondPreference'),
+  ),
+);
+
+Map<String, dynamic> _$LobbyPositionPreferencesToJson(
+  LobbyPositionPreferences instance,
+) => <String, dynamic>{
+  'firstPreference':
+      _$LobbyPositionPreferenceEnumMap[instance.firstPreference]!,
+  'secondPreference':
+      _$LobbyPositionPreferenceEnumMap[instance.secondPreference]!,
 };
 
 MatchmakingSearch _$MatchmakingSearchFromJson(Map<String, dynamic> json) =>

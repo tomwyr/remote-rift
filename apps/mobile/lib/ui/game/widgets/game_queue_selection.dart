@@ -6,6 +6,7 @@ import 'package:remote_rift_utils/remote_rift_utils.dart';
 
 import '../../../data/models.dart';
 import '../../../i18n/strings.g.dart';
+import '../../widgets/layout.dart';
 import '../game_cubit.dart';
 
 class const GameQueueSelectionButton({
@@ -182,14 +183,14 @@ class const _QueuesSection({
           Column(
             children: [
               ListTile(
-                contentPadding: const .symmetric(horizontal: 14),
+                contentPadding: const .symmetric(horizontal: 16),
                 enabled: queue.enabled,
                 visualDensity: .standard,
                 onTap: () => onSelect(queue),
                 title: Text(queue.name),
                 trailing: queue.enabled ? const Icon(Icons.chevron_right) : const Icon(Icons.block),
               ),
-              if (queue != queues.last) const Divider(height: 1),
+              if (queue != queues.last) const AppListDivider(),
             ],
           ),
       ],

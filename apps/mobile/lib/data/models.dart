@@ -2,6 +2,8 @@ import 'package:remote_rift_core/remote_rift_core.dart';
 
 import '../i18n/strings.g.dart';
 
+enum LobbyRolePreferenceSlot { primary, secondary }
+
 extension RemoteRiftErrorStrings on RemoteRiftError {
   String get title => switch (this) {
     .unableToConnect => t.gameError.unableToConnectTitle,

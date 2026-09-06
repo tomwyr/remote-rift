@@ -87,6 +87,40 @@ enum RiftStatusTone { neutral, active, ready, warning, error }
 
 enum BasicLayoutSectionFontSize { medium, large }
 
+class const AppCard({
+  super.key,
+  required final Widget child,
+  final EdgeInsets? padding,
+}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.remoteRiftTheme.colorScheme;
+
+    return Container(
+      width: .infinity,
+      padding: padding,
+      decoration: BoxDecoration(
+        color: colors.navy.withValues(alpha: 0.025),
+        border: .all(color: colors.navy.withValues(alpha: 0.12)),
+        borderRadius: .circular(16),
+      ),
+      child: child,
+    );
+  }
+}
+
+class const AppListDivider({super.key}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Divider(
+      height: 1,
+      indent: 16,
+      endIndent: 16,
+      color: context.remoteRiftTheme.colorScheme.navy.withValues(alpha: 0.12),
+    );
+  }
+}
+
 class const BasicLayoutSection({
   super.key,
   final String? label,
@@ -116,14 +150,8 @@ class const BasicLayoutSection({
       .error => colors.error,
     };
 
-    return Container(
-      width: .infinity,
+    return AppCard(
       padding: const .all(16),
-      decoration: BoxDecoration(
-        color: colors.navy.withValues(alpha: 0.025),
-        border: .all(color: colors.navy.withValues(alpha: 0.12)),
-        borderRadius: .circular(16),
-      ),
       child: Column(
         crossAxisAlignment: .start,
         children: [

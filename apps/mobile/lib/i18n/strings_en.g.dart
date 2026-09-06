@@ -247,6 +247,9 @@ class Translations$lobbyRolePreferences$en {
 	/// en: 'Role Preferences'
 	String get title => 'Role Preferences';
 
+	/// en: 'Select roles'
+	String get selectRolesLabel => 'Select roles';
+
 	/// en: 'Primary'
 	String get primaryLabel => 'Primary';
 
@@ -549,6 +552,7 @@ extension on Translations {
 			'championSelect.position.bottom' => 'Bottom',
 			'championSelect.position.support' => 'Support',
 			'lobbyRolePreferences.title' => 'Role Preferences',
+			'lobbyRolePreferences.selectRolesLabel' => 'Select roles',
 			'lobbyRolePreferences.primaryLabel' => 'Primary',
 			'lobbyRolePreferences.secondaryLabel' => 'Secondary',
 			'lobbyRolePreferences.primarySelectionTitle' => 'Select Primary Role',

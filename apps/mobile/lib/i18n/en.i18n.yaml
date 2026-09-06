@@ -68,6 +68,7 @@ championSelect:
 
 lobbyRolePreferences:
   title: "Role Preferences"
+  selectRolesLabel: "Select roles"
   primaryLabel: "Primary"
   secondaryLabel: "Secondary"
   primarySelectionTitle: "Select Primary Role"

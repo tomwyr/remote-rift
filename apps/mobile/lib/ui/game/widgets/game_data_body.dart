@@ -18,6 +18,10 @@ class const GameDataBody({
 }) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final hasFailedAction = context.select((GameCubit cubit) {
+      final state = cubit.state;
+      return state is Data && state.failedAction != null;
+    });
     var effectiveQueueName = queueName;
     // Use placeholder text only if no placeholder widget is provided.
     if (queueNamePlaceholder == null) {
@@ -41,7 +45,7 @@ class const GameDataBody({
           tone: tone,
           icon: icon,
         ),
-        const _GameActionRecovery(),
+        if (hasFailedAction) const _GameActionRecovery(),
         ?child,
       ],
     );

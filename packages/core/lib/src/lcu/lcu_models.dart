@@ -1,5 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 
+import 'lcu_converters.dart';
+
 part 'lcu_models.g.dart';
 
 @JsonEnum(alwaysCreate: true, fieldRename: .pascal)
@@ -170,6 +172,7 @@ class GameQueue({
 @JsonSerializable()
 class LobbyDetails({
   required final LobbyGameConfig gameConfig,
+  final LobbyMember? localMember,
 }) {
   factory fromJson(Map<String, dynamic> json) => _$LobbyDetailsFromJson(json);
 
@@ -177,8 +180,21 @@ class LobbyDetails({
 }
 
 @JsonSerializable()
+class LobbyMember({
+  @JsonKey(readValue: normalizePositionPreference)
+  required final LobbyPositionPreference firstPositionPreference,
+  @JsonKey(readValue: normalizePositionPreference)
+  required final LobbyPositionPreference secondPositionPreference,
+}) {
+  factory fromJson(Map<String, dynamic> json) => _$LobbyMemberFromJson(json);
+
+  Map<String, dynamic> toJson() => _$LobbyMemberToJson(this);
+}
+
+@JsonSerializable()
 class LobbyGameConfig({
   required final int queueId,
+  required final bool showPositionSelector,
 }) {
   factory fromJson(Map<String, dynamic> json) => _$LobbyGameConfigFromJson(json);
 
@@ -187,8 +203,10 @@ class LobbyGameConfig({
 
 @JsonSerializable()
 class LobbyPositionPreferences({
-  final LobbyPositionPreference? firstPreference,
-  final LobbyPositionPreference? secondPreference,
+  @JsonKey(readValue: normalizePositionPreference)
+  required final LobbyPositionPreference firstPreference,
+  @JsonKey(readValue: normalizePositionPreference)
+  required final LobbyPositionPreference secondPreference,
 }) {
   factory fromJson(Map<String, dynamic> json) => _$LobbyPositionPreferencesFromJson(json);
 

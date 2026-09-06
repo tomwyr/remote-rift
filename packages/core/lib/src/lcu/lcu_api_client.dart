@@ -70,9 +70,10 @@ class LcuApiClient({
     return _listFromJson(jsonDecode(response.body), GameQueue.fromJson);
   }
 
-  Future<LobbyDetails> getLobby() async {
+  Future<LobbyDetails?> getLobby() async {
     final response = await _request(.get, 'lol-lobby/v2/lobby');
-    return .fromJson(jsonDecode(response.body));
+    final json = jsonDecode(response.body);
+    return json == null ? null : .fromJson(json);
   }
 
   Future<LobbyPositionPreferences> getLocalMemberPositionPreferences() async {
@@ -197,4 +198,8 @@ extension on Response {
   }
 }
 
-enum LcuApiClientError implements Exception { unreachable, connectionLost, requestRejected }
+enum LcuApiClientError implements Exception {
+  unreachable,
+  connectionLost,
+  requestRejected,
+}

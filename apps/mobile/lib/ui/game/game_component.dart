@@ -78,7 +78,7 @@ class const GameComponent({super.key}) extends StatelessWidget {
                 tone: .neutral,
                 icon: Icons.groups_outlined,
                 child: switch (rolePreferences) {
-                  LobbyRoleSelection preferences => LobbyRolePreferencesCard(
+                  var preferences? => LobbyRolePreferencesCard(
                     loading: loading,
                     preferences: preferences,
                   ),

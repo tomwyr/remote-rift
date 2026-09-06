@@ -3,11 +3,22 @@ import '../models/state.dart';
 
 extension LobbyPositionPreferencesMapper on lcu.LobbyPositionPreferences {
   LobbyRolePreferences? toLobbyRolePreferencesOrNull() {
-    return switch ((firstPreference, secondPreference)) {
+    return (firstPreference, secondPreference).toLobbyRolePreferencesOrNull();
+  }
+}
+
+extension LobbyMemberMapper on lcu.LobbyMember {
+  LobbyRolePreferences? toLobbyRolePreferencesOrNull() {
+    return (firstPositionPreference, secondPositionPreference).toLobbyRolePreferencesOrNull();
+  }
+}
+
+extension on (lcu.LobbyPositionPreference, lcu.LobbyPositionPreference) {
+  LobbyRolePreferences? toLobbyRolePreferencesOrNull() {
+    return switch (this) {
       (.unselected, .unselected) => const UnselectedLobbyRolePreferences(),
       (.fill, .unselected) || (.fill, .fill) => const FillLobbyRolePreferences(),
-      (var first?, var second?) => _toLobbyRoleSelectionOrNull(first, second),
-      _ => null,
+      (var first, var second) => _toLobbyRoleSelectionOrNull(first, second),
     };
   }
 }

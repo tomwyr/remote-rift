@@ -7,6 +7,7 @@ import 'package:remote_rift_core/remote_rift_core.dart';
 import 'package:remote_rift_utils/remote_rift_utils.dart';
 
 import '../../data/api_client.dart';
+import '../../data/models.dart';
 import 'game_state.dart';
 
 class GameCubit({
@@ -53,6 +54,25 @@ class GameCubit({
     _runGameAction(.updateRoles, () async {
       await _apiClient.updateLobbyRolePreferences(first: first, second: second);
     });
+  }
+
+  void updateLobbyRolePreference({
+    required LobbyRole role,
+    required LobbyRolePreferenceSlot slot,
+  }) {
+    final preferences = switch (state) {
+      Data(state: Lobby(state: .idle, rolePreferences: LobbyRoleSelection preferences)) =>
+        preferences,
+      _ => throw StateError(
+        'Tried to update a lobby role preference without selected lobby roles.',
+      ),
+    };
+    final (first, second) = switch (slot) {
+      .primary => (role, role == preferences.second ? preferences.first : preferences.second),
+      .secondary => (role == preferences.first ? preferences.second : preferences.first, role),
+    };
+
+    updateLobbyRolePreferences(first: first, second: second);
   }
 
   void stopMatchSearch() {
