@@ -153,14 +153,27 @@ class RemoteRiftConnector._init({
   Future<void> lockInChampion() async {
     await _runChampionSelectAction(.lockInChampion, (session, player) async {
       final actionAssignment = session.activeLocalAction;
-      final actionId = actionAssignment?.id;
-      if (actionId == null || actionAssignment?.type != .pick) {
+      if (actionAssignment == null || !actionAssignment.type.isPickOrBan) {
         throw RemoteRiftStateError.championSelectActionUnavailable;
+      }
+      final actionId = actionAssignment.id;
+      if (actionId == null) {
+        throw RemoteRiftStateError.championSelectActionUnavailable;
+      }
+      final championId = actionAssignment.championId;
+      if (championId == null || championId <= 0) {
+        throw RemoteRiftStateError.championSelectActionRejected;
       }
       await _lcuApi.updateChampSelectAction(
         actionId: actionId,
-        update: lcu.ChampSelectActionUpdate(completed: true),
+        update: lcu.ChampSelectActionUpdate(championId: championId, completed: true),
       );
+
+      final updatedSession = await _lcuApi.getChampSelectSession();
+      final updatedAction = updatedSession.actionWithId(actionId);
+      if (updatedAction?.completed != true) {
+        throw RemoteRiftStateError.championSelectActionRejected;
+      }
     });
   }
 
@@ -188,7 +201,8 @@ class RemoteRiftConnector._init({
     if (await _lcuApi.getGameflowPhase() != .champSelect) {
       throw RemoteRiftStateError.notChampionSelect;
     }
-    final (session, champions, spells) = await (
+    final (gameflowSession, session, champions, spells) = await (
+      _lcuApi.getGameflowSession(),
       _lcuApi.getChampSelectSession(),
       _lcuApi.getChampGridChampions(),
       _lcuApi.getSummonerSpells(),
@@ -198,7 +212,10 @@ class RemoteRiftConnector._init({
     }
 
     final catalogChampions = champions.toChampionSelectCatalogChampions();
-    final catalogSpells = spells.toChampionSelectCatalogSummonerSpells();
+    final gameMode = gameflowSession.gameData.queue.gameMode;
+    final catalogSpells = spells
+        .where((spell) => spell.gameModes?.contains(gameMode) ?? false)
+        .toChampionSelectCatalogSummonerSpells();
     if (catalogChampions.isEmpty || catalogSpells.isEmpty) {
       throw RemoteRiftStateError.championSelectUnavailable;
     }
@@ -307,7 +324,10 @@ class RemoteRiftConnector._init({
 
     final player = session.localPlayer;
     final position = player?.assignedPosition?.toChampionSelectPosition();
-    final championId = player?.preferredChampionId;
+    final (championId, championAction) = switch (timer?.phase) {
+      .planning => (player?.preferredChampionId, ChampionSelectChampionAction.pick),
+      _ => (session.localChampionId, session.localChampionAction),
+    };
     final actionAvailability = session.toChampionSelectActionAvailability();
 
     final (champion, spell1, spell2) = await (
@@ -320,6 +340,8 @@ class RemoteRiftConnector._init({
       phase: phase,
       timeLeft: timeLeftInPhase.milliseconds,
       champion: champion,
+      championAction: championAction,
+      unavailableChampionIds: session.unavailableChampionIds,
       position: position,
       spell1: spell1,
       spell2: spell2,
@@ -347,15 +369,24 @@ class RemoteRiftConnector._init({
     required lcu.ChampSelectActionType lcuActionType,
   }) async {
     await _runChampionSelectAction(actionType, (session, player) async {
-      final actionAssignment = session.activeLocalAction;
-      final actionId = actionAssignment?.id;
-      if (championId <= 0 || actionId == null || actionAssignment?.type != lcuActionType) {
+      if (championId <= 0) {
         throw RemoteRiftStateError.championSelectActionUnavailable;
       }
-      await _lcuApi.updateChampSelectAction(
-        actionId: actionId,
-        update: lcu.ChampSelectActionUpdate(championId: championId),
-      );
+      final actionAssignment = session.activeLocalAction;
+      if (actionAssignment == null || actionAssignment.type != lcuActionType) {
+        throw RemoteRiftStateError.championSelectActionUnavailable;
+      }
+      final actionId = actionAssignment.id;
+      if (actionId == null) {
+        throw RemoteRiftStateError.championSelectActionUnavailable;
+      }
+      final update = lcu.ChampSelectActionUpdate(championId: championId);
+      await _lcuApi.updateChampSelectAction(actionId: actionId, update: update);
+
+      final updatedSession = await _lcuApi.getChampSelectSession();
+      if (updatedSession.actionWithId(actionId)?.championId != championId) {
+        throw RemoteRiftStateError.championSelectActionRejected;
+      }
     });
   }
 

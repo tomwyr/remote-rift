@@ -104,7 +104,7 @@ class const AppCard({
         border: .all(color: colors.navy.withValues(alpha: 0.12)),
         borderRadius: .circular(16),
       ),
-      child: child,
+      child: Material(type: .transparency, child: child),
     );
   }
 }
@@ -130,6 +130,7 @@ class const BasicLayoutSection({
   final String? description,
   final RiftStatusTone tone = .neutral,
   final IconData? icon,
+  final BasicLayoutAction? action,
 }) extends StatelessWidget {
   this
     : assert(
@@ -193,6 +194,13 @@ class const BasicLayoutSection({
             Text(
               description,
               style: textTheme.bodyLarge?.copyWith(height: 1.4),
+            ),
+          ],
+          if (action case BasicLayoutAction(:final label, :final onPressed)) ...[
+            const SizedBox(height: 16),
+            Align(
+              alignment: .centerRight,
+              child: ElevatedButton(onPressed: onPressed, child: Text(label)),
             ),
           ],
         ],

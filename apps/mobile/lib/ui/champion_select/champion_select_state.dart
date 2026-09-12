@@ -7,6 +7,10 @@ part 'champion_select_state.g.dart';
 sealed class const ChampionSelectState({
   required final ChampionSelect championSelect,
 }) extends Equatable {
+  bool get canLockIn {
+    return championSelect.actionAvailability.lockInChampion && championSelect.champion != null;
+  }
+
   ChampionSelectActionStatus statusOf(ChampionSelectAction action) => .idle;
 
   @override
@@ -39,7 +43,7 @@ class const Data({
   }) {
     final normalizedQuery = query.toLowerCase();
     final entries = switch (type) {
-      .champions => catalog.championEntries(),
+      .champions => catalog.championEntries(championSelect.unavailableChampionIds),
       .summonerSpells => catalog.summonterSpellsEntries(),
     };
     return entries.where((entry) {
@@ -51,6 +55,7 @@ class const Data({
 class ChampionSelectCatalogEntry({
   required final int id,
   required final String name,
+  final bool enabled = true,
 });
 
 enum ChampionSelectCatalogType { champions, summonerSpells }
@@ -62,9 +67,16 @@ enum ChampionSelectAction { pickChampion, banChampion, firstSpell, secondSpell, 
 enum ChampionSelectActionStatus { idle, submitting, failed }
 
 extension on ChampionSelectCatalog {
-  List<ChampionSelectCatalogEntry> championEntries() {
+  List<ChampionSelectCatalogEntry> championEntries(List<int> unavailableChampionIds) {
+    final unavailable = unavailableChampionIds.toSet();
     return champions
-        .map((champion) => ChampionSelectCatalogEntry(id: champion.id, name: champion.name))
+        .map(
+          (champion) => ChampionSelectCatalogEntry(
+            id: champion.id,
+            name: champion.name,
+            enabled: !unavailable.contains(champion.id),
+          ),
+        )
         .toList();
   }
 }

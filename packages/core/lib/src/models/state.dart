@@ -138,6 +138,8 @@ class ChampionSelect({
   required final ChampionSelectPhase phase,
   @DurationMillisecondsConverter() required final Duration timeLeft,
   required final Champion? champion,
+  required final ChampionSelectChampionAction? championAction,
+  required final List<int> unavailableChampionIds,
   required final ChampionSelectPosition? position,
   required final SummonerSpell? spell1,
   required final SummonerSpell? spell2,
@@ -152,6 +154,8 @@ class ChampionSelect({
     phase,
     timeLeft,
     champion,
+    championAction,
+    unavailableChampionIds,
     position,
     spell1,
     spell2,
@@ -197,6 +201,6 @@ enum LobbyRole { top, jungle, middle, bottom, support }
 
 enum GameFoundState { pending, accepted, declined }
 
-enum ChampionSelectPhase { planning, banPick, finalization }
+enum ChampionSelectPhase { planning, banPick, finalization, gameStarting }
 
 enum ChampionSelectPosition { top, jungle, middle, bottom, support }

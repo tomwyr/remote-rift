@@ -148,8 +148,8 @@ class Translations$championSelect$en {
 	/// en: 'Choose champion to ban'
 	String get banTitle => 'Choose champion to ban';
 
-	/// en: 'Choose a champion to lock in for your turn.'
-	String get pickGuidance => 'Choose a champion to lock in for your turn.';
+	/// en: 'Choose a champion for your turn.'
+	String get pickGuidance => 'Choose a champion for your turn.';
 
 	/// en: 'Choose a champion to ban for your turn.'
 	String get banGuidance => 'Choose a champion to ban for your turn.';
@@ -162,15 +162,6 @@ class Translations$championSelect$en {
 
 	/// en: 'Choose a summoner spell for this slot.'
 	String get spellGuidance => 'Choose a summoner spell for this slot.';
-
-	/// en: 'Lock in champion?'
-	String get lockInTitle => 'Lock in champion?';
-
-	/// en: 'Confirm your champion before the timer runs out.'
-	String get lockInGuidance => 'Confirm your champion before the timer runs out.';
-
-	/// en: 'Lock In'
-	String get lockInConfirm => 'Lock In';
 
 	/// en: 'Cancel'
 	String get cancel => 'Cancel';
@@ -412,6 +403,9 @@ class Translations$championSelect$phase$en {
 
 	/// en: 'Finalization'
 	String get finalization => 'Finalization';
+
+	/// en: 'Game starting'
+	String get gameStarting => 'Game starting';
 }
 
 // Path: championSelect.position
@@ -515,14 +509,11 @@ extension on Translations {
 			'championSelect.description' => 'Review your current champion-select choices.',
 			'championSelect.pickTitle' => 'Choose champion',
 			'championSelect.banTitle' => 'Choose champion to ban',
-			'championSelect.pickGuidance' => 'Choose a champion to lock in for your turn.',
+			'championSelect.pickGuidance' => 'Choose a champion for your turn.',
 			'championSelect.banGuidance' => 'Choose a champion to ban for your turn.',
 			'championSelect.spell1Title' => 'Choose Spell 1',
 			'championSelect.spell2Title' => 'Choose Spell 2',
 			'championSelect.spellGuidance' => 'Choose a summoner spell for this slot.',
-			'championSelect.lockInTitle' => 'Lock in champion?',
-			'championSelect.lockInGuidance' => 'Confirm your champion before the timer runs out.',
-			'championSelect.lockInConfirm' => 'Lock In',
 			'championSelect.cancel' => 'Cancel',
 			'championSelect.pickAction' => 'Pick champion',
 			'championSelect.banAction' => 'Ban champion',
@@ -546,6 +537,7 @@ extension on Translations {
 			'championSelect.phase.planning' => 'Planning',
 			'championSelect.phase.banPick' => 'Ban / Pick',
 			'championSelect.phase.finalization' => 'Finalization',
+			'championSelect.phase.gameStarting' => 'Game starting',
 			'championSelect.position.top' => 'Top',
 			'championSelect.position.jungle' => 'Jungle',
 			'championSelect.position.middle' => 'Middle',

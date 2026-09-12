@@ -29,6 +29,7 @@ GameflowQueue _$GameflowQueueFromJson(Map<String, dynamic> json) =>
       id: (json['id'] as num).toInt(),
       name: json['name'] as String,
       description: json['description'] as String,
+      gameMode: json['gameMode'] as String,
     );
 
 Map<String, dynamic> _$GameflowQueueToJson(GameflowQueue instance) =>
@@ -36,6 +37,7 @@ Map<String, dynamic> _$GameflowQueueToJson(GameflowQueue instance) =>
       'id': instance.id,
       'name': instance.name,
       'description': instance.description,
+      'gameMode': instance.gameMode,
     };
 
 ChampSelectSession _$ChampSelectSessionFromJson(Map<String, dynamic> json) =>
@@ -79,6 +81,7 @@ ChampSelectActionAssignment _$ChampSelectActionAssignmentFromJson(
 ) => ChampSelectActionAssignment(
   id: (json['id'] as num?)?.toInt(),
   actorCellId: (json['actorCellId'] as num?)?.toInt(),
+  championId: (json['championId'] as num?)?.toInt(),
   completed: json['completed'] as bool?,
   isInProgress: json['isInProgress'] as bool?,
   type: $enumDecodeNullable(_$ChampSelectActionTypeEnumMap, json['type']),
@@ -89,6 +92,7 @@ Map<String, dynamic> _$ChampSelectActionAssignmentToJson(
 ) => <String, dynamic>{
   'id': instance.id,
   'actorCellId': instance.actorCellId,
+  'championId': instance.championId,
   'completed': instance.completed,
   'isInProgress': instance.isInProgress,
   'type': _$ChampSelectActionTypeEnumMap[instance.type],
@@ -97,6 +101,7 @@ Map<String, dynamic> _$ChampSelectActionAssignmentToJson(
 const _$ChampSelectActionTypeEnumMap = {
   ChampSelectActionType.pick: 'pick',
   ChampSelectActionType.ban: 'ban',
+  ChampSelectActionType.tenBansReveal: 'ten_bans_reveal',
 };
 
 ChampSelectActionUpdate _$ChampSelectActionUpdateFromJson(
@@ -120,7 +125,7 @@ ChampSelectPlayer _$ChampSelectPlayerFromJson(Map<String, dynamic> json) =>
       championPickIntent: (json['championPickIntent'] as num?)?.toInt(),
       assignedPosition: $enumDecodeNullable(
         _$ChampSelectAssignedPositionEnumMap,
-        json['assignedPosition'],
+        normalizeAssignedPosition(json, 'assignedPosition'),
       ),
       spell1Id: (json['spell1Id'] as num?)?.toInt(),
       spell2Id: (json['spell2Id'] as num?)?.toInt(),
@@ -148,6 +153,8 @@ const _$ChampSelectAssignedPositionEnumMap = {
 ChampSelectMySelectionUpdate _$ChampSelectMySelectionUpdateFromJson(
   Map<String, dynamic> json,
 ) => ChampSelectMySelectionUpdate(
+  championId: (json['championId'] as num?)?.toInt(),
+  championPickIntent: (json['championPickIntent'] as num?)?.toInt(),
   spell1Id: (json['spell1Id'] as num?)?.toInt(),
   spell2Id: (json['spell2Id'] as num?)?.toInt(),
 );
@@ -155,6 +162,8 @@ ChampSelectMySelectionUpdate _$ChampSelectMySelectionUpdateFromJson(
 Map<String, dynamic> _$ChampSelectMySelectionUpdateToJson(
   ChampSelectMySelectionUpdate instance,
 ) => <String, dynamic>{
+  'championId': ?instance.championId,
+  'championPickIntent': ?instance.championPickIntent,
   'spell1Id': ?instance.spell1Id,
   'spell2Id': ?instance.spell2Id,
 };
@@ -176,6 +185,7 @@ const _$ChampSelectTimerPhaseEnumMap = {
   ChampSelectTimerPhase.planning: 'PLANNING',
   ChampSelectTimerPhase.banPick: 'BAN_PICK',
   ChampSelectTimerPhase.finalization: 'FINALIZATION',
+  ChampSelectTimerPhase.gameStarting: 'GAME_STARTING',
 };
 
 ChampGridChampion _$ChampGridChampionFromJson(Map<String, dynamic> json) =>
@@ -191,10 +201,17 @@ SummonerSpell _$SummonerSpellFromJson(Map<String, dynamic> json) =>
     SummonerSpell(
       id: (json['id'] as num?)?.toInt(),
       name: json['name'] as String?,
+      gameModes: (json['gameModes'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
     );
 
 Map<String, dynamic> _$SummonerSpellToJson(SummonerSpell instance) =>
-    <String, dynamic>{'id': instance.id, 'name': instance.name};
+    <String, dynamic>{
+      'id': instance.id,
+      'name': instance.name,
+      'gameModes': instance.gameModes,
+    };
 
 GameQueue _$GameQueueFromJson(Map<String, dynamic> json) => GameQueue(
   id: (json['id'] as num).toInt(),
@@ -343,18 +360,6 @@ const _$ReadyCheckResponseEnumMap = {
   ReadyCheckResponse.accepted: 'Accepted',
   ReadyCheckResponse.declined: 'Declined',
 };
-
-ReadyCheckError _$ReadyCheckErrorFromJson(Map<String, dynamic> json) =>
-    ReadyCheckError(
-      httpStatus: (json['httpStatus'] as num).toInt(),
-      message: json['message'] as String,
-    );
-
-Map<String, dynamic> _$ReadyCheckErrorToJson(ReadyCheckError instance) =>
-    <String, dynamic>{
-      'httpStatus': instance.httpStatus,
-      'message': instance.message,
-    };
 
 HeartbeatConnection _$HeartbeatConnectionFromJson(Map<String, dynamic> json) =>
     HeartbeatConnection(stableConnection: json['stableConnection'] as bool);

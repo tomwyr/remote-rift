@@ -14,7 +14,7 @@ class ChampionSelectCubit({
 }) extends Cubit<ChampionSelectState> {
   this : super(Initial(championSelect: championSelect));
 
-  final _events = StreamController<ChampionSelectEvent>();
+  final _events = StreamController<ChampionSelectEvent>.broadcast();
   Stream<ChampionSelectEvent> get events => _events.stream;
 
   Future<void> loadCatalog() async {
@@ -78,7 +78,6 @@ class ChampionSelectCubit({
     if (!_beginAction(action)) {
       return;
     }
-
     try {
       await operation();
       _finishAction(action);

@@ -7,7 +7,7 @@ extension ChampSelectSessionExtensions on lcu.ChampSelectSession {
     final cellId = localPlayerCellId;
     if (cellId == null) return null;
 
-    for (final player in myTeam) {
+    for (var player in myTeam) {
       if (player.cellId == cellId) return player;
     }
     return null;
@@ -17,8 +17,8 @@ extension ChampSelectSessionExtensions on lcu.ChampSelectSession {
     final cellId = localPlayerCellId;
     if (cellId == null) return null;
 
-    for (final round in actions) {
-      for (final action in round) {
+    for (var actionTurn in actions) {
+      for (var action in actionTurn) {
         if (action.actorCellId == cellId &&
             action.isInProgress == true &&
             action.completed != true) {
@@ -28,6 +28,98 @@ extension ChampSelectSessionExtensions on lcu.ChampSelectSession {
     }
     return null;
   }
+
+  lcu.ChampSelectActionAssignment? get localChampionActionAssignment {
+    if (activeLocalAction case var action?) {
+      return action;
+    }
+
+    final cellId = localPlayerCellId;
+    if (cellId == null) {
+      return null;
+    }
+
+    for (var actionTurn in actions.reversed) {
+      for (var action in actionTurn.reversed) {
+        if (action.hasLockedChampionForCell(cellId)) {
+          return action;
+        }
+      }
+    }
+    return null;
+  }
+
+  int? get localChampionId {
+    final championId = localChampionActionAssignment?.championId;
+    return championId != null && championId > 0 ? championId : null;
+  }
+
+  ChampionSelectChampionAction? get localChampionAction {
+    return switch (localChampionActionAssignment?.type) {
+      .pick => .pick,
+      .ban => .ban,
+      _ => null,
+    };
+  }
+
+  List<int> get unavailableChampionIds {
+    final championIds = <int>{};
+    for (var actionTurn in actions) {
+      for (var action in actionTurn) {
+        if (action.bannedChampionId case var championId?) {
+          championIds.add(championId);
+        }
+      }
+    }
+
+    final localCellId = localPlayerCellId;
+    for (var player in myTeam) {
+      if (player.cellId == localCellId) {
+        continue;
+      }
+      final championId = player.preferredChampionId;
+      if (championId != null) {
+        championIds.add(championId);
+      }
+    }
+
+    return championIds.toList();
+  }
+
+  lcu.ChampSelectActionAssignment? actionWithId(int actionId) {
+    for (var actionTurn in actions) {
+      for (var action in actionTurn) {
+        if (action.id == actionId) {
+          return action;
+        }
+      }
+    }
+    return null;
+  }
+}
+
+extension ChampSelectActionAssignmentExtensions on lcu.ChampSelectActionAssignment {
+  int? get bannedChampionId {
+    if (type != .ban || completed != true) {
+      return null;
+    }
+    if (championId case var selectedChampionId? when selectedChampionId > 0) {
+      return selectedChampionId;
+    }
+    return null;
+  }
+
+  bool hasLockedChampionForCell(int cellId) {
+    final selectedChampionId = championId;
+    return actorCellId == cellId &&
+        completed == true &&
+        selectedChampionId != null &&
+        selectedChampionId > 0;
+  }
+}
+
+extension ChampSelectActionTypeExtensions on lcu.ChampSelectActionType? {
+  bool get isPickOrBan => this == .pick || this == .ban;
 }
 
 extension ChampSelectPlayerExtensions on lcu.ChampSelectPlayer {
@@ -48,10 +140,13 @@ extension ChampSelectSessionAvailabilityMapper on lcu.ChampSelectSession {
     if (localPlayer == null || timeLeft == null || timeLeft <= 0) {
       return .unavailable;
     }
+    if (timer?.phase == .planning) {
+      return .spells;
+    }
     return switch (activeLocalAction?.type) {
       .pick => .pick,
       .ban => .ban,
-      null => .unavailable,
+      _ => .spells,
     };
   }
 }
@@ -62,6 +157,7 @@ extension ChampSelectTimerPhaseMapper on lcu.ChampSelectTimerPhase {
       .planning => .planning,
       .banPick => .banPick,
       .finalization => .finalization,
+      .gameStarting => .gameStarting,
     };
   }
 }
@@ -84,10 +180,18 @@ extension ChampGridChampionIterableMapper on Iterable<lcu.ChampGridChampion> {
   }
 
   List<ChampionSelectCatalogChampion> toChampionSelectCatalogChampions() {
-    final catalogChampions = map(
-      (champion) => (champion.id, champion.toChampionSelectCatalogChampionOrNull()),
-    );
-    return _valuesById(catalogChampions).values.toList()..sort((a, b) => a.name.compareTo(b.name));
+    final championsByName = <String, ChampionSelectCatalogChampion>{};
+    for (var champion in this) {
+      final catalogChampion = champion.toChampionSelectCatalogChampionOrNull();
+      if (catalogChampion == null) {
+        continue;
+      }
+      final existing = championsByName[catalogChampion.name];
+      if (existing == null || catalogChampion.id < existing.id) {
+        championsByName[catalogChampion.name] = catalogChampion;
+      }
+    }
+    return championsByName.values.toList()..sort((a, b) => a.name.compareTo(b.name));
   }
 }
 
@@ -97,10 +201,18 @@ extension SummonerSpellIterableMapper on Iterable<lcu.SummonerSpell> {
   }
 
   List<ChampionSelectCatalogSummonerSpell> toChampionSelectCatalogSummonerSpells() {
-    final catalogSpells = map(
-      (spell) => (spell.id, spell.toChampionSelectCatalogSummonerSpellOrNull()),
-    );
-    return _valuesById(catalogSpells).values.toList()..sort((a, b) => a.name.compareTo(b.name));
+    final spellsByName = <String, ChampionSelectCatalogSummonerSpell>{};
+    for (var spell in this) {
+      final catalogSpell = spell.toChampionSelectCatalogSummonerSpellOrNull();
+      if (catalogSpell == null) {
+        continue;
+      }
+      final existing = spellsByName[catalogSpell.name];
+      if (existing == null || catalogSpell.id < existing.id) {
+        spellsByName[catalogSpell.name] = catalogSpell;
+      }
+    }
+    return spellsByName.values.toList()..sort((a, b) => a.name.compareTo(b.name));
   }
 }
 
@@ -138,7 +250,7 @@ extension SummonerSpellMapper on lcu.SummonerSpell {
 
 Map<int, T> _valuesById<T>(Iterable<(int?, T?)> values) {
   final mappedValues = <int, T>{};
-  for (final (id, value) in values) {
+  for (var (id, value) in values) {
     if (id != null && id > 0 && value != null) mappedValues[id] = value;
   }
   return mappedValues;

@@ -14,7 +14,6 @@ import '../game/widgets/game_data_body.dart';
 import '../widgets/layout.dart';
 import '../widgets/time_countdown.dart';
 import 'champion_select_cubit.dart';
-import 'widgets/lock_in_sheet.dart';
 import 'widgets/picker_sheet.dart';
 
 class const ChampionSelectComponent({
@@ -42,22 +41,10 @@ class const ChampionSelectComponent({
   @override
   Widget build(BuildContext context) {
     final cubit = context.watch<ChampionSelectCubit>();
-    final championSelect = cubit.state.championSelect;
-    final champion = championSelect.champion;
-    final availability = championSelect.actionAvailability;
-    final actionStatus = cubit.state.statusOf(.lockIn);
 
     return Lifecycle(
       onInit: cubit.loadCatalog,
       child: BasicLayout(
-        action: availability.lockInChampion && champion != null
-            ? BasicLayoutAction(
-                label: t.championSelect.lockInAction,
-                onPressed: actionStatus == .submitting
-                    ? null
-                    : () => ChampionSelectLockInSheet.show(context, champion: champion),
-              )
-            : null,
         body: GameDataBody(
           queueName: queueName,
           title: t.championSelect.title,
@@ -101,9 +88,17 @@ class const _BodyContent() extends StatelessWidget {
 class const _ChampionCard() extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final championSelect = context.watch<ChampionSelectCubit>().state.championSelect;
+    final cubit = context.watch<ChampionSelectCubit>();
+    final state = cubit.state;
+    final championSelect = state.championSelect;
     final championTitle = championSelect.champion?.name ?? t.championSelect.noChampion;
     final availability = championSelect.actionAvailability;
+    final lockInAction = state.canLockIn
+        ? BasicLayoutAction(
+            label: t.championSelect.lockInAction,
+            onPressed: state.statusOf(.lockIn) == .submitting ? null : cubit.lockIn,
+          )
+        : null;
 
     if (availability.pickChampion) {
       return InkWell(
@@ -113,6 +108,7 @@ class const _ChampionCard() extends StatelessWidget {
           label: t.championSelect.pickAction,
           title: championTitle,
           description: t.championSelect.pickGuidance,
+          action: lockInAction,
         ),
       );
     }
@@ -125,14 +121,28 @@ class const _ChampionCard() extends StatelessWidget {
           label: t.championSelect.banAction,
           title: championTitle,
           description: t.championSelect.banGuidance,
+          action: lockInAction,
         ),
       );
     }
 
-    return BasicLayoutSection(
-      label: t.championSelect.championLabel,
-      title: championTitle,
-    );
+    return switch (championSelect.championAction) {
+      .pick => BasicLayoutSection(
+        label: t.championSelect.pickAction,
+        title: championTitle,
+        action: lockInAction,
+      ),
+      .ban => BasicLayoutSection(
+        label: t.championSelect.banAction,
+        title: championTitle,
+        action: lockInAction,
+      ),
+      null => BasicLayoutSection(
+        label: t.championSelect.championLabel,
+        title: championTitle,
+        action: lockInAction,
+      ),
+    };
   }
 }
 

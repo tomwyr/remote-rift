@@ -44,6 +44,7 @@ class GameflowQueue({
   required final int id,
   required final String name,
   required final String description,
+  required final String gameMode,
 }) {
   factory fromJson(Map<String, dynamic> json) => _$GameflowQueueFromJson(json);
 
@@ -66,6 +67,7 @@ class ChampSelectSession({
 class ChampSelectActionAssignment({
   final int? id,
   final int? actorCellId,
+  final int? championId,
   final bool? completed,
   final bool? isInProgress,
   final ChampSelectActionType? type,
@@ -86,13 +88,14 @@ class ChampSelectActionUpdate({
 }
 
 @JsonEnum(fieldRename: .snake)
-enum ChampSelectActionType { pick, ban }
+enum ChampSelectActionType { pick, ban, tenBansReveal }
 
 @JsonSerializable()
 class ChampSelectPlayer({
   final int? cellId,
   final int? championId,
   final int? championPickIntent,
+  @JsonKey(readValue: normalizeAssignedPosition)
   final ChampSelectAssignedPosition? assignedPosition,
   final int? spell1Id,
   final int? spell2Id,
@@ -104,6 +107,8 @@ class ChampSelectPlayer({
 
 @JsonSerializable(includeIfNull: false)
 class ChampSelectMySelectionUpdate({
+  final int? championId,
+  final int? championPickIntent,
   final int? spell1Id,
   final int? spell2Id,
 }) {
@@ -130,6 +135,7 @@ enum ChampSelectTimerPhase {
   planning,
   banPick,
   finalization,
+  gameStarting,
 }
 
 @JsonSerializable()
@@ -146,6 +152,7 @@ class ChampGridChampion({
 class SummonerSpell({
   final int? id,
   final String? name,
+  final List<String>? gameModes,
 }) {
   factory fromJson(Map<String, dynamic> json) => _$SummonerSpellFromJson(json);
 
@@ -256,16 +263,6 @@ enum ReadyCheckState { invalid, inProgress }
 
 @JsonEnum(fieldRename: .pascal)
 enum ReadyCheckResponse { none, accepted, declined }
-
-@JsonSerializable()
-class ReadyCheckError({
-  required final int httpStatus,
-  required final String message,
-}) implements Exception {
-  factory fromJson(Map<String, dynamic> json) => _$ReadyCheckErrorFromJson(json);
-
-  Map<String, dynamic> toJson() => _$ReadyCheckErrorToJson(this);
-}
 
 @JsonSerializable()
 class HeartbeatConnection({

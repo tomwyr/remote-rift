@@ -30,6 +30,7 @@ extension ChampionSelectPhaseStrings on ChampionSelectPhase {
     .planning => t.championSelect.phase.planning,
     .banPick => t.championSelect.phase.banPick,
     .finalization => t.championSelect.phase.finalization,
+    .gameStarting => t.championSelect.phase.gameStarting,
   };
 }
 

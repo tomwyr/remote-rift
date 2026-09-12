@@ -28,35 +28,26 @@ class _TimeCountdownState extends State<TimeCountdown> with SingleTickerProvider
   @override
   void initState() {
     super.initState();
-    _controller = _createController();
+    _controller = AnimationController(vsync: this)..addListener(() => setState(() {}));
+    _synchronizeController();
   }
 
   @override
   void didUpdateWidget(covariant TimeCountdown oldWidget) {
     super.didUpdateWidget(oldWidget);
-    startChanged() {
-      return oldWidget.start != widget.start;
-    }
-
-    currentChangeExceedsDrift() {
-      if (oldWidget.current != widget.current) {
-        final currentDiff = (widget.current - _controllerCurrent).abs();
-        return currentDiff > widget.drift;
+    if (oldWidget.current != widget.current) {
+      final currentDiff = (widget.current - _controllerCurrent).abs();
+      if (currentDiff > widget.drift) {
+        _synchronizeController();
       }
-      return false;
-    }
-
-    if (startChanged() || currentChangeExceedsDrift()) {
-      _controller.dispose();
-      _controller = _createController();
     }
   }
 
-  AnimationController _createController() {
-    return AnimationController(vsync: this)
+  void _synchronizeController() {
+    _controller
+      ..stop()
       ..duration = widget.start.seconds
       ..value = widget.current / widget.start
-      ..addListener(() => setState(() {}))
       ..reverse();
   }
 

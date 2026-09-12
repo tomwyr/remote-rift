@@ -90,8 +90,15 @@ class const ChampionSelectActionAvailability({
   static const ban = ChampionSelectActionAvailability(
     pickChampion: false,
     banChampion: true,
+    lockInChampion: true,
+    changeSummonerSpells: true,
+  );
+
+  static const spells = ChampionSelectActionAvailability(
+    pickChampion: false,
+    banChampion: false,
     lockInChampion: false,
-    changeSummonerSpells: false,
+    changeSummonerSpells: true,
   );
 
   static const unavailable = ChampionSelectActionAvailability(

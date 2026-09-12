@@ -117,6 +117,13 @@ ChampionSelect _$ChampionSelectFromJson(Map<String, dynamic> json) =>
       champion: json['champion'] == null
           ? null
           : Champion.fromJson(json['champion'] as Map<String, dynamic>),
+      championAction: $enumDecodeNullable(
+        _$ChampionSelectChampionActionEnumMap,
+        json['championAction'],
+      ),
+      unavailableChampionIds: (json['unavailableChampionIds'] as List<dynamic>)
+          .map((e) => (e as num).toInt())
+          .toList(),
       position: $enumDecodeNullable(
         _$ChampionSelectPositionEnumMap,
         json['position'],
@@ -138,6 +145,9 @@ Map<String, dynamic> _$ChampionSelectToJson(
   'phase': _$ChampionSelectPhaseEnumMap[instance.phase]!,
   'timeLeft': const DurationMillisecondsConverter().toJson(instance.timeLeft),
   'champion': instance.champion,
+  'championAction':
+      _$ChampionSelectChampionActionEnumMap[instance.championAction],
+  'unavailableChampionIds': instance.unavailableChampionIds,
   'position': _$ChampionSelectPositionEnumMap[instance.position],
   'spell1': instance.spell1,
   'spell2': instance.spell2,
@@ -148,6 +158,12 @@ const _$ChampionSelectPhaseEnumMap = {
   ChampionSelectPhase.planning: 'planning',
   ChampionSelectPhase.banPick: 'banPick',
   ChampionSelectPhase.finalization: 'finalization',
+  ChampionSelectPhase.gameStarting: 'gameStarting',
+};
+
+const _$ChampionSelectChampionActionEnumMap = {
+  ChampionSelectChampionAction.pick: 'pick',
+  ChampionSelectChampionAction.ban: 'ban',
 };
 
 const _$ChampionSelectPositionEnumMap = {

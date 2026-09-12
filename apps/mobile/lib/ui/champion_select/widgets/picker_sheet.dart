@@ -261,7 +261,7 @@ class _CatalogPickerState extends State<_CatalogPicker> {
                       children: [
                         for (final entry in items)
                           ListTile(
-                            enabled: actionStatus != .submitting,
+                            enabled: entry.enabled && actionStatus != .submitting,
                             onTap: () => _select(entry.id),
                             selected: entry.name == widget.selectedName,
                             title: Text(entry.name),
