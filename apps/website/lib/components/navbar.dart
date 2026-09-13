@@ -8,7 +8,9 @@ import '../data/site_info.dart';
 
 @client
 class Navbar extends StatefulComponent {
-  const new({super.key});
+  // See https://github.com/schultek/jaspr/issues/877.
+  // ignore: unnecessary_type_name_in_constructor
+  const Navbar({super.key});
 
   @override
   State<Navbar> createState() => _NavbarState();

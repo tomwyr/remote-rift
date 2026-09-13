@@ -6,7 +6,9 @@ import 'package:universal_web/web.dart';
 
 @client
 class BackToTop extends StatefulComponent {
-  const new({super.key});
+  // See https://github.com/schultek/jaspr/issues/877.
+  // ignore: unnecessary_type_name_in_constructor
+  const BackToTop({super.key});
 
   @override
   State<BackToTop> createState() => BackToTopState();

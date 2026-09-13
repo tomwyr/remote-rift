@@ -6,7 +6,9 @@ import 'package:universal_web/web.dart';
 
 @client
 class CursorTracker extends StatefulComponent {
-  const new({super.key});
+  // See https://github.com/schultek/jaspr/issues/877.
+  // ignore: unnecessary_type_name_in_constructor
+  const CursorTracker({super.key});
 
   @override
   State<CursorTracker> createState() => _CursorTrackerState();
