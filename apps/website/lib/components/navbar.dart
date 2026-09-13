@@ -8,7 +8,7 @@ import '../data/site_info.dart';
 
 @client
 class Navbar extends StatefulComponent {
-  const Navbar({super.key});
+  const new({super.key});
 
   @override
   State<Navbar> createState() => _NavbarState();

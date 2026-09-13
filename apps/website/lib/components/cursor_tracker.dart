@@ -6,7 +6,7 @@ import 'package:universal_web/web.dart';
 
 @client
 class CursorTracker extends StatefulComponent {
-  const CursorTracker({super.key});
+  const new({super.key});
 
   @override
   State<CursorTracker> createState() => _CursorTrackerState();

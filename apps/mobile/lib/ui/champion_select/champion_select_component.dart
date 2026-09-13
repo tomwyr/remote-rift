@@ -179,10 +179,8 @@ class const _SpellCard() extends StatelessWidget {
 class const _SpellRow({
   required final String label,
   required final String value,
-  this.onTap,
+  final VoidCallback? onTap,
 }) extends StatelessWidget {
-  final VoidCallback? onTap;
-
   @override
   Widget build(BuildContext context) => ListTile(
     contentPadding: .zero,

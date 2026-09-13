@@ -6,7 +6,7 @@ import 'package:universal_web/web.dart';
 
 @client
 class BackToTop extends StatefulComponent {
-  const BackToTop({super.key});
+  const new({super.key});
 
   @override
   State<BackToTop> createState() => BackToTopState();
