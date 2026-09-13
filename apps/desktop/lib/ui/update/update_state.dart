@@ -28,3 +28,5 @@ class UpdateError({required final UpdateRelease update}) extends UpdateState {
   @override
   List<Object?> get props => [update];
 }
+
+enum UpdateEvent { installed, installationFailed }

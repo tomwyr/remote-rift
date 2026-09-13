@@ -21,13 +21,22 @@ class const UpdateJournalStore() {
     }
   }
 
-  Future<void> acknowledge({
+  Future<void> writeRecovery({
+    required String path,
+    required UpdateRecoveryCause cause,
+  }) async {
+    final recovery = UpdateRecoveryRecord(cause: cause);
+    final content = jsonEncode(recovery.toJson());
+    await File(path).writeAsString(content, flush: true);
+  }
+
+  Future<UpdateStartupResult> acknowledge({
     required String path,
     required String currentVersion,
   }) async {
     final journal = File(path);
     if (!await journal.exists()) {
-      return;
+      return NoUpdate();
     }
 
     late final UpdateJournal value;
@@ -37,18 +46,44 @@ class const UpdateJournalStore() {
       value = .fromJson(json);
     } catch (error) {
       if (error case FormatException() || TypeError()) {
-        return;
+        return InvalidJournal();
       }
       rethrow;
     }
 
     if (value.version != currentVersion) {
-      return;
+      return AwaitingAcknowledgement(
+        expectedVersion: value.version,
+        currentVersion: currentVersion,
+      );
     }
     final backup = Directory(value.backupPath);
     if (await backup.exists()) {
       await backup.delete(recursive: true);
     }
     await journal.delete();
+    return Acknowledged(version: value.version);
+  }
+
+  Future<UpdateStartupResult> consumeRecovery(String path) async {
+    final recovery = File(path);
+    if (!await recovery.exists()) {
+      return NoUpdate();
+    }
+
+    late final UpdateRecoveryRecord value;
+    try {
+      final content = await recovery.readAsString();
+      final json = jsonDecode(content);
+      value = .fromJson(json);
+    } catch (error) {
+      if (error case FormatException() || TypeError()) {
+        return InvalidRecovery();
+      }
+      rethrow;
+    }
+
+    await recovery.delete();
+    return Recovered(cause: value.cause);
   }
 }

@@ -98,33 +98,37 @@ class RemoteRiftTheme {
     );
   }
 
-  static Widget builder(BuildContext context, Widget? child) {
-    final theme = Theme.of(context);
-    final themeExtension = RemoteRiftThemeExtension.of(context);
+  static Widget builder({required Widget child}) {
+    return Builder(
+      builder: (context) {
+        final theme = Theme.of(context);
+        final themeExtension = RemoteRiftThemeExtension.of(context);
 
-    final buttonTextStyle = WidgetStateProperty.all(
-      RemoteRiftThemeExtension.buttonTextStyle(
-        themeExtension.buttonVariant,
-        theme,
-      ),
+        final buttonTextStyle = WidgetStateProperty.all(
+          RemoteRiftThemeExtension.buttonTextStyle(
+            themeExtension.buttonVariant,
+            theme,
+          ),
+        );
+
+        final modifiedTheme = theme.copyWith(
+          appBarTheme: theme.appBarTheme.copyWith(
+            titleTextStyle: theme.textTheme.headlineSmall,
+          ),
+          elevatedButtonTheme: ElevatedButtonThemeData(
+            style: theme.elevatedButtonTheme.style!.copyWith(
+              textStyle: buttonTextStyle,
+            ),
+          ),
+          outlinedButtonTheme: OutlinedButtonThemeData(
+            style: theme.outlinedButtonTheme.style!.copyWith(
+              textStyle: buttonTextStyle,
+            ),
+          ),
+        );
+
+        return Theme(data: modifiedTheme, child: child);
+      },
     );
-
-    final modifiedTheme = theme.copyWith(
-      appBarTheme: theme.appBarTheme.copyWith(
-        titleTextStyle: theme.textTheme.headlineSmall,
-      ),
-      elevatedButtonTheme: ElevatedButtonThemeData(
-        style: theme.elevatedButtonTheme.style!.copyWith(
-          textStyle: buttonTextStyle,
-        ),
-      ),
-      outlinedButtonTheme: OutlinedButtonThemeData(
-        style: theme.outlinedButtonTheme.style!.copyWith(
-          textStyle: buttonTextStyle,
-        ),
-      ),
-    );
-
-    return Theme(data: modifiedTheme, child: child!);
   }
 }

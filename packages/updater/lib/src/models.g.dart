@@ -17,3 +17,20 @@ Map<String, dynamic> _$UpdateJournalToJson(UpdateJournal instance) =>
       'version': instance.version,
       'backup_path': instance.backupPath,
     };
+
+UpdateRecoveryRecord _$UpdateRecoveryRecordFromJson(
+  Map<String, dynamic> json,
+) => UpdateRecoveryRecord(
+  cause: $enumDecode(_$UpdateRecoveryCauseEnumMap, json['cause']),
+);
+
+Map<String, dynamic> _$UpdateRecoveryRecordToJson(
+  UpdateRecoveryRecord instance,
+) => <String, dynamic>{'cause': _$UpdateRecoveryCauseEnumMap[instance.cause]!};
+
+const _$UpdateRecoveryCauseEnumMap = {
+  UpdateRecoveryCause.invalidArchive: 'invalid_archive',
+  UpdateRecoveryCause.fileSystem: 'file_system',
+  UpdateRecoveryCause.process: 'process',
+  UpdateRecoveryCause.unknown: 'unknown',
+};

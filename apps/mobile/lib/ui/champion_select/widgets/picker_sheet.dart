@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:remote_rift_core/remote_rift_core.dart';
+import 'package:remote_rift_ui/remote_rift_ui.dart';
 
 import '../../../i18n/strings.g.dart';
 import '../../widgets/layout.dart';
-import '../../widgets/events_listener.dart';
 import '../champion_select_cubit.dart';
 import '../champion_select_state.dart';
 

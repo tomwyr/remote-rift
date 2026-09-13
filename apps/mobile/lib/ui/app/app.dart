@@ -10,7 +10,7 @@ class const App({super.key}) extends StatelessWidget {
     return MaterialApp(
       title: t.app.title,
       theme: RemoteRiftTheme.light(),
-      builder: RemoteRiftTheme.builder,
+      builder: (context, child) => RemoteRiftTheme.builder(child: child!),
       home: HomePage.builder(),
     );
   }

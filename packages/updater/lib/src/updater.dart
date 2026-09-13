@@ -12,7 +12,7 @@ import 'update_release_catalog.dart';
 import 'update_runner.dart';
 
 abstract interface class ApplicationUpdater {
-  Future<void> acknowledgeHealthyStart();
+  Future<UpdateStartupResult> acknowledgeHealthyStart();
   Future<UpdateRelease?> checkUpdateAvailable();
   Future<void> installUpdate({required UpdateRelease update});
 }
@@ -24,10 +24,10 @@ class DesktopUpdater({
   final UpdateDiagnostics _diagnostics = const UpdateDiagnostics(),
 }) implements ApplicationUpdater {
   @override
-  Future<void> acknowledgeHealthyStart() async {
+  Future<UpdateStartupResult> acknowledgeHealthyStart() async {
     final packageInfo = await PackageInfo.fromPlatform();
     final version = packageInfo.version;
-    await _updateRunner.acknowledgeHealthyStart(version: version);
+    return await _updateRunner.acknowledgeHealthyStart(version: version);
   }
 
   @override

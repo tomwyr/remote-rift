@@ -13,6 +13,10 @@ update:
   errorTitle: "Update Failed"
   errorDescription: "An error occurred while updating. Please try again."
   errorRetryLabel: "Retry"
+  installedTitle: "Remote Rift has been updated"
+  installedDescription: "The latest version is ready to use."
+  installationFailedTitle: "The update could not be completed"
+  installationFailedDescription: "Remote Rift is still running the previous version. Select Update in the header to try again."
 
 tray:
   openLabel: "Open"

@@ -1,6 +1,7 @@
 ## [0.12.0] - Unreleased
 
 - Added the application version to screen footers
+- Added post-update status notifications
 
 ## [0.11.0] - 2026-09-13
 

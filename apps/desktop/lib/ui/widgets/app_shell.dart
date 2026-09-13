@@ -44,7 +44,7 @@ class const DesktopAppShell({
                   ),
                   ?trailing,
                   if (trailing != null && showUpdateAction) const SizedBox(width: 4),
-                  if (showUpdateAction) UpdateButton.builder(),
+                  if (showUpdateAction) const UpdateButton(),
                 ],
               ),
             ),

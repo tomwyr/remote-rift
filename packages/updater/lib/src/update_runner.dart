@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:path/path.dart';
 
 import 'file_utils.dart';
+import 'models.dart';
 import 'platform.dart';
 import 'process_utils.dart';
 import 'update_diagnostics.dart';
@@ -82,12 +83,16 @@ abstract class UpdateRunner({
       await _replaceTransaction(paths, expectedVersion);
       replacementInstalled = true;
       await runAppExecutable(paths.executable);
-    } catch (_) {
+    } catch (error) {
       if (replacementInstalled) {
         await _restoreBackup(paths);
       }
       // The original app has exited. Relaunch the existing or restored application.
       await _diagnostics.record(event: 'helper_failed');
+      await _journalStore.writeRecovery(
+        path: _recoveryPath(paths.target),
+        cause: _resolveRecoveryCause(error),
+      );
       await runAppExecutable(paths.executable);
       rethrow;
     } finally {
@@ -98,9 +103,16 @@ abstract class UpdateRunner({
     }
   }
 
-  Future<void> acknowledgeHealthyStart({required String version}) async {
-    final path = _journalPath(_fileUtils.getApplicationDirectory());
-    await _journalStore.acknowledge(path: path, currentVersion: version);
+  Future<UpdateStartupResult> acknowledgeHealthyStart({required String version}) async {
+    final applicationPath = _fileUtils.getApplicationDirectory();
+    final result = await _journalStore.acknowledge(
+      path: _journalPath(applicationPath),
+      currentVersion: version,
+    );
+    if (result is! NoUpdate) {
+      return result;
+    }
+    return _journalStore.consumeRecovery(_recoveryPath(applicationPath));
   }
 
   Future<void> cleanupArchive(String archivePath) async {
@@ -178,6 +190,19 @@ abstract class UpdateRunner({
 
   String _journalPath(String applicationPath) {
     return join(dirname(applicationPath), '.$_applicationLabel-update.json');
+  }
+
+  String _recoveryPath(String applicationPath) {
+    return join(dirname(applicationPath), '.$_applicationLabel-update-recovery.json');
+  }
+
+  UpdateRecoveryCause _resolveRecoveryCause(Object error) {
+    return switch (error) {
+      UpdateFileError.invalidArchive => .invalidArchive,
+      FileSystemException() => .fileSystem,
+      ProcessException() => .process,
+      _ => .unknown,
+    };
   }
 
   Future<void> _cleanupStaging(String archivePath) async {

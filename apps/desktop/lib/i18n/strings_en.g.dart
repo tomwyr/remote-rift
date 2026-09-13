@@ -100,6 +100,18 @@ class Translations$update$en {
 
 	/// en: 'Retry'
 	String get errorRetryLabel => 'Retry';
+
+	/// en: 'Remote Rift has been updated'
+	String get installedTitle => 'Remote Rift has been updated';
+
+	/// en: 'The latest version is ready to use.'
+	String get installedDescription => 'The latest version is ready to use.';
+
+	/// en: 'The update could not be completed'
+	String get installationFailedTitle => 'The update could not be completed';
+
+	/// en: 'Remote Rift is still running the previous version. Select Update in the header to try again.'
+	String get installationFailedDescription => 'Remote Rift is still running the previous version. Select Update in the header to try again.';
 }
 
 // Path: tray
@@ -218,6 +230,10 @@ extension on Translations {
 			'update.errorTitle' => 'Update Failed',
 			'update.errorDescription' => 'An error occurred while updating. Please try again.',
 			'update.errorRetryLabel' => 'Retry',
+			'update.installedTitle' => 'Remote Rift has been updated',
+			'update.installedDescription' => 'The latest version is ready to use.',
+			'update.installationFailedTitle' => 'The update could not be completed',
+			'update.installationFailedDescription' => 'Remote Rift is still running the previous version. Select Update in the header to try again.',
 			'tray.openLabel' => 'Open',
 			'tray.quitLabel' => 'Quit',
 			'service.statusEyebrow' => 'Service status',

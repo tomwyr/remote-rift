@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:remote_rift_updater/remote_rift_updater.dart';
 
@@ -8,8 +10,22 @@ class UpdateCubit({
 }) extends Cubit<UpdateState> {
   this : super(Initial());
 
+  final _events = StreamController<UpdateEvent>.broadcast();
+  Stream<UpdateEvent> get events => _events.stream;
+
   void initialize() async {
     _assertInitializeState();
+
+    final startupResult = await _updater.acknowledgeHealthyStart();
+    switch (startupResult) {
+      case Acknowledged():
+        _events.add(.installed);
+      case Recovered():
+        _events.add(.installationFailed);
+      case _:
+        break;
+    }
+
     try {
       final update = await _updater.checkUpdateAvailable();
       if (update != null) {
@@ -36,6 +52,12 @@ class UpdateCubit({
     if (state case UpdateError(:var update)) {
       emit(UpdateAvailable(update: update));
     }
+  }
+
+  @override
+  Future<void> close() async {
+    await _events.close();
+    await super.close();
   }
 }
 

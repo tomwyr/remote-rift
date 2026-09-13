@@ -88,6 +88,7 @@
 - Separate self-contained phases of long methods with blank lines; extract helpers only for meaningful operations, not parameter forwarding.
 - Let scope helpers create and clean up temporary resources before passing them to callbacks; keep resource operations at callers when that clarifies sequence.
 - Keep consecutive important asynchronous effects explicit at call sites; do not hide persistence inside a fetching helper.
+- In async contexts, await futures instead of returning them directly.
 - Keep serialization models with related package models, prefer generated serializers, and preserve serialized names unless intentionally changing the schema.
 - In `build` methods, group resolved locals and separate them from the returned widget tree with a blank line.
 - Define const constructors only for widgets; do not require const call sites for ordinary models, but use const where language or framework semantics require it, such as annotation metadata.

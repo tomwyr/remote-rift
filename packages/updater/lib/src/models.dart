@@ -22,6 +22,26 @@ class UpdateRelease({
   List<Object?> get props => [tag, version, artifact];
 }
 
+sealed class UpdateStartupResult;
+
+class NoUpdate extends UpdateStartupResult;
+
+class Acknowledged({required final String version}) extends UpdateStartupResult;
+
+class Recovered({required final UpdateRecoveryCause cause}) extends UpdateStartupResult;
+
+class AwaitingAcknowledgement({
+  required final String expectedVersion,
+  required final String currentVersion,
+}) extends UpdateStartupResult;
+
+class InvalidJournal extends UpdateStartupResult;
+
+class InvalidRecovery extends UpdateStartupResult;
+
+@JsonEnum(fieldRename: .snake)
+enum UpdateRecoveryCause { invalidArchive, fileSystem, process, unknown }
+
 @JsonSerializable()
 class UpdateJournal({
   required final String version,
@@ -30,4 +50,11 @@ class UpdateJournal({
   factory fromJson(Map<String, dynamic> json) => _$UpdateJournalFromJson(json);
 
   Map<String, dynamic> toJson() => _$UpdateJournalToJson(this);
+}
+
+@JsonSerializable()
+class UpdateRecoveryRecord({required final UpdateRecoveryCause cause}) {
+  factory fromJson(Map<String, dynamic> json) => _$UpdateRecoveryRecordFromJson(json);
+
+  Map<String, dynamic> toJson() => _$UpdateRecoveryRecordToJson(this);
 }
