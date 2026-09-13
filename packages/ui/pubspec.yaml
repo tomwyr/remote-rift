@@ -11,6 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
   bonsoir: ^7.1.4
+  package_info_plus: ^10.2.1
 
 dev_dependencies:
   flutter_test:

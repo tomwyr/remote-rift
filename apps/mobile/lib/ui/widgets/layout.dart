@@ -22,11 +22,26 @@ class const BasicLayout({
 
   @override
   Widget build(BuildContext context) {
+    final bottomContent = _bottomContent(context);
+
     return FitViewportScrollView(
       child: Column(
         crossAxisAlignment: .stretch,
         mainAxisAlignment: .spaceBetween,
-        children: [_topContent(context), ?_bottomContent(context)],
+        children: [
+          _topContent(context),
+          Column(
+            crossAxisAlignment: .stretch,
+            children: [
+              if (bottomContent case var content?) ...[
+                content,
+                const SizedBox(height: 16),
+              ],
+              const AppVersion(),
+              const SizedBox(height: 12),
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -72,7 +87,6 @@ class const BasicLayout({
             OutlinedButton(onPressed: onPressed, child: Text(label)),
           ],
         ],
-        SizedBox(height: 12),
       ],
     );
   }

@@ -1,5 +1,19 @@
 # Dart and Flutter working agreements
 
+## Planning
+
+- Store created implementation plans in `docs/plans`.
+
+## Commits
+
+- Use a short, imperative, sentence-case subject without a conventional-commit prefix or period.
+- Lead with a concrete action such as `Add`, `Fix`, `Support`, `Update`, or `Migrate`.
+- Name the affected product capability; include app names or versions only when they clarify the change.
+
+## Shared UI
+
+- Move identical widgets used by multiple apps into a shared package.
+
 ## Model boundaries
 
 - Keep transport models faithful to remote protocols: preserve wire names, shapes, and raw domain terminology.
@@ -83,6 +97,9 @@
 - Use braces for `if` control flows.
 - Non-empty Dart `switch` cases end automatically; use `break` only for intentional no-op cases.
 - Prefer pattern matching and guards when clearer than chained conditions for nullable, validated values.
+- Prefer `var` over `final` in pattern matches.
+- For conditionally included collection values, prefer an `if-case` spread over a nullable element
+  followed by a separate null check.
 - Avoid unsafe `!`; bind and promote nullable values with locals or patterns.
 - Avoid `as`; bind and promote narrowed values with locals or patterns.
 - Do not create private pass-through methods; extract private methods only for meaningful shared logic, and keep equivalent duplication in that shared method.

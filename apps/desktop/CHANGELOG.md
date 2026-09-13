@@ -1,3 +1,7 @@
+## [0.12.0] - Unreleased
+
+- Added the application version to screen footers
+
 ## [0.11.0] - 2026-09-13
 
 - Added support for champion select phase

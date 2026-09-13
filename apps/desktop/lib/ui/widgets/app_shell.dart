@@ -51,6 +51,10 @@ class const DesktopAppShell({
             Expanded(
               child: Padding(padding: .all(12), child: body),
             ),
+            const Padding(
+              padding: .fromLTRB(12, 8, 12, 12),
+              child: AppVersion(),
+            ),
           ],
         ),
       ),
