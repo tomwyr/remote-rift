@@ -7,14 +7,21 @@ enum AppNotificationType { success, error }
 class const AppNotifications({
   super.key,
   required final GlobalKey<NavigatorState> navigatorKey,
-  required super.child,
-}) extends InheritedWidget {
+  required final Widget child,
+}) extends StatelessWidget {
   static AppNotifications of(BuildContext context) {
-    final notifications = context.getInheritedWidgetOfExactType<AppNotifications>();
-    if (notifications == null) {
+    final scope = context.dependOnInheritedWidgetOfExactType<_AppNotificationsScope>();
+    if (scope == null) {
       throw StateError('AppNotifications is unavailable in this context.');
     }
-    return notifications;
+    return scope.notifications;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ToastificationWrapper(
+      child: _AppNotificationsScope(notifications: this, child: child),
+    );
   }
 
   void show({
@@ -41,7 +48,7 @@ class const AppNotifications({
 
     toastification.show(
       context: context,
-      alignment: .topRight,
+      alignment: .bottomRight,
       autoCloseDuration: const Duration(seconds: 5),
       animationDuration: const Duration(milliseconds: 200),
       type: switch (type) {
@@ -77,7 +84,13 @@ class const AppNotifications({
       dragToClose: true,
     );
   }
+}
 
+class const _AppNotificationsScope({
+  required final AppNotifications notifications,
+  required super.child,
+}) extends InheritedWidget {
   @override
-  bool updateShouldNotify(AppNotifications oldWidget) => navigatorKey != oldWidget.navigatorKey;
+  bool updateShouldNotify(_AppNotificationsScope oldWidget) =>
+      notifications.navigatorKey != oldWidget.notifications.navigatorKey;
 }

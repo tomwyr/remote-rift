@@ -20,20 +20,21 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	/// Constructing via the enum [AppLocale.build] is preferred.
 	Translations({Map<String, Node>? overrides, PluralResolver? cardinalResolver, PluralResolver? ordinalResolver, TranslationMetadata<AppLocale, Translations>? meta})
 		: assert(overrides == null, 'Set "translation_overrides: true" in order to enable this feature.'),
-		  $meta = meta ?? TranslationMetadata(
+		  _meta = meta ?? TranslationMetadata(
 		    locale: AppLocale.en,
 		    overrides: overrides ?? {},
 		    cardinalResolver: cardinalResolver,
 		    ordinalResolver: ordinalResolver,
 		  ) {
-		$meta.setFlatMapFunction(_flatMapFunction);
+		_meta.setFlatMapFunction(_flatMapFunction);
 	}
 
 	/// Metadata for the translations of <en>.
-	@override final TranslationMetadata<AppLocale, Translations> $meta;
+	final TranslationMetadata<AppLocale, Translations> _meta;
+	@override TranslationMetadata<AppLocale, Translations> get $meta => _meta;
 
 	/// Access flat map
-	dynamic operator[](String key) => $meta.getTranslation(key);
+	dynamic operator[](String key) => _meta.getTranslation(key);
 
 	late final Translations _root = this; // ignore: unused_field
 
@@ -101,14 +102,14 @@ class Translations$update$en {
 	/// en: 'Retry'
 	String get errorRetryLabel => 'Retry';
 
-	/// en: 'Remote Rift has been updated'
-	String get installedTitle => 'Remote Rift has been updated';
+	/// en: 'Update complete'
+	String get installedTitle => 'Update complete';
 
 	/// en: 'The latest version is ready to use.'
 	String get installedDescription => 'The latest version is ready to use.';
 
-	/// en: 'The update could not be completed'
-	String get installationFailedTitle => 'The update could not be completed';
+	/// en: 'Update failed'
+	String get installationFailedTitle => 'Update failed';
 
 	/// en: 'Remote Rift is still running the previous version. Select Update in the header to try again.'
 	String get installationFailedDescription => 'Remote Rift is still running the previous version. Select Update in the header to try again.';
@@ -230,9 +231,9 @@ extension on Translations {
 			'update.errorTitle' => 'Update Failed',
 			'update.errorDescription' => 'An error occurred while updating. Please try again.',
 			'update.errorRetryLabel' => 'Retry',
-			'update.installedTitle' => 'Remote Rift has been updated',
+			'update.installedTitle' => 'Update complete',
 			'update.installedDescription' => 'The latest version is ready to use.',
-			'update.installationFailedTitle' => 'The update could not be completed',
+			'update.installationFailedTitle' => 'Update failed',
 			'update.installationFailedDescription' => 'Remote Rift is still running the previous version. Select Update in the header to try again.',
 			'tray.openLabel' => 'Open',
 			'tray.quitLabel' => 'Quit',
