@@ -1,4 +1,4 @@
-## [0.13.0] - Unreleased
+## [0.13.0] - 2026-09-13
 
 - Added support for champion select phase
 
