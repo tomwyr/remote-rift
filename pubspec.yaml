@@ -13,5 +13,4 @@ workspace:
   - packages/mcp
   - packages/ui
   - packages/utils
-  - packages/tools
   - packages/updater
