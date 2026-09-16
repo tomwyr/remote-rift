@@ -1,14 +1,18 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:remote_rift_api/remote_rift_api.dart';
 import 'package:remote_rift_core/remote_rift_core.dart';
 import 'package:remote_rift_updater/remote_rift_updater.dart';
 
 import 'common/platform.dart';
 import 'services/api_service_runner.dart';
+import 'services/mcp_secret_store.dart';
 import 'services/noop_updater.dart';
+import 'services/mcp_server_runner.dart';
 import 'ui/connection/connection_cubit.dart';
 import 'ui/service/service_cubit.dart';
+import 'ui/mcp/mcp_integration_cubit.dart';
 import 'ui/update/update_cubit.dart';
 
 class Dependencies {
@@ -24,6 +28,15 @@ class Dependencies {
 
   static UpdateCubit updateCubit(BuildContext context) {
     return UpdateCubit(updater: applicationUpdater());
+  }
+
+  static McpIntegrationCubit mcpIntegrationCubit(BuildContext context) {
+    return McpIntegrationCubit(
+      runner: McpServerRunner(
+        connector: RemoteRiftConnector(),
+        secretStore: McpSecretStore(secureStorage: FlutterSecureStorage()),
+      ),
+    );
   }
 
   static ApplicationUpdater applicationUpdater() {

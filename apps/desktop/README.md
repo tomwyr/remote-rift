@@ -55,6 +55,14 @@ Guest Wi-Fi, client isolation, VLAN or routed-network boundaries, firewalls, and
 > [!NOTE]
 > Link-local IPv6 addresses require an interface identifier. The current Bonsoir Darwin implementation does not provide it, so Remote Rift ignores those addresses on Apple platforms. IPv4 and global IPv6 endpoints continue to work.
 
+## AI integrations
+
+Remote Rift Desktop can expose the local League Client connection through the Model Context Protocol (MCP). Select the **AI integrations** button in the top bar, then select **Enable** and copy the displayed configuration into an MCP-compatible AI host.
+
+The server runs only on the computer running Remote Rift Desktop and requires the bearer token included in the copied configuration. Select **Reset AI host connection** to replace that token when needed.
+
+See the [Remote Rift MCP documentation](../../packages/mcp/README.md) for available tools and library integration details.
+
 ## Development
 
 To run the project locally:

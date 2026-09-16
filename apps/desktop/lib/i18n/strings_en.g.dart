@@ -20,21 +20,20 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	/// Constructing via the enum [AppLocale.build] is preferred.
 	Translations({Map<String, Node>? overrides, PluralResolver? cardinalResolver, PluralResolver? ordinalResolver, TranslationMetadata<AppLocale, Translations>? meta})
 		: assert(overrides == null, 'Set "translation_overrides: true" in order to enable this feature.'),
-		  _meta = meta ?? TranslationMetadata(
+		  $meta = meta ?? TranslationMetadata(
 		    locale: AppLocale.en,
 		    overrides: overrides ?? {},
 		    cardinalResolver: cardinalResolver,
 		    ordinalResolver: ordinalResolver,
 		  ) {
-		_meta.setFlatMapFunction(_flatMapFunction);
+		$meta.setFlatMapFunction(_flatMapFunction);
 	}
 
 	/// Metadata for the translations of <en>.
-	final TranslationMetadata<AppLocale, Translations> _meta;
-	@override TranslationMetadata<AppLocale, Translations> get $meta => _meta;
+	@override final TranslationMetadata<AppLocale, Translations> $meta;
 
 	/// Access flat map
-	dynamic operator[](String key) => _meta.getTranslation(key);
+	dynamic operator[](String key) => $meta.getTranslation(key);
 
 	late final Translations _root = this; // ignore: unused_field
 
@@ -47,6 +46,7 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	late final Translations$service$en service = Translations$service$en._(_root);
 	late final Translations$connection$en connection = Translations$connection$en._(_root);
 	late final Translations$gameError$en gameError = Translations$gameError$en._(_root);
+	late final Translations$mcp$en mcp = Translations$mcp$en._(_root);
 }
 
 // Path: app
@@ -211,6 +211,51 @@ class Translations$gameError$en {
 	String get unknownDescription => 'The game\'s state could not be accessed due to an unexpected error.';
 }
 
+// Path: mcp
+class Translations$mcp$en {
+	Translations$mcp$en._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'AI integrations'
+	String get title => 'AI integrations';
+
+	/// en: 'Runs only on this computer. Your messages and League credentials stay in your AI host and Remote Rift.'
+	String get localOnly => 'Runs only on this computer. Your messages and League credentials stay in your AI host and Remote Rift.';
+
+	/// en: 'Enable'
+	String get enable => 'Enable';
+
+	/// en: 'Disable'
+	String get disable => 'Disable';
+
+	/// en: 'Reset AI host connection'
+	String get reset => 'Reset AI host connection';
+
+	/// en: 'Starting local server...'
+	String get starting => 'Starting local server...';
+
+	/// en: 'Running locally'
+	String get running => 'Running locally';
+
+	/// en: 'Could not start the local server. Check that its port is available, then try again.'
+	String get error => 'Could not start the local server. Check that its port is available, then try again.';
+
+	/// en: 'Host configuration'
+	String get configuration => 'Host configuration';
+
+	/// en: 'Copy configuration'
+	String get copy => 'Copy configuration';
+
+	/// en: 'Configuration copied'
+	String get copied => 'Configuration copied';
+
+	/// en: 'Reads connection and game state. Can manage lobbies, matchmaking, ready checks, and Champion Select.'
+	String get capabilities => 'Reads connection and game state. Can manage lobbies, matchmaking, ready checks, and Champion Select.';
+}
+
 /// The flat map containing all translations for locale <en>.
 /// Only for edge cases! For simple maps, use the map function of this library.
 ///
@@ -255,6 +300,18 @@ extension on Translations {
 			'gameError.unknownTitle' => 'Unknown game state',
 			'gameError.unableToConnectDescription' => 'The game client could not be reached. Make sure that it is running to interact with the game.',
 			'gameError.unknownDescription' => 'The game\'s state could not be accessed due to an unexpected error.',
+			'mcp.title' => 'AI integrations',
+			'mcp.localOnly' => 'Runs only on this computer. Your messages and League credentials stay in your AI host and Remote Rift.',
+			'mcp.enable' => 'Enable',
+			'mcp.disable' => 'Disable',
+			'mcp.reset' => 'Reset AI host connection',
+			'mcp.starting' => 'Starting local server...',
+			'mcp.running' => 'Running locally',
+			'mcp.error' => 'Could not start the local server. Check that its port is available, then try again.',
+			'mcp.configuration' => 'Host configuration',
+			'mcp.copy' => 'Copy configuration',
+			'mcp.copied' => 'Configuration copied',
+			'mcp.capabilities' => 'Reads connection and game state. Can manage lobbies, matchmaking, ready checks, and Champion Select.',
 			_ => null,
 		};
 	}

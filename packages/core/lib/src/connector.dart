@@ -42,11 +42,16 @@ class RemoteRiftConnector._init({
     }
   }
 
+  Future<RemoteRiftStatus> getStatus() async {
+    final connection = await _lcuApi.getHeartbeatConnection();
+    return connection.stableConnection ? .ready : .unavailable;
+  }
+
   Stream<RemoteRiftSession> getCurrentSessionStream() async* {
     RemoteRiftSession? previousSession;
     await for (var _ in _tickStream(seconds: 1)) {
       try {
-        if (await _getCurrentSession() case var session when session != previousSession) {
+        if (await getCurrentSession() case var session when session != previousSession) {
           yield session;
           previousSession = session;
         }
@@ -238,7 +243,7 @@ class RemoteRiftConnector._init({
     }
   }
 
-  Future<RemoteRiftSession> _getCurrentSession() async {
+  Future<RemoteRiftSession> getCurrentSession() async {
     var (queueName, state) = await (_getQueueNameOrNull(), _getCurrentState()).waitUnwrapped;
     if (state case PreGame()) {
       // Clear the queue if the session data is out of sync with the state.

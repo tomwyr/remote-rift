@@ -2,6 +2,7 @@
 
 - Added the application version to screen footers
 - Added post-update status notifications
+- Added local MCP server integration for AI clients
 
 ## [0.11.0] - 2026-09-13
 

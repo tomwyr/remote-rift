@@ -53,6 +53,7 @@ The workspace is organized around user-facing applications and the packages that
 
 - [API](packages/api) - Local API service and CLI wrapper around the League Client API.
 - [Core](packages/core) - League Client API integration and connector service.
+- [MCP](packages/mcp) - Local Model Context Protocol server exposing League Client tools to AI hosts.
 - [UI](packages/ui) - Shared UI, theming and Flutter dependent utilities.
 - [Utils](packages/utils) - Shared Dart utilities and common data models.
 - [Tools](packages/tools) - Scripts and utilities used during development.

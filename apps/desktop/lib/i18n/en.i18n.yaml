@@ -45,3 +45,17 @@ gameError:
   unknownTitle: "Unknown game state"
   unableToConnectDescription: "The game client could not be reached. Make sure that it is running to interact with the game."
   unknownDescription: "The game's state could not be accessed due to an unexpected error."
+
+mcp:
+  title: "AI integrations"
+  localOnly: "Runs only on this computer. Your messages and League credentials stay in your AI host and Remote Rift."
+  enable: "Enable"
+  disable: "Disable"
+  reset: "Reset AI host connection"
+  starting: "Starting local server..."
+  running: "Running locally"
+  error: "Could not start the local server. Check that its port is available, then try again."
+  configuration: "Host configuration"
+  copy: "Copy configuration"
+  copied: "Configuration copied"
+  capabilities: "Reads connection and game state. Can manage lobbies, matchmaking, ready checks, and Champion Select."
