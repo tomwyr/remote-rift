@@ -4,6 +4,7 @@ import 'package:remote_rift_ui/remote_rift_ui.dart';
 
 import '../../i18n/strings.g.dart';
 import '../widgets/app_shell.dart';
+import '../widgets/app_icon_button.dart';
 import '../widgets/layout.dart';
 import 'update_cubit.dart';
 import 'update_state.dart';
@@ -30,10 +31,10 @@ class const UpdatePage({super.key}) extends StatelessWidget {
       onDispose: cubit.recoverOnDismiss,
       child: AppShell(
         showUpdateAction: false,
-        trailing: IconButton(
+        trailing: AppIconButton(
           onPressed: Navigator.of(context).pop,
           tooltip: t.update.availableCancelLabel,
-          icon: const Icon(Icons.close),
+          icon: Icons.close,
         ),
         body: switch (state) {
           Initial() || UpToDate() || UpdateCheckFailed() => const SizedBox.shrink(),

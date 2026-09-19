@@ -32,10 +32,14 @@ class Dependencies {
   }
 
   static McpIntegrationCubit mcpIntegrationCubit(BuildContext context) {
+    final secureStorage = FlutterSecureStorage(
+      mOptions: MacOsOptions(usesDataProtectionKeychain: false),
+    );
+
     return McpIntegrationCubit(
       runner: McpServerRunner(
         connector: RemoteRiftConnector(),
-        secretStore: McpSecretStore(secureStorage: FlutterSecureStorage()),
+        secretStore: McpSecretStore(secureStorage: secureStorage),
       ),
     );
   }

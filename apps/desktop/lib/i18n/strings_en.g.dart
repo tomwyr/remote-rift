@@ -237,41 +237,53 @@ class Translations$mcp$en {
 
 	// Translations
 
-	/// en: 'AI integrations'
-	String get title => 'AI integrations';
+	/// en: 'MCP server'
+	String get title => 'MCP server';
 
-	/// en: 'Runs only on this computer. Your messages and League credentials stay in your AI host and Remote Rift.'
-	String get localOnly => 'Runs only on this computer. Your messages and League credentials stay in your AI host and Remote Rift.';
+	/// en: 'Connect an AI host'
+	String get connectTitle => 'Connect an AI host';
 
-	/// en: 'Enable'
-	String get enable => 'Enable';
+	/// en: 'For AI hosts to access game state and League actions.'
+	String get description => 'For AI hosts to access game state and League actions.';
 
-	/// en: 'Disable'
-	String get disable => 'Disable';
+	/// en: 'Runs locally'
+	String get localOnly => 'Runs locally';
 
-	/// en: 'Reset AI host connection'
-	String get reset => 'Reset AI host connection';
+	/// en: 'Start server'
+	String get enable => 'Start server';
 
-	/// en: 'Starting local server...'
-	String get starting => 'Starting local server...';
+	/// en: 'Stop server'
+	String get disable => 'Stop server';
 
-	/// en: 'Running locally'
-	String get running => 'Running locally';
+	/// en: 'Reset access'
+	String get reset => 'Reset access';
 
-	/// en: 'Could not start the local server. Check that its port is available, then try again.'
-	String get error => 'Could not start the local server. Check that its port is available, then try again.';
+	/// en: 'Starting server...'
+	String get starting => 'Starting server...';
+
+	/// en: 'Server is active'
+	String get running => 'Server is active';
+
+	/// en: 'Couldn't start the server.'
+	String get startError => 'Couldn\'t start the server.';
+
+	/// en: 'Couldn't reset access.'
+	String get resetError => 'Couldn\'t reset access.';
+
+	/// en: 'Couldn't stop the server.'
+	String get stopError => 'Couldn\'t stop the server.';
 
 	/// en: 'Host configuration'
 	String get configuration => 'Host configuration';
+
+	/// en: 'Paste this into your AI host to connect it to Remote Rift and your game client.'
+	String get configurationDescription => 'Paste this into your AI host to connect it to Remote Rift and your game client.';
 
 	/// en: 'Copy configuration'
 	String get copy => 'Copy configuration';
 
 	/// en: 'Configuration copied'
 	String get copied => 'Configuration copied';
-
-	/// en: 'Reads connection and game state. Can manage lobbies, matchmaking, ready checks, and Champion Select.'
-	String get capabilities => 'Reads connection and game state. Can manage lobbies, matchmaking, ready checks, and Champion Select.';
 }
 
 // Path: settings.lockfile
@@ -369,18 +381,22 @@ extension on Translations {
 			'gameError.unknownTitle' => 'Unknown game state',
 			'gameError.unableToConnectDescription' => 'The game client could not be reached. Make sure that it is running to interact with the game.',
 			'gameError.unknownDescription' => 'The game\'s state could not be accessed due to an unexpected error.',
-			'mcp.title' => 'AI integrations',
-			'mcp.localOnly' => 'Runs only on this computer. Your messages and League credentials stay in your AI host and Remote Rift.',
-			'mcp.enable' => 'Enable',
-			'mcp.disable' => 'Disable',
-			'mcp.reset' => 'Reset AI host connection',
-			'mcp.starting' => 'Starting local server...',
-			'mcp.running' => 'Running locally',
-			'mcp.error' => 'Could not start the local server. Check that its port is available, then try again.',
+			'mcp.title' => 'MCP server',
+			'mcp.connectTitle' => 'Connect an AI host',
+			'mcp.description' => 'For AI hosts to access game state and League actions.',
+			'mcp.localOnly' => 'Runs locally',
+			'mcp.enable' => 'Start server',
+			'mcp.disable' => 'Stop server',
+			'mcp.reset' => 'Reset access',
+			'mcp.starting' => 'Starting server...',
+			'mcp.running' => 'Server is active',
+			'mcp.startError' => 'Couldn\'t start the server.',
+			'mcp.resetError' => 'Couldn\'t reset access.',
+			'mcp.stopError' => 'Couldn\'t stop the server.',
 			'mcp.configuration' => 'Host configuration',
+			'mcp.configurationDescription' => 'Paste this into your AI host to connect it to Remote Rift and your game client.',
 			'mcp.copy' => 'Copy configuration',
 			'mcp.copied' => 'Configuration copied',
-			'mcp.capabilities' => 'Reads connection and game state. Can manage lobbies, matchmaking, ready checks, and Champion Select.',
 			_ => null,
 		};
 	}

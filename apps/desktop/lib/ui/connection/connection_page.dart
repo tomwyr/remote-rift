@@ -6,8 +6,8 @@ import 'package:remote_rift_ui/remote_rift_ui.dart';
 import '../../dependencies.dart';
 import '../../i18n/strings.g.dart';
 import '../widgets/app_shell.dart';
+import '../widgets/app_icon_button.dart';
 import '../widgets/layout.dart';
-import '../mcp/mcp_integration_component.dart';
 import '../settings/settings_page.dart';
 import 'connection_cubit.dart';
 import 'connection_state.dart';
@@ -32,12 +32,11 @@ class const ConnectionPage({super.key}) extends StatelessWidget {
           mainAxisSize: .min,
           children: [
             ConnectionStatusIcon(state: cubit.state),
-            IconButton(
+            AppIconButton(
               tooltip: t.settings.title,
-              icon: const Icon(Icons.settings_outlined),
+              icon: Icons.settings_outlined,
               onPressed: () => SettingsPage.show(context),
             ),
-            const McpIntegrationButton(),
           ],
         ),
         body: switch (cubit.state) {

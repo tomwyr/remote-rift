@@ -14,7 +14,7 @@ class McpIntegrationCubit({required final McpServerRunner _runner})
       );
     }
 
-    await _runServer(_runner.enable);
+    await _runServer(.start, _runner.enable);
   }
 
   void disable() async {
@@ -22,7 +22,7 @@ class McpIntegrationCubit({required final McpServerRunner _runner})
       await _runner.disable();
       emit(Idle());
     } catch (_) {
-      emit(Failed());
+      emit(Failed(action: .stop));
     }
   }
 
@@ -33,16 +33,16 @@ class McpIntegrationCubit({required final McpServerRunner _runner})
       );
     }
 
-    await _runServer(_runner.reset);
+    await _runServer(.reset, _runner.reset);
   }
 
-  Future<void> _runServer(Future<McpServerRunInfo> Function() run) async {
+  Future<void> _runServer(McpAction action, Future<McpServerRunInfo> Function() run) async {
     emit(Starting());
     try {
       final info = await run();
       emit(Running(hostConfiguration: info.hostConfiguration));
     } catch (_) {
-      emit(Failed());
+      emit(Failed(action: action));
     }
   }
 
