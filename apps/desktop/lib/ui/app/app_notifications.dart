@@ -68,8 +68,8 @@ class const AppNotifications({
         description,
         style: textTheme.bodySmall?.copyWith(height: 1.42),
       ),
-      padding: const .all(16),
-      margin: const .all(12),
+      padding: const .all(12),
+      margin: const .all(8),
       borderRadius: .circular(16),
       borderSide: BorderSide(color: colors.navy.withValues(alpha: 0.12)),
       boxShadow: [
