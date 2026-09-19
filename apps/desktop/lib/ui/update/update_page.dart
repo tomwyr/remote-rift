@@ -28,7 +28,7 @@ class const UpdatePage({super.key}) extends StatelessWidget {
 
     return Lifecycle(
       onDispose: cubit.recoverOnDismiss,
-      child: DesktopAppShell(
+      child: AppShell(
         showUpdateAction: false,
         trailing: IconButton(
           onPressed: Navigator.of(context).pop,
@@ -38,23 +38,23 @@ class const UpdatePage({super.key}) extends StatelessWidget {
         body: switch (state) {
           Initial() || UpToDate() || UpdateCheckFailed() => const SizedBox.shrink(),
 
-          UpdateAvailable() => BasicLayout(
+          UpdateAvailable() => AppStatusLayout(
             eyebrow: t.update.statusEyebrow,
             title: t.update.availableTitle,
             description: t.update.availableDescription,
             icon: .update(colorScheme),
             tone: .ready,
-            action: BasicLayoutAction(
+            action: AppStatusAction(
               label: t.update.availableConfirmLabel,
               onPressed: cubit.installUpdate,
             ),
-            secondaryAction: BasicLayoutAction(
+            secondaryAction: AppStatusAction(
               label: t.update.availableCancelLabel,
               onPressed: Navigator.of(context).pop,
             ),
           ),
 
-          UpdateInProgress() => BasicLayout(
+          UpdateInProgress() => AppStatusLayout(
             eyebrow: t.update.statusEyebrow,
             title: t.update.inProgressTitle,
             description: t.update.inProgressDescription,
@@ -63,17 +63,17 @@ class const UpdatePage({super.key}) extends StatelessWidget {
             loading: true,
           ),
 
-          UpdateError() => BasicLayout(
+          UpdateError() => AppStatusLayout(
             eyebrow: t.update.statusEyebrow,
             title: t.update.errorTitle,
             description: t.update.errorDescription,
             icon: .error(colorScheme),
             tone: .error,
-            action: BasicLayoutAction(
+            action: AppStatusAction(
               label: t.update.errorRetryLabel,
               onPressed: canRetry ? cubit.installUpdate : null,
             ),
-            secondaryAction: BasicLayoutAction(
+            secondaryAction: AppStatusAction(
               label: t.update.availableCancelLabel,
               onPressed: Navigator.of(context).pop,
             ),

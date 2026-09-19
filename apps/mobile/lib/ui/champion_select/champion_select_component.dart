@@ -44,7 +44,7 @@ class const ChampionSelectComponent({
 
     return Lifecycle(
       onInit: cubit.loadCatalog,
-      child: BasicLayout(
+      child: AppStatusLayout(
         body: GameDataBody(
           queueName: queueName,
           title: t.championSelect.title,
@@ -67,7 +67,7 @@ class const _BodyContent() extends StatelessWidget {
       crossAxisAlignment: .stretch,
       spacing: 12,
       children: [
-        BasicLayoutSection(
+        AppStatusSection(
           label: t.championSelect.phaseLabel,
           title: championSelect.phase.displayName,
         ),
@@ -75,7 +75,7 @@ class const _BodyContent() extends StatelessWidget {
 
         _ChampionCard(),
 
-        BasicLayoutSection(
+        AppStatusSection(
           label: t.championSelect.positionLabel,
           title: championSelect.position?.displayName ?? t.championSelect.unavailable,
         ),
@@ -94,7 +94,7 @@ class const _ChampionCard() extends StatelessWidget {
     final championTitle = championSelect.champion?.name ?? t.championSelect.noChampion;
     final availability = championSelect.actionAvailability;
     final lockInAction = state.canLockIn
-        ? BasicLayoutAction(
+        ? AppStatusAction(
             label: t.championSelect.lockInAction,
             onPressed: state.statusOf(.lockIn) == .submitting ? null : cubit.lockIn,
           )
@@ -104,7 +104,7 @@ class const _ChampionCard() extends StatelessWidget {
       return InkWell(
         onTap: () => ChampionSelectPickerSheet.showChampion(context, action: .pick),
         borderRadius: const .all(.circular(16)),
-        child: BasicLayoutSection(
+        child: AppStatusSection(
           label: t.championSelect.pickAction,
           title: championTitle,
           description: t.championSelect.pickGuidance,
@@ -117,7 +117,7 @@ class const _ChampionCard() extends StatelessWidget {
       return InkWell(
         onTap: () => ChampionSelectPickerSheet.showChampion(context, action: .ban),
         borderRadius: const .all(.circular(16)),
-        child: BasicLayoutSection(
+        child: AppStatusSection(
           label: t.championSelect.banAction,
           title: championTitle,
           description: t.championSelect.banGuidance,
@@ -127,17 +127,17 @@ class const _ChampionCard() extends StatelessWidget {
     }
 
     return switch (championSelect.championAction) {
-      .pick => BasicLayoutSection(
+      .pick => AppStatusSection(
         label: t.championSelect.pickAction,
         title: championTitle,
         action: lockInAction,
       ),
-      .ban => BasicLayoutSection(
+      .ban => AppStatusSection(
         label: t.championSelect.banAction,
         title: championTitle,
         action: lockInAction,
       ),
-      null => BasicLayoutSection(
+      null => AppStatusSection(
         label: t.championSelect.championLabel,
         title: championTitle,
         action: lockInAction,
@@ -151,7 +151,7 @@ class const _SpellCard() extends StatelessWidget {
   Widget build(BuildContext context) {
     final championSelect = context.watch<ChampionSelectCubit>().state.championSelect;
 
-    return BasicLayoutSection(
+    return AppStatusSection(
       label: t.championSelect.spellsLabel,
       titlePlaceholder: Column(
         children: [
@@ -208,7 +208,7 @@ class const _ChampionSelectCountdown({
       start: max(seconds, 0.001),
       current: seconds,
       drift: 1.5,
-      builder: (_, currentSeconds) => BasicLayoutSection(
+      builder: (_, currentSeconds) => AppStatusSection(
         label: t.championSelect.timeLeftLabel,
         title: _formatTime(currentSeconds),
         titleFontSize: .large,

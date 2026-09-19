@@ -6,7 +6,7 @@ import '../../common/platform.dart';
 import '../../i18n/strings.g.dart';
 import '../update/update_button.dart';
 
-class const DesktopAppShell({
+class const AppShell({
   super.key,
   required final Widget body,
   final String? title,

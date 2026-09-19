@@ -37,15 +37,15 @@ class const ServicePage({
       },
       child: switch (cubit.state) {
         Started() => startedBuilder(context),
-        _ => DesktopAppShell(
+        _ => AppShell(
           body: switch (cubit.state) {
             Initial() || Started() => SizedBox.shrink(),
 
-            Starting() => BasicLayout(
+            Starting() => AppStatusLayout(
               eyebrow: t.service.statusEyebrow,
               title: t.service.startingTitle,
               description: t.service.startingDescription,
-              icon: BasicLayoutIcon(
+              icon: AppStatusIcon(
                 data: Icons.power_outlined,
                 color: colorScheme.neutral,
               ),
@@ -53,14 +53,14 @@ class const ServicePage({
               loading: true,
             ),
 
-            StartupError(:var cause, :var restartTriggered) => BasicLayout(
+            StartupError(:var cause, :var restartTriggered) => AppStatusLayout(
               eyebrow: t.service.statusEyebrow,
               title: t.service.errorTitle,
               description: cause.description,
               icon: .error(colorScheme),
               tone: .error,
               loading: restartTriggered,
-              action: BasicLayoutAction(
+              action: AppStatusAction(
                 label: t.service.errorRetry,
                 onPressed: cubit.restart,
               ),

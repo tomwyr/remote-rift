@@ -37,8 +37,8 @@ class const GameComponent({super.key}) extends StatelessWidget {
           // Delay showing content to avoid flicker when loading appears for a single frame
           Loading() => DelayedDisplay(
             delay: 200.milliseconds,
-            placeholder: BasicLayout(loading: true),
-            child: BasicLayout(
+            placeholder: AppStatusLayout(loading: true),
+            child: AppStatusLayout(
               title: t.connection.loadingTitle,
               description: t.connection.loadingDescription,
               loading: true,
@@ -48,7 +48,7 @@ class const GameComponent({super.key}) extends StatelessWidget {
           ),
 
           Data(:var queueName, :var state, :var loading) => switch (state) {
-            PreGame(:var availableQueues) => BasicLayout(
+            PreGame(:var availableQueues) => AppStatusLayout(
               body: GameDataBody(
                 queueNamePlaceholder: GameQueueSelectionButton(
                   loading: loading,
@@ -59,7 +59,7 @@ class const GameComponent({super.key}) extends StatelessWidget {
                 tone: .neutral,
                 icon: Icons.sports_esports_outlined,
               ),
-              action: .new(
+              action: AppStatusAction(
                 label: t.home.createLobbyButton,
                 onPressed: !loading
                     ? () => GameQueueSelectionModal.selectAndUpdateQueue(
@@ -70,7 +70,7 @@ class const GameComponent({super.key}) extends StatelessWidget {
               ),
             ),
 
-            Lobby(state: .idle, :var rolePreferences) => BasicLayout(
+            Lobby(state: .idle, :var rolePreferences) => AppStatusLayout(
               body: GameDataBody(
                 queueName: queueName,
                 title: t.gameState.lobbyIdleTitle,
@@ -85,17 +85,17 @@ class const GameComponent({super.key}) extends StatelessWidget {
                   _ => null,
                 },
               ),
-              action: .new(
+              action: AppStatusAction(
                 label: t.home.searchGameButton,
                 onPressed: !loading ? cubit.searchMatch : null,
               ),
-              secondaryAction: .new(
+              secondaryAction: AppStatusAction(
                 label: t.home.leaveLobbyButton,
                 onPressed: !loading ? cubit.leaveLobby : null,
               ),
             ),
 
-            Lobby(state: .searching) => BasicLayout(
+            Lobby(state: .searching) => AppStatusLayout(
               body: GameDataBody(
                 queueName: queueName,
                 title: t.gameState.lobbySearchingTitle,
@@ -103,13 +103,13 @@ class const GameComponent({super.key}) extends StatelessWidget {
                 tone: .active,
                 icon: Icons.radar_outlined,
               ),
-              action: .new(
+              action: AppStatusAction(
                 label: t.home.cancelSearchButton,
                 onPressed: !loading ? cubit.stopMatchSearch : null,
               ),
             ),
 
-            Found(state: .pending, :var answerMaxTime, :var answerTimeLeft) => BasicLayout(
+            Found(state: .pending, :var answerMaxTime, :var answerTimeLeft) => AppStatusLayout(
               body: GameDataBody(
                 queueName: queueName,
                 title: t.gameState.foundPendingTitle,
@@ -118,14 +118,17 @@ class const GameComponent({super.key}) extends StatelessWidget {
                 icon: Icons.notifications_active_outlined,
                 child: GameFoundCountdown(maxTime: answerMaxTime, timeLeft: answerTimeLeft),
               ),
-              action: .new(
+              action: AppStatusAction(
                 label: t.home.acceptGameButton,
                 onPressed: !loading ? cubit.acceptMatch : null,
               ),
-              secondaryAction: .new(label: t.home.declineGameButton, onPressed: cubit.declineMatch),
+              secondaryAction: AppStatusAction(
+                label: t.home.declineGameButton,
+                onPressed: cubit.declineMatch,
+              ),
             ),
 
-            Found(state: .accepted) => BasicLayout(
+            Found(state: .accepted) => AppStatusLayout(
               body: GameDataBody(
                 queueName: queueName,
                 title: t.gameState.foundAcceptedTitle,
@@ -136,7 +139,7 @@ class const GameComponent({super.key}) extends StatelessWidget {
               loading: true,
             ),
 
-            Found(state: .declined) => BasicLayout(
+            Found(state: .declined) => AppStatusLayout(
               body: GameDataBody(
                 queueName: queueName,
                 title: t.gameState.foundDeclinedTitle,
@@ -152,7 +155,7 @@ class const GameComponent({super.key}) extends StatelessWidget {
               championSelect: state,
             ),
 
-            InGame() => BasicLayout(
+            InGame() => AppStatusLayout(
               body: GameDataBody(
                 queueName: queueName,
                 title: t.gameState.inGameTitle,
@@ -162,7 +165,7 @@ class const GameComponent({super.key}) extends StatelessWidget {
               ),
             ),
 
-            Unknown() => BasicLayout(
+            Unknown() => AppStatusLayout(
               body: GameDataBody(
                 queueName: queueName,
                 title: t.gameState.unknownTitle,

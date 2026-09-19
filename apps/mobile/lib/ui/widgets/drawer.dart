@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class const EndDrawerIcon({
+class const AppEndDrawerButton({
   super.key,
   required final IconData icon,
 }) extends StatelessWidget {

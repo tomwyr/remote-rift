@@ -28,7 +28,7 @@ class const SettingsPage({super.key}) extends StatelessWidget {
 
     return Lifecycle(
       onInit: cubit.initialize,
-      child: DesktopAppShell(
+      child: AppShell(
         title: t.settings.title,
         showUpdateAction: false,
         trailing: IconButton(
@@ -72,13 +72,13 @@ class const _LockfileLocationCard({required final Loaded state}) extends Statele
 
     return SingleChildScrollView(
       padding: .only(bottom: 12),
-      child: DesktopCard(
+      child: AppCard(
         padding: .all(20),
         child: Column(
           crossAxisAlignment: .stretch,
           mainAxisSize: .min,
           children: [
-            DesktopEyebrow(label: t.settings.lockfile.title, accent: colors.gold),
+            AppEyebrow(label: t.settings.lockfile.title, accent: colors.gold),
             const SizedBox(height: 16),
             Text(
               mode,

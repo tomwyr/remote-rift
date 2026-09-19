@@ -27,7 +27,7 @@ class const ConnectionPage({super.key}) extends StatelessWidget {
 
     return Lifecycle(
       onInit: cubit.initialize,
-      child: DesktopAppShell(
+      child: AppShell(
         trailing: Row(
           mainAxisSize: .min,
           children: [
@@ -43,11 +43,11 @@ class const ConnectionPage({super.key}) extends StatelessWidget {
         body: switch (cubit.state) {
           Initial() => SizedBox.shrink(),
 
-          Connecting() => BasicLayout(
+          Connecting() => AppStatusLayout(
             eyebrow: t.connection.statusEyebrow,
             title: t.connection.connectingTitle,
             description: t.connection.connectingDescription,
-            icon: BasicLayoutIcon(
+            icon: AppStatusIcon(
               data: Icons.wifi_tethering_rounded,
               color: colorScheme.neutral,
             ),
@@ -55,20 +55,20 @@ class const ConnectionPage({super.key}) extends StatelessWidget {
             loading: true,
           ),
 
-          ConnectionError(:var reconnectTriggered) => BasicLayout(
+          ConnectionError(:var reconnectTriggered) => AppStatusLayout(
             eyebrow: t.connection.statusEyebrow,
             title: t.connection.errorTitle,
             description: t.connection.errorDescription,
             icon: .error(colorScheme),
             tone: .error,
             loading: reconnectTriggered,
-            action: BasicLayoutAction(
+            action: AppStatusAction(
               label: t.connection.errorRetry,
               onPressed: cubit.reconnect,
             ),
           ),
 
-          ConnectedWithError(:var cause) => BasicLayout(
+          ConnectedWithError(:var cause) => AppStatusLayout(
             eyebrow: t.connection.statusEyebrow,
             title: cause.title,
             description: cause.description,
@@ -76,11 +76,11 @@ class const ConnectionPage({super.key}) extends StatelessWidget {
             tone: .warning,
           ),
 
-          Connected() => BasicLayout(
+          Connected() => AppStatusLayout(
             eyebrow: t.connection.statusEyebrow,
             title: t.connection.connectedTitle,
             description: t.connection.connectedDescription,
-            icon: BasicLayoutIcon(
+            icon: AppStatusIcon(
               data: Icons.check_rounded,
               color: colorScheme.success,
             ),

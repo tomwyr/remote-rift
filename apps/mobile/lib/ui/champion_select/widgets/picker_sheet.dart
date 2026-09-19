@@ -188,7 +188,7 @@ class const _CatalogFailure() extends StatelessWidget {
     return Column(
       crossAxisAlignment: .stretch,
       children: [
-        BasicLayoutSection(
+        AppStatusSection(
           title: t.championSelect.catalogFailureTitle,
           description: t.championSelect.catalogFailed,
           tone: .error,

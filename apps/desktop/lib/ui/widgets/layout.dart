@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:remote_rift_ui/remote_rift_ui.dart';
 
-class const DesktopCard({
+class const AppCard({
   super.key,
   required final EdgeInsets padding,
   required final Widget child,
@@ -33,16 +33,16 @@ class const DesktopCard({
   }
 }
 
-class const BasicLayout({
+class const AppStatusLayout({
   super.key,
   required final String eyebrow,
   final String? title,
   final String? description,
-  final BasicLayoutIcon? icon,
-  final DesktopStatusTone tone = .neutral,
+  final AppStatusIcon? icon,
+  final AppStatusTone tone = .neutral,
   final bool loading = false,
-  final BasicLayoutAction? action,
-  final BasicLayoutAction? secondaryAction,
+  final AppStatusAction? action,
+  final AppStatusAction? secondaryAction,
 }) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -55,7 +55,7 @@ class const BasicLayout({
       .error => colors.error,
     };
 
-    return DesktopCard(
+    return AppCard(
       padding: .all(16),
       child: DefaultTextStyle(
         style: Theme.of(context).textTheme.bodyMedium!,
@@ -63,7 +63,7 @@ class const BasicLayout({
           crossAxisAlignment: .stretch,
           mainAxisSize: .min,
           children: [
-            DesktopEyebrow(label: eyebrow, accent: accent),
+            AppEyebrow(label: eyebrow, accent: accent),
             const SizedBox(height: 16),
             _StatusDetails(
               title: title,
@@ -84,7 +84,7 @@ class const BasicLayout({
   }
 }
 
-class const DesktopEyebrow({
+class const AppEyebrow({
   required final String label,
   required final Color accent,
 }) extends StatelessWidget {
@@ -112,7 +112,7 @@ class const DesktopEyebrow({
 class const _StatusDetails({
   required final String? title,
   required final String? description,
-  required final BasicLayoutIcon? icon,
+  required final AppStatusIcon? icon,
   required final Color accent,
 }) extends StatelessWidget {
   @override
@@ -155,7 +155,7 @@ class const _StatusDetails({
 }
 
 class const _StatusIcon({
-  required final BasicLayoutIcon icon,
+  required final AppStatusIcon icon,
   required final Color accent,
 }) extends StatelessWidget {
   @override
@@ -181,8 +181,8 @@ class const _StatusIcon({
 
 class const _StatusFooter({
   required final bool loading,
-  required final BasicLayoutAction? action,
-  required final BasicLayoutAction? secondaryAction,
+  required final AppStatusAction? action,
+  required final AppStatusAction? secondaryAction,
 }) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -203,8 +203,8 @@ class const _StatusFooter({
 }
 
 class const _StatusActions({
-  required final BasicLayoutAction? action,
-  required final BasicLayoutAction? secondaryAction,
+  required final AppStatusAction? action,
+  required final AppStatusAction? secondaryAction,
 }) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -215,9 +215,9 @@ class const _StatusActions({
     return Column(
       crossAxisAlignment: .stretch,
       children: [
-        if (action case BasicLayoutAction(:final label, :final onPressed))
+        if (action case AppStatusAction(:final label, :final onPressed))
           ElevatedButton(onPressed: onPressed, child: Text(label)),
-        if (secondaryAction case BasicLayoutAction(
+        if (secondaryAction case AppStatusAction(
           :final label,
           :final onPressed,
         )) ...[
@@ -229,15 +229,15 @@ class const _StatusActions({
   }
 }
 
-enum DesktopStatusTone { neutral, active, ready, warning, error }
+enum AppStatusTone { neutral, active, ready, warning, error }
 
-class BasicLayoutIcon({
+class AppStatusIcon({
   required final IconData data,
   required final Color color,
   final Offset? offset,
 }) {
   factory warning(RemoteRiftColorScheme colorScheme) {
-    return BasicLayoutIcon(
+    return AppStatusIcon(
       data: Icons.warning_amber_rounded,
       color: colorScheme.warning,
       offset: const Offset(0, -2),
@@ -245,21 +245,21 @@ class BasicLayoutIcon({
   }
 
   factory error(RemoteRiftColorScheme colorScheme) {
-    return BasicLayoutIcon(
+    return AppStatusIcon(
       data: Icons.error_outline_rounded,
       color: colorScheme.error,
     );
   }
 
   factory update(RemoteRiftColorScheme colorScheme) {
-    return BasicLayoutIcon(
+    return AppStatusIcon(
       data: Icons.system_update_alt,
       color: colorScheme.success,
     );
   }
 }
 
-class BasicLayoutAction({
+class AppStatusAction({
   required final String label,
   required final VoidCallback? onPressed,
 });

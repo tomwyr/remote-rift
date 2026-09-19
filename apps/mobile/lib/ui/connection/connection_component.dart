@@ -39,8 +39,8 @@ class const ConnectionComponent({
           // Delay showing content to avoid flicker when loading appears for a single frame
           Connecting() => DelayedDisplay(
             delay: 200.milliseconds,
-            placeholder: BasicLayout(loading: true),
-            child: BasicLayout(
+            placeholder: AppStatusLayout(loading: true),
+            child: AppStatusLayout(
               title: t.connection.connectingTitle,
               description: t.connection.connectingDescription,
               loading: true,
@@ -49,28 +49,31 @@ class const ConnectionComponent({
             ),
           ),
 
-          ConnectionError(:var cause, :var reconnectTriggered) => BasicLayout(
+          ConnectionError(:var cause, :var reconnectTriggered) => AppStatusLayout(
             title: t.connection.errorTitle,
             description: cause.description,
             loading: reconnectTriggered,
             tone: .error,
             icon: Icons.wifi_off,
-            action: .new(label: t.connection.errorRetry, onPressed: cubit.reconnectAfterError),
+            action: AppStatusAction(
+              label: t.connection.errorRetry,
+              onPressed: cubit.reconnectAfterError,
+            ),
           ),
 
-          ConnectedWithError(:var cause) => BasicLayout(
+          ConnectedWithError(:var cause) => AppStatusLayout(
             title: cause.title,
             description: cause.description,
             tone: .error,
             icon: Icons.error_outline,
           ),
 
-          ConnectedIncompatible() => BasicLayout(
+          ConnectedIncompatible() => AppStatusLayout(
             title: t.connection.incompatibleTitle,
             description: t.connection.incompatibleDescription,
             tone: .warning,
             icon: Icons.system_update_alt,
-            action: .new(
+            action: AppStatusAction(
               label: t.connection.incompatibleRetry,
               onPressed: cubit.reconnectAfterIncompatibility,
             ),

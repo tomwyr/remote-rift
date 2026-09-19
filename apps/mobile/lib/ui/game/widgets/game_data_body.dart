@@ -13,7 +13,7 @@ class const GameDataBody({
   required final String title,
   required final String description,
   final Widget? child,
-  final RiftStatusTone tone = .neutral,
+  final AppStatusTone tone = .neutral,
   final IconData? icon,
 }) extends StatelessWidget {
   @override
@@ -32,12 +32,12 @@ class const GameDataBody({
       crossAxisAlignment: .start,
       spacing: 12,
       children: [
-        BasicLayoutSection(
+        AppStatusSection(
           label: t.home.gameModeLabel,
           title: effectiveQueueName,
           titlePlaceholder: queueNamePlaceholder,
         ),
-        BasicLayoutSection(
+        AppStatusSection(
           label: t.home.gameStateLabel,
           title: title,
           titleFontSize: .large,
@@ -62,7 +62,7 @@ class const _GameActionRecovery() extends StatelessWidget {
       return const SizedBox.shrink();
     }
 
-    return BasicLayoutSection(
+    return AppStatusSection(
       label: t.gameState.actionFailed,
       description: t.gameState.actionRecoveryDescription,
       tone: .warning,

@@ -94,7 +94,7 @@ class const _McpLoadingState() extends StatelessWidget {
 class const _McpFailedState() extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BasicLayout(
+    return AppStatusLayout(
       eyebrow: t.mcp.title,
       description: t.mcp.error,
       icon: .error(context.remoteRiftTheme.colorScheme),

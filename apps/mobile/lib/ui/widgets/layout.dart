@@ -3,16 +3,16 @@ import 'package:remote_rift_ui/remote_rift_ui.dart';
 
 import 'fit_viewport_scroll_view.dart';
 
-class const BasicLayout({
+class const AppStatusLayout({
   super.key,
   final String? title,
   final String? description,
   final Widget? body,
   final bool loading = false,
-  final RiftStatusTone tone = .neutral,
+  final AppStatusTone tone = .neutral,
   final IconData? icon,
-  final BasicLayoutAction? action,
-  final BasicLayoutAction? secondaryAction,
+  final AppStatusAction? action,
+  final AppStatusAction? secondaryAction,
 }) extends StatelessWidget {
   this
     : assert(
@@ -51,7 +51,7 @@ class const BasicLayout({
       crossAxisAlignment: .start,
       children: [
         if (title case var title?)
-          BasicLayoutSection(
+          AppStatusSection(
             title: title,
             titleFontSize: .large,
             description: description,
@@ -75,11 +75,11 @@ class const BasicLayout({
         if (loading)
           Center(child: CircularProgressIndicator())
         else if (hasAction) ...[
-          if (action case BasicLayoutAction(:var label, :var onPressed)) ...[
+          if (action case AppStatusAction(:var label, :var onPressed)) ...[
             SizedBox(height: 12),
             ElevatedButton(onPressed: onPressed, child: Text(label)),
           ],
-          if (secondaryAction case BasicLayoutAction(
+          if (secondaryAction case AppStatusAction(
             :var label,
             :var onPressed,
           )) ...[
@@ -92,14 +92,14 @@ class const BasicLayout({
   }
 }
 
-class BasicLayoutAction({
+class AppStatusAction({
   required final String label,
   required final VoidCallback? onPressed,
 });
 
-enum RiftStatusTone { neutral, active, ready, warning, error }
+enum AppStatusTone { neutral, active, ready, warning, error }
 
-enum BasicLayoutSectionFontSize { medium, large }
+enum AppStatusSectionTitleSize { medium, large }
 
 class const AppCard({
   super.key,
@@ -135,16 +135,16 @@ class const AppListDivider({super.key}) extends StatelessWidget {
   }
 }
 
-class const BasicLayoutSection({
+class const AppStatusSection({
   super.key,
   final String? label,
   final String? title,
   final Widget? titlePlaceholder,
-  final BasicLayoutSectionFontSize titleFontSize = .medium,
+  final AppStatusSectionTitleSize titleFontSize = .medium,
   final String? description,
-  final RiftStatusTone tone = .neutral,
+  final AppStatusTone tone = .neutral,
   final IconData? icon,
-  final BasicLayoutAction? action,
+  final AppStatusAction? action,
 }) extends StatelessWidget {
   this
     : assert(
@@ -210,7 +210,7 @@ class const BasicLayoutSection({
               style: textTheme.bodyLarge?.copyWith(height: 1.4),
             ),
           ],
-          if (action case BasicLayoutAction(:final label, :final onPressed)) ...[
+          if (action case AppStatusAction(:final label, :final onPressed)) ...[
             const SizedBox(height: 16),
             Align(
               alignment: .centerRight,
