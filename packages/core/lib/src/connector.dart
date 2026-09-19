@@ -22,7 +22,7 @@ class RemoteRiftConnector._init({
 }) {
   factory() {
     final lcuApi = LcuApiClient(
-      lcuConnection: LcuConnection(parser: LcuLockfileParser(), loader: LcuLockfileLoader()),
+      lcuConnection: .shared,
       httpClient: ClientFactory.noCertificateVerification(),
     );
     return RemoteRiftConnector._init(

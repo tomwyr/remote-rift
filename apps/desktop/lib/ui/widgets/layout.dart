@@ -1,6 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:remote_rift_ui/remote_rift_ui.dart';
 
+class const DesktopCard({
+  super.key,
+  required final EdgeInsets padding,
+  required final Widget child,
+}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.remoteRiftTheme.colorScheme;
+
+    return Align(
+      alignment: .topCenter,
+      child: Container(
+        width: .infinity,
+        padding: padding,
+        decoration: BoxDecoration(
+          color: colors.canvas,
+          border: .all(color: colors.navy.withValues(alpha: 0.12)),
+          borderRadius: .circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: colors.navy.withValues(alpha: 0.08),
+              blurRadius: 20,
+              offset: const Offset(0, 8),
+            ),
+          ],
+        ),
+        child: child,
+      ),
+    );
+  }
+}
+
 class const BasicLayout({
   super.key,
   required final String eyebrow,
@@ -23,61 +55,43 @@ class const BasicLayout({
       .error => colors.error,
     };
 
-    return Align(
-      alignment: .topCenter,
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 420),
-        child: Container(
-          width: .infinity,
-          padding: .all(16),
-          decoration: BoxDecoration(
-            color: colors.canvas,
-            border: Border.all(color: colors.navy.withValues(alpha: 0.12)),
-            borderRadius: .circular(16),
-            boxShadow: [
-              BoxShadow(
-                color: colors.navy.withValues(alpha: 0.08),
-                blurRadius: 20,
-                offset: const Offset(0, 8),
-              ),
-            ],
-          ),
-          child: DefaultTextStyle(
-            style: Theme.of(context).textTheme.bodyMedium!,
-            child: Column(
-              crossAxisAlignment: .stretch,
-              mainAxisSize: .min,
-              children: [
-                _StatusEyebrow(label: eyebrow, accent: accent, colors: colors),
-                const SizedBox(height: 16),
-                _StatusDetails(
-                  title: title,
-                  description: description,
-                  icon: icon,
-                  accent: accent,
-                ),
-                const SizedBox(height: 16),
-                _StatusFooter(
-                  loading: loading,
-                  action: action,
-                  secondaryAction: secondaryAction,
-                ),
-              ],
+    return DesktopCard(
+      padding: .all(16),
+      child: DefaultTextStyle(
+        style: Theme.of(context).textTheme.bodyMedium!,
+        child: Column(
+          crossAxisAlignment: .stretch,
+          mainAxisSize: .min,
+          children: [
+            DesktopEyebrow(label: eyebrow, accent: accent),
+            const SizedBox(height: 16),
+            _StatusDetails(
+              title: title,
+              description: description,
+              icon: icon,
+              accent: accent,
             ),
-          ),
+            const SizedBox(height: 16),
+            _StatusFooter(
+              loading: loading,
+              action: action,
+              secondaryAction: secondaryAction,
+            ),
+          ],
         ),
       ),
     );
   }
 }
 
-class const _StatusEyebrow({
+class const DesktopEyebrow({
   required final String label,
   required final Color accent,
-  required final RemoteRiftColorScheme colors,
 }) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final colors = context.remoteRiftTheme.colorScheme;
+
     return Row(
       children: [
         Container(width: 3, height: 16, color: accent),

@@ -9,12 +9,14 @@ import '../update/update_button.dart';
 class const DesktopAppShell({
   super.key,
   required final Widget body,
+  final String? title,
   final Widget? trailing,
   final bool showUpdateAction = true,
 }) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.remoteRiftTheme.colorScheme;
+    final appTitle = title ?? t.app.title;
     final headerTopPadding = switch (targetPlatform) {
       .windows => 10.0,
       .macos => 34.0,
@@ -36,7 +38,7 @@ class const DesktopAppShell({
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
-                      t.app.title,
+                      appTitle,
                       style: Theme.of(
                         context,
                       ).textTheme.titleLarge?.copyWith(fontWeight: .w300),

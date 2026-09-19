@@ -40,6 +40,21 @@ connection:
   errorDescription: "Unable to connect to the game client."
   errorRetry: "Reconnect"
 
+settings:
+  title: "Settings"
+  close: "Close settings"
+  lockfile:
+    title: "Lockfile location"
+    defaultLocation: "Default location"
+    customLocation: "Custom location"
+    defaultPath: "Using the standard League Client location."
+    customPath: "Using a custom League Client lockfile."
+    choose: "Choose custom location"
+    change: "Change location"
+    reset: "Reset to default"
+    invalid: "Choose a valid League Client lockfile."
+    persistenceFailed: "Couldn't save the lockfile location. Please try again."
+
 gameError:
   unableToConnectTitle: "Unable to connect"
   unknownTitle: "Unknown game state"

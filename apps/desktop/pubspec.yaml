@@ -24,6 +24,7 @@ dependencies:
   hooks: ^1.0.1
   toastification: ^3.2.0
   flutter_secure_storage: ^11.1.1
+  file_selector: ^1.0.3
 
   remote_rift_updater: any
   remote_rift_api: any

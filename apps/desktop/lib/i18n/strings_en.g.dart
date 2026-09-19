@@ -45,6 +45,7 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	late final Translations$tray$en tray = Translations$tray$en._(_root);
 	late final Translations$service$en service = Translations$service$en._(_root);
 	late final Translations$connection$en connection = Translations$connection$en._(_root);
+	late final Translations$settings$en settings = Translations$settings$en._(_root);
 	late final Translations$gameError$en gameError = Translations$gameError$en._(_root);
 	late final Translations$mcp$en mcp = Translations$mcp$en._(_root);
 }
@@ -190,6 +191,23 @@ class Translations$connection$en {
 	String get errorRetry => 'Reconnect';
 }
 
+// Path: settings
+class Translations$settings$en {
+	Translations$settings$en._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Settings'
+	String get title => 'Settings';
+
+	/// en: 'Close settings'
+	String get close => 'Close settings';
+
+	late final Translations$settings$lockfile$en lockfile = Translations$settings$lockfile$en._(_root);
+}
+
 // Path: gameError
 class Translations$gameError$en {
 	Translations$gameError$en._(this._root);
@@ -256,6 +274,45 @@ class Translations$mcp$en {
 	String get capabilities => 'Reads connection and game state. Can manage lobbies, matchmaking, ready checks, and Champion Select.';
 }
 
+// Path: settings.lockfile
+class Translations$settings$lockfile$en {
+	Translations$settings$lockfile$en._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Lockfile location'
+	String get title => 'Lockfile location';
+
+	/// en: 'Default location'
+	String get defaultLocation => 'Default location';
+
+	/// en: 'Custom location'
+	String get customLocation => 'Custom location';
+
+	/// en: 'Using the standard League Client location.'
+	String get defaultPath => 'Using the standard League Client location.';
+
+	/// en: 'Using a custom League Client lockfile.'
+	String get customPath => 'Using a custom League Client lockfile.';
+
+	/// en: 'Choose custom location'
+	String get choose => 'Choose custom location';
+
+	/// en: 'Change location'
+	String get change => 'Change location';
+
+	/// en: 'Reset to default'
+	String get reset => 'Reset to default';
+
+	/// en: 'Choose a valid League Client lockfile.'
+	String get invalid => 'Choose a valid League Client lockfile.';
+
+	/// en: 'Couldn't save the lockfile location. Please try again.'
+	String get persistenceFailed => 'Couldn\'t save the lockfile location. Please try again.';
+}
+
 /// The flat map containing all translations for locale <en>.
 /// Only for edge cases! For simple maps, use the map function of this library.
 ///
@@ -296,6 +353,18 @@ extension on Translations {
 			'connection.errorTitle' => 'Connection error',
 			'connection.errorDescription' => 'Unable to connect to the game client.',
 			'connection.errorRetry' => 'Reconnect',
+			'settings.title' => 'Settings',
+			'settings.close' => 'Close settings',
+			'settings.lockfile.title' => 'Lockfile location',
+			'settings.lockfile.defaultLocation' => 'Default location',
+			'settings.lockfile.customLocation' => 'Custom location',
+			'settings.lockfile.defaultPath' => 'Using the standard League Client location.',
+			'settings.lockfile.customPath' => 'Using a custom League Client lockfile.',
+			'settings.lockfile.choose' => 'Choose custom location',
+			'settings.lockfile.change' => 'Change location',
+			'settings.lockfile.reset' => 'Reset to default',
+			'settings.lockfile.invalid' => 'Choose a valid League Client lockfile.',
+			'settings.lockfile.persistenceFailed' => 'Couldn\'t save the lockfile location. Please try again.',
 			'gameError.unableToConnectTitle' => 'Unable to connect',
 			'gameError.unknownTitle' => 'Unknown game state',
 			'gameError.unableToConnectDescription' => 'The game client could not be reached. Make sure that it is running to interact with the game.',

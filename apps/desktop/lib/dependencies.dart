@@ -13,6 +13,7 @@ import 'services/mcp_server_runner.dart';
 import 'ui/connection/connection_cubit.dart';
 import 'ui/service/service_cubit.dart';
 import 'ui/mcp/mcp_integration_cubit.dart';
+import 'ui/settings/settings_cubit.dart';
 import 'ui/update/update_cubit.dart';
 
 class Dependencies {
@@ -37,6 +38,10 @@ class Dependencies {
         secretStore: McpSecretStore(secureStorage: FlutterSecureStorage()),
       ),
     );
+  }
+
+  static SettingsCubit settingsCubit(BuildContext context) {
+    return SettingsCubit(connection: .shared);
   }
 
   static ApplicationUpdater applicationUpdater() {

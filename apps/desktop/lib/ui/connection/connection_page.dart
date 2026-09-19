@@ -8,6 +8,7 @@ import '../../i18n/strings.g.dart';
 import '../widgets/app_shell.dart';
 import '../widgets/layout.dart';
 import '../mcp/mcp_integration_component.dart';
+import '../settings/settings_page.dart';
 import 'connection_cubit.dart';
 import 'connection_state.dart';
 
@@ -31,6 +32,11 @@ class const ConnectionPage({super.key}) extends StatelessWidget {
           mainAxisSize: .min,
           children: [
             ConnectionStatusIcon(state: cubit.state),
+            IconButton(
+              tooltip: t.settings.title,
+              icon: const Icon(Icons.settings_outlined),
+              onPressed: () => SettingsPage.show(context),
+            ),
             const McpIntegrationButton(),
           ],
         ),

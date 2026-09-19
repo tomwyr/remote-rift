@@ -12,6 +12,7 @@ dependencies:
   http: ^1.6.0
   equatable: ^2.0.8
   time: ^2.1.6
+  path: ^1.9.1
 
   remote_rift_utils: any
 
