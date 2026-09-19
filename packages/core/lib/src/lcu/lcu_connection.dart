@@ -19,16 +19,17 @@ class LcuConnection({
 
   LcuLockfileData? _lockfileData;
 
-  LcuLockfileData getLockfileData() {
+  Future<LcuLockfileData> getLockfileData() async {
     if (_lockfileData case var data?) {
       return data;
     }
-    return refreshLockfileData();
+    return await refreshLockfileData();
   }
 
-  LcuLockfileData refreshLockfileData() {
+  Future<LcuLockfileData> refreshLockfileData() async {
     try {
-      final lockfile = _loader.loadLockfile(_path.getActivePath());
+      final activePath = await _path.getActivePath();
+      final lockfile = _loader.loadLockfile(activePath);
       final data = _parser.parseLockfile(lockfile);
       _lockfileData = data;
       return data;
@@ -43,15 +44,15 @@ class LcuConnection({
     _parser.parseLockfile(lockfile);
   }
 
-  String? get lockfileCustomPath => _path.getCustomPath();
+  Future<String?> getLockfileCustomPath() => _path.getCustomPath();
 
-  void saveLockfileCustomPath(String path) {
-    _path.saveCustomPath(path);
+  Future<void> saveLockfileCustomPath(String path) async {
+    await _path.saveCustomPath(path);
     _lockfileData = null;
   }
 
-  void resetLockfileCustomPath() {
-    _path.reset();
+  Future<void> resetLockfileCustomPath() async {
+    await _path.reset();
     _lockfileData = null;
   }
 }
@@ -61,31 +62,46 @@ class LcuLockfilePath({
 }) {
   String? _customPath;
   var _loaded = false;
+  Future<void>? _loading;
 
-  String getActivePath() {
-    return getCustomPath() ?? _defaultPath();
+  Future<String> getActivePath() async {
+    return await getCustomPath() ?? _defaultPath();
   }
 
-  String? getCustomPath() {
-    _load();
+  Future<String?> getCustomPath() async {
+    await _load();
     return _customPath;
   }
 
-  void saveCustomPath(String path) {
-    _load();
-    _store.save(LcuConnectionConfiguration(customPath: path));
+  Future<void> saveCustomPath(String path) async {
+    await _load();
+    await _store.save(LcuConnectionConfiguration(customPath: path));
     _customPath = path;
   }
 
-  void reset() {
-    _load();
-    _store.remove();
+  Future<void> reset() async {
+    await _load();
+    await _store.remove();
     _customPath = null;
   }
 
-  void _load() {
+  Future<void> _load() async {
     if (_loaded) return;
-    _customPath = _store.load()?.customPath;
+    if (_loading case var loading?) return await loading;
+
+    final loading = _loadConfiguration();
+    _loading = loading;
+
+    try {
+      await loading;
+    } finally {
+      _loading = null;
+    }
+  }
+
+  Future<void> _loadConfiguration() async {
+    final configuration = await _store.load();
+    _customPath = configuration?.customPath;
     _loaded = true;
   }
 

@@ -193,7 +193,7 @@ class LcuApiClient({
     Map<String, dynamic>? body,
   ]) async {
     Future<Response> execute() async {
-      final lockfileData = _lcuConnection.getLockfileData();
+      final lockfileData = await _lcuConnection.getLockfileData();
       return await _runRequest(method, path, body, lockfileData);
     }
 
@@ -201,7 +201,7 @@ class LcuApiClient({
       return await execute();
     } on SocketException catch (_) {
       // Retry once in case the error was caused by a stale lockfile.
-      _lcuConnection.refreshLockfileData();
+      await _lcuConnection.refreshLockfileData();
       try {
         return await execute();
       } on SocketException catch (_) {

@@ -18,12 +18,12 @@ class LcuConnectionConfiguration({
 }
 
 class LcuConnectionConfigurationStore {
-  LcuConnectionConfiguration? load() {
+  Future<LcuConnectionConfiguration?> load() async {
     try {
       final file = _configurationFile();
-      if (!file.existsSync()) return null;
+      if (!await file.exists()) return null;
 
-      return .fromJson(jsonDecode(file.readAsStringSync()));
+      return .fromJson(jsonDecode(await file.readAsString()));
     } catch (error) {
       if (error case FileSystemException() || FormatException() || TypeError()) {
         throw LcuConnectionError.configurationUnavailable;
@@ -32,21 +32,21 @@ class LcuConnectionConfigurationStore {
     }
   }
 
-  void save(LcuConnectionConfiguration configuration) {
+  Future<void> save(LcuConnectionConfiguration configuration) async {
     try {
       final file = _configurationFile();
-      file.parent.createSync(recursive: true);
-      file.writeAsStringSync(jsonEncode(configuration.toJson()));
+      await file.parent.create(recursive: true);
+      await file.writeAsString(jsonEncode(configuration.toJson()));
     } on FileSystemException {
       throw LcuConnectionError.configurationUnavailable;
     }
   }
 
-  void remove() {
+  Future<void> remove() async {
     try {
       final file = _configurationFile();
-      if (file.existsSync()) {
-        file.deleteSync();
+      if (await file.exists()) {
+        await file.delete();
       }
     } on FileSystemException {
       throw LcuConnectionError.configurationUnavailable;

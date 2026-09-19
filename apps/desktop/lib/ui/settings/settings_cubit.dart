@@ -8,9 +8,10 @@ class SettingsCubit({
 }) extends Cubit<SettingsState> {
   this : super(Initial());
 
-  void initialize() {
+  void initialize() async {
     try {
-      emit(Loaded(customPath: _connection.lockfileCustomPath));
+      final customPath = await _connection.getLockfileCustomPath();
+      emit(Loaded(customPath: customPath));
     } on LcuConnectionError catch (error) {
       if (error case .configurationUnavailable) {
         emit(Loaded(customPath: null, failure: .pathPersistence));
@@ -20,13 +21,13 @@ class SettingsCubit({
     }
   }
 
-  void selectCustomPath(String path) {
+  void selectCustomPath(String path) async {
     final previous = _requireLoaded();
     emit(Loaded(customPath: previous.customPath, saving: true));
 
     try {
       _connection.validateLockfilePath(path);
-      _connection.saveLockfileCustomPath(path);
+      await _connection.saveLockfileCustomPath(path);
       emit(Loaded(customPath: path));
     } on LcuConnectionError catch (error) {
       if (error case .configurationUnavailable) {
@@ -41,12 +42,12 @@ class SettingsCubit({
     }
   }
 
-  void reset() {
+  void reset() async {
     final previous = _requireLoaded();
     emit(Loaded(customPath: previous.customPath, saving: true));
 
     try {
-      _connection.resetLockfileCustomPath();
+      await _connection.resetLockfileCustomPath();
       emit(Loaded(customPath: null));
     } on LcuConnectionError catch (error) {
       if (error case .configurationUnavailable) {
