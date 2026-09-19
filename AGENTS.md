@@ -12,7 +12,8 @@
 
 ## Shared UI
 
-- Move identical widgets used by multiple apps into a shared package.
+- Share a visual primitive within an app once it has two established uses; move identical widgets used
+  by multiple apps into a shared package.
 
 ## Model boundaries
 
@@ -53,6 +54,10 @@
 - Throw typed feature domain/state errors from orchestration; do not use generic argument errors for invalid external or current-state conditions.
 - Keep equivalent client operations consistent in request encoding, headers, and error handling; add HTTP-status translation or protocol metadata only when endpoint-specific.
 - Keep feature-specific guards at feature boundaries; do not alter shared action-helper behavior, including concurrency semantics, without a shared requirement.
+- Own mutable runtime configuration at the shared connection boundary. Callers depend on connection
+  operations, not on a mutable configuration object.
+- Persist feature configuration through typed JSON-serializable stores. Keep file-storage mechanics in
+  the store and runtime connection policy at the connection boundary.
 - Give transport-client methods typed inputs; do not expose raw `Map<String, dynamic>` payloads publicly.
 - Match existing feature-action APIs: succeed with `Future<void>`, throw typed feature errors for expected domain/state failures, propagate infrastructure failures, and do not add outcome enums duplicating those semantics.
 - Define typed request inputs for action arguments; prefer bodies to query parameters for structured input, and use a finite input discriminator for closely related route variants instead of duplicating routes or input types.
@@ -64,6 +69,8 @@
 - When every state needs an initial snapshot, provide it at construction; load asynchronously from the owning lifecycle, not cubit creation.
 - Keep displayed feature data in feature state; avoid drilling parallel snapshots through descendants that can select feature state.
 - Keep asynchronous action progress and recoverable failure in state; widgets must not catch cubit action failures or duplicate action flags.
+- Keep platform UI interactions, such as native file selection, at the widget boundary. Cubits accept
+  the selected input, perform feature validation and persistence, and emit recoverable typed failures.
 - For actions sharing a finite lifecycle, use an action-to-status map with one status per action instead of separate pending and failure collections; omitted entries are neutral.
 - A sealed state base may provide a finite status valid for every variant; data-bearing variants override it with resolved status so widgets need not extract subtypes.
 - Put capabilities derived from emitted state, such as retryability after failure, on the applicable variant; widgets consume them, while cubits expose commands rather than accepting state solely to answer them.
@@ -74,6 +81,12 @@
 - Use modal-route constraints for sheet bounds and `SafeArea` for system insets; do not manually recompute viewport height or safe-area padding unless required interaction behavior cannot use them.
 - Use `context.select` for narrow dependencies and `context.watch` for complete state; do not add builders solely to read bloc state.
 - Resolve `context.select`, `context.watch`, and `context.read` before constructing widget subtrees; do not nest them in constructor arguments, and extract meaningful state branches when that keeps dependencies with presentation.
+- Give Desktop subpages a localized title through the shared shell rather than reusing the root-page title.
+- For narrow Desktop settings, use setting eyebrow, current-value title, muted explanation, optional
+  detailed value, then actions. Keep the title and explanation close; separate optional details,
+  feedback, and actions with larger semantic gaps.
+- Do not put independent setting values in a row in narrow windows. Use setting icons only when they
+  form a consistent taxonomy across the page or product.
 
 ## Dart style
 
