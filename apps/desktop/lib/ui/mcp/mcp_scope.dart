@@ -10,21 +10,21 @@ class McpScope({
   super.key,
   required final Widget child,
 }) extends StatelessWidget {
-  static Widget builder({required Widget child}) {
-    return BlocProvider(
-      create: Dependencies.mcpIntegrationCubit,
-      child: McpScope(child: child),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<McpIntegrationCubit>();
+    return BlocProvider(
+      create: Dependencies.mcpIntegrationCubit,
+      child: Builder(
+        builder: (context) {
+          final cubit = context.read<McpIntegrationCubit>();
 
-    return Lifecycle(
-      onInit: () => appManager.addExitListener(cubit.close),
-      onDispose: () => appManager.removeExitListener(cubit.close),
-      child: child,
+          return Lifecycle(
+            onInit: () => appManager.addExitListener(cubit.close),
+            onDispose: () => appManager.removeExitListener(cubit.close),
+            child: child,
+          );
+        },
+      ),
     );
   }
 }

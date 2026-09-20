@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:remote_rift_core/remote_rift_core.dart';
 import 'package:remote_rift_ui/remote_rift_ui.dart';
 
-import '../../dependencies.dart';
 import '../../i18n/strings.g.dart';
 import '../widgets/app_shell.dart';
 import '../widgets/app_icon_button.dart';
@@ -13,13 +12,6 @@ import 'connection_cubit.dart';
 import 'connection_state.dart';
 
 class const ConnectionPage({super.key}) extends StatelessWidget {
-  static Widget builder() {
-    return BlocProvider(
-      create: Dependencies.connectionCubit,
-      child: ConnectionPage(),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final cubit = context.watch<ConnectionCubit>();
@@ -28,16 +20,10 @@ class const ConnectionPage({super.key}) extends StatelessWidget {
     return Lifecycle(
       onInit: cubit.initialize,
       child: AppShell(
-        trailing: Row(
-          mainAxisSize: .min,
-          children: [
-            ConnectionStatusIcon(state: cubit.state),
-            AppIconButton(
-              tooltip: t.settings.title,
-              icon: Icons.settings_outlined,
-              onPressed: () => SettingsPage.show(context),
-            ),
-          ],
+        trailing: AppIconButton(
+          tooltip: t.settings.title,
+          icon: Icons.settings_outlined,
+          onPressed: () => SettingsPage.show(context),
         ),
         body: switch (cubit.state) {
           Initial() => SizedBox.shrink(),
@@ -86,25 +72,6 @@ class const ConnectionPage({super.key}) extends StatelessWidget {
             tone: .ready,
           ),
         },
-      ),
-    );
-  }
-}
-
-class const ConnectionStatusIcon({
-  super.key,
-  required final ConnectionState state,
-}) extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final colors = context.remoteRiftTheme.colorScheme;
-    final isConnected = state is Connected;
-    return Padding(
-      padding: const .symmetric(horizontal: 6),
-      child: Icon(
-        isConnected ? Icons.wifi_rounded : Icons.wifi_off_rounded,
-        color: isConnected ? colors.ready : colors.gold,
-        size: 20,
       ),
     );
   }

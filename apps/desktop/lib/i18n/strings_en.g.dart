@@ -169,6 +169,15 @@ class Translations$connection$en {
 	/// en: 'League client'
 	String get statusEyebrow => 'League client';
 
+	/// en: 'Connecting to League client...'
+	String get connectingStatus => 'Connecting to League client...';
+
+	/// en: 'League client connected'
+	String get connectedStatus => 'League client connected';
+
+	/// en: 'League client unavailable'
+	String get unavailableStatus => 'League client unavailable';
+
 	/// en: 'Connecting...'
 	String get connectingTitle => 'Connecting...';
 
@@ -361,6 +370,9 @@ extension on Translations {
 			'service.errorUnknownDescription' => 'The application couldn\'t start. This may be due to a missing network connection or another temporary issue.',
 			'service.errorRetry' => 'Restart',
 			'connection.statusEyebrow' => 'League client',
+			'connection.connectingStatus' => 'Connecting to League client...',
+			'connection.connectedStatus' => 'League client connected',
+			'connection.unavailableStatus' => 'League client unavailable',
 			'connection.connectingTitle' => 'Connecting...',
 			'connection.connectingDescription' => 'Initializing communication with the game client.',
 			'connection.connectedTitle' => 'Connected',

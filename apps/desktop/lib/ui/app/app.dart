@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:remote_rift_ui/remote_rift_ui.dart';
 
 import '../../i18n/strings.g.dart';
+import '../connection/connection_scope.dart';
 import '../home/home_page.dart';
 import '../mcp/mcp_scope.dart';
 import '../update/update_component.dart';
@@ -24,8 +25,10 @@ class _AppState extends State<App> {
       builder: (context, child) => RemoteRiftTheme.builder(
         child: AppNotifications(
           navigatorKey: _navigatorKey,
-          child: UpdateComponent.builder(
-            child: McpScope.builder(child: child!),
+          child: ConnectionScope(
+            child: UpdateComponent.builder(
+              child: McpScope(child: child!),
+            ),
           ),
         ),
       ),

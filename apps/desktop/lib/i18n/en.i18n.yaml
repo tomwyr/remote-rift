@@ -32,6 +32,9 @@ service:
 
 connection:
   statusEyebrow: "League client"
+  connectingStatus: "Connecting to League client..."
+  connectedStatus: "League client connected"
+  unavailableStatus: "League client unavailable"
   connectingTitle: "Connecting..."
   connectingDescription: "Initializing communication with the game client."
   connectedTitle: "Connected"
