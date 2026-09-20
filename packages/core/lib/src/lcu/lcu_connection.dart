@@ -47,7 +47,11 @@ class LcuConnection({
   Future<String?> getLockfileCustomPath() => _path.getCustomPath();
 
   Future<void> saveLockfileCustomPath(String path) async {
-    await _path.saveCustomPath(path);
+    if (_path.isDefaultPath(path)) {
+      await _path.reset();
+    } else {
+      await _path.saveCustomPath(path);
+    }
     _lockfileData = null;
   }
 
@@ -83,6 +87,10 @@ class LcuLockfilePath({
     await _load();
     await _store.remove();
     _customPath = null;
+  }
+
+  bool isDefaultPath(String path) {
+    return path == _defaultPath();
   }
 
   Future<void> _load() async {
@@ -143,7 +151,11 @@ class LcuLockfileLoader {
     if (!file.existsSync()) {
       throw LcuConnectionError.lockfileMissing;
     }
-    return file.readAsStringSync();
+    try {
+      return file.readAsStringSync();
+    } on FileSystemException {
+      throw LcuConnectionError.lockfileInvalid;
+    }
   }
 }
 

@@ -28,7 +28,8 @@ class SettingsCubit({
     try {
       _connection.validateLockfilePath(path);
       await _connection.saveLockfileCustomPath(path);
-      emit(Loaded(customPath: path));
+      final customPath = await _connection.getLockfileCustomPath();
+      emit(Loaded(customPath: customPath));
     } on LcuConnectionError catch (error) {
       if (error case .configurationUnavailable) {
         emit(Loaded(customPath: previous.customPath, failure: .pathPersistence));
