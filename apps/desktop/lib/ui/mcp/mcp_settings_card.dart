@@ -166,7 +166,7 @@ class const _McpDetails({
         AppValueBox(
           child: SelectableText(configuration, style: Theme.of(context).textTheme.bodySmall),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 12),
         ElevatedButton.icon(
           onPressed: () => _copyConfiguration(context),
           icon: const Icon(Icons.copy_outlined),

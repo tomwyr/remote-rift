@@ -5,6 +5,7 @@ import '../../common/assets.dart';
 import '../../common/platform.dart';
 import '../../i18n/strings.g.dart';
 import '../update/update_button.dart';
+import 'app_footer.dart';
 
 class const AppShell({
   super.key,
@@ -57,10 +58,7 @@ class const AppShell({
                 child: body,
               ),
             ),
-            const Padding(
-              padding: .fromLTRB(12, 8, 12, 12),
-              child: AppVersion(),
-            ),
+            const AppFooter(),
           ],
         ),
       ),

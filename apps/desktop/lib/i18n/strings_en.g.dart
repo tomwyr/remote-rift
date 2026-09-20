@@ -258,11 +258,14 @@ class Translations$mcp$en {
 	/// en: 'Reset access'
 	String get reset => 'Reset access';
 
-	/// en: 'Starting server...'
-	String get starting => 'Starting server...';
+	/// en: 'Resetting MCP server access...'
+	String get resetting => 'Resetting MCP server access...';
 
-	/// en: 'Server is active'
-	String get running => 'Server is active';
+	/// en: 'Starting MCP server...'
+	String get starting => 'Starting MCP server...';
+
+	/// en: 'MCP server is active'
+	String get running => 'MCP server is active';
 
 	/// en: 'Couldn't start the server.'
 	String get startError => 'Couldn\'t start the server.';
@@ -388,8 +391,9 @@ extension on Translations {
 			'mcp.enable' => 'Start server',
 			'mcp.disable' => 'Stop server',
 			'mcp.reset' => 'Reset access',
-			'mcp.starting' => 'Starting server...',
-			'mcp.running' => 'Server is active',
+			'mcp.resetting' => 'Resetting MCP server access...',
+			'mcp.starting' => 'Starting MCP server...',
+			'mcp.running' => 'MCP server is active',
 			'mcp.startError' => 'Couldn\'t start the server.',
 			'mcp.resetError' => 'Couldn\'t reset access.',
 			'mcp.stopError' => 'Couldn\'t stop the server.',
