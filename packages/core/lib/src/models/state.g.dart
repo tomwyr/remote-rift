@@ -13,7 +13,7 @@ PreGame _$PreGameFromJson(Map<String, dynamic> json) => PreGame(
 );
 
 Map<String, dynamic> _$PreGameToJson(PreGame instance) => <String, dynamic>{
-  'availableQueues': instance.availableQueues,
+  'availableQueues': instance.availableQueues.map((e) => e.toJson()).toList(),
 };
 
 Lobby _$LobbyFromJson(Map<String, dynamic> json) => Lobby(
@@ -27,7 +27,7 @@ Lobby _$LobbyFromJson(Map<String, dynamic> json) => Lobby(
 
 Map<String, dynamic> _$LobbyToJson(Lobby instance) => <String, dynamic>{
   'state': _$GameLobbyStateEnumMap[instance.state]!,
-  'rolePreferences': instance.rolePreferences,
+  'rolePreferences': instance.rolePreferences?.toJson(),
 };
 
 const _$GameLobbyStateEnumMap = {
@@ -144,14 +144,14 @@ Map<String, dynamic> _$ChampionSelectToJson(
 ) => <String, dynamic>{
   'phase': _$ChampionSelectPhaseEnumMap[instance.phase]!,
   'timeLeft': const DurationMillisecondsConverter().toJson(instance.timeLeft),
-  'champion': instance.champion,
+  'champion': instance.champion?.toJson(),
   'championAction':
       _$ChampionSelectChampionActionEnumMap[instance.championAction],
   'unavailableChampionIds': instance.unavailableChampionIds,
   'position': _$ChampionSelectPositionEnumMap[instance.position],
-  'spell1': instance.spell1,
-  'spell2': instance.spell2,
-  'actionAvailability': instance.actionAvailability,
+  'spell1': instance.spell1?.toJson(),
+  'spell2': instance.spell2?.toJson(),
+  'actionAvailability': instance.actionAvailability.toJson(),
 };
 
 const _$ChampionSelectPhaseEnumMap = {

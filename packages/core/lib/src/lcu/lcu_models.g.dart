@@ -14,7 +14,7 @@ GameflowSession _$GameflowSessionFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$GameflowSessionToJson(GameflowSession instance) =>
-    <String, dynamic>{'gameData': instance.gameData};
+    <String, dynamic>{'gameData': instance.gameData.toJson()};
 
 GameflowGameData _$GameflowGameDataFromJson(Map<String, dynamic> json) =>
     GameflowGameData(
@@ -22,7 +22,7 @@ GameflowGameData _$GameflowGameDataFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$GameflowGameDataToJson(GameflowGameData instance) =>
-    <String, dynamic>{'queue': instance.queue};
+    <String, dynamic>{'queue': instance.queue.toJson()};
 
 GameflowQueue _$GameflowQueueFromJson(Map<String, dynamic> json) =>
     GameflowQueue(
@@ -71,9 +71,11 @@ ChampSelectSession _$ChampSelectSessionFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$ChampSelectSessionToJson(ChampSelectSession instance) =>
     <String, dynamic>{
       'localPlayerCellId': instance.localPlayerCellId,
-      'myTeam': instance.myTeam,
-      'actions': instance.actions,
-      'timer': instance.timer,
+      'myTeam': instance.myTeam.map((e) => e.toJson()).toList(),
+      'actions': instance.actions
+          .map((e) => e.map((e) => e.toJson()).toList())
+          .toList(),
+      'timer': instance.timer?.toJson(),
     };
 
 ChampSelectActionAssignment _$ChampSelectActionAssignmentFromJson(
@@ -248,8 +250,8 @@ LobbyDetails _$LobbyDetailsFromJson(Map<String, dynamic> json) => LobbyDetails(
 
 Map<String, dynamic> _$LobbyDetailsToJson(LobbyDetails instance) =>
     <String, dynamic>{
-      'gameConfig': instance.gameConfig,
-      'localMember': instance.localMember,
+      'gameConfig': instance.gameConfig.toJson(),
+      'localMember': instance.localMember?.toJson(),
     };
 
 LobbyMember _$LobbyMemberFromJson(Map<String, dynamic> json) => LobbyMember(

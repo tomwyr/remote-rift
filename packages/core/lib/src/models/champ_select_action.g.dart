@@ -65,8 +65,8 @@ ChampionSelectCatalog _$ChampionSelectCatalogFromJson(
 Map<String, dynamic> _$ChampionSelectCatalogToJson(
   ChampionSelectCatalog instance,
 ) => <String, dynamic>{
-  'champions': instance.champions,
-  'summonerSpells': instance.summonerSpells,
+  'champions': instance.champions.map((e) => e.toJson()).toList(),
+  'summonerSpells': instance.summonerSpells.map((e) => e.toJson()).toList(),
 };
 
 ChampionSelectCatalogChampion _$ChampionSelectCatalogChampionFromJson(
