@@ -13,13 +13,13 @@ class McpIntegrationCubit({required final McpServerRunner _runner})
   Stream<McpIntegrationEvent> get events => _events.stream;
 
   void enable() async {
-    if (state case Starting() || Running()) {
+    if (state case Starting() || Resetting() || Running()) {
       throw StateError(
         'Tried to enable while already starting or running (was ${state.runtimeType})',
       );
     }
 
-    await _runServer(.start, _runner.enable);
+    await _runServer(.start, Starting(), _runner.enable);
   }
 
   void disable() async {
@@ -35,17 +35,21 @@ class McpIntegrationCubit({required final McpServerRunner _runner})
   }
 
   void reset() async {
-    if (state is! Running) {
-      throw StateError(
-        'Tried to reset while not running (was ${state.runtimeType})',
-      );
-    }
+    final runningState = _requireRunning();
 
-    await _runServer(.reset, _runner.reset);
+    await _runServer(
+      .reset,
+      Resetting(lastRunningState: runningState),
+      _runner.reset,
+    );
   }
 
-  Future<void> _runServer(McpAction action, Future<McpServerRunInfo> Function() run) async {
-    emit(Starting());
+  Future<void> _runServer(
+    McpAction action,
+    McpIntegrationState pendingState,
+    Future<McpServerRunInfo> Function() run,
+  ) async {
+    emit(pendingState);
     try {
       final info = await run();
       emit(Running(hostConfiguration: info.hostConfiguration));
@@ -57,7 +61,7 @@ class McpIntegrationCubit({required final McpServerRunner _runner})
   Running _requireRunning() {
     return switch (state) {
       Running runningState => runningState,
-      _ => throw StateError('Tried to disable while not running (was ${state.runtimeType})'),
+      _ => throw StateError('Tried to access MCP while not running (was ${state.runtimeType})'),
     };
   }
 

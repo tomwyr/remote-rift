@@ -21,6 +21,11 @@ class Stopped({required final Running lastRunningState}) extends McpIntegrationS
   List<Object?> get props => [...super.props, lastRunningState];
 }
 
+class Resetting({required final Running lastRunningState}) extends McpIntegrationState {
+  @override
+  List<Object?> get props => [...super.props, lastRunningState];
+}
+
 enum McpAction { start, reset, stop }
 
 class Failed({required final McpAction action}) extends McpIntegrationState {

@@ -29,11 +29,12 @@ class const McpSettingsCard() extends StatelessWidget {
           Text(t.mcp.description),
           const SizedBox(height: 12),
           const _McpLocalInfo(),
-          if (state case Starting() || Running() || Failed()) const SizedBox(height: 16),
+          if (state case Starting() || Resetting() || Running() || Failed())
+            const SizedBox(height: 16),
           switch (state) {
             Idle() || Stopped() => const SizedBox.shrink(),
             Starting() => const _McpLoadingState(),
-            Running() => const _McpActiveSummary(),
+            Resetting() || Running() => const _McpActiveSummary(),
             Failed(:var action) => _McpFailedState(action: action),
           },
           if (state case Idle() || Stopped() || Failed()) ...[
@@ -126,6 +127,7 @@ class const McpDetailsSheet() extends StatelessWidget {
           padding: const .fromLTRB(20, 20, 20, 20),
           child: switch (state) {
             Running(:var hostConfiguration) ||
+            Resetting(lastRunningState: Running(:var hostConfiguration)) ||
             Stopped(lastRunningState: Running(:var hostConfiguration)) => _McpDetails(
               configuration: hostConfiguration,
               state: state,
@@ -240,6 +242,22 @@ class _McpActions({required final McpIntegrationState state}) extends StatelessW
           TextButton(onPressed: cubit.reset, child: Text(t.mcp.reset)),
           const SizedBox(height: 2),
           TextButton(onPressed: cubit.disable, child: Text(t.mcp.disable)),
+        ],
+      ),
+      Resetting() => Column(
+        crossAxisAlignment: .stretch,
+        children: [
+          TextButton.icon(
+            onPressed: null,
+            icon: const SizedBox(
+              width: 16,
+              height: 16,
+              child: CircularProgressIndicator(strokeWidth: 2),
+            ),
+            label: Text(t.mcp.reset),
+          ),
+          const SizedBox(height: 2),
+          TextButton(onPressed: null, child: Text(t.mcp.disable)),
         ],
       ),
       Starting() => const SizedBox.shrink(),
