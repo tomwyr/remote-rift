@@ -16,9 +16,16 @@ class Running({
   List<Object?> get props => [...super.props, hostConfiguration];
 }
 
+class Stopped({required final Running lastRunningState}) extends McpIntegrationState {
+  @override
+  List<Object?> get props => [...super.props, lastRunningState];
+}
+
 enum McpAction { start, reset, stop }
 
 class Failed({required final McpAction action}) extends McpIntegrationState {
   @override
   List<Object?> get props => [...super.props, action];
 }
+
+enum McpIntegrationEvent { stopped }

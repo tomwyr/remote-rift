@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../services/mcp_server_runner.dart';
@@ -6,6 +8,9 @@ import 'mcp_integration_state.dart';
 class McpIntegrationCubit({required final McpServerRunner _runner})
     extends Cubit<McpIntegrationState> {
   this : super(Idle());
+
+  final _events = StreamController<McpIntegrationEvent>.broadcast();
+  Stream<McpIntegrationEvent> get events => _events.stream;
 
   void enable() async {
     if (state case Starting() || Running()) {
@@ -18,9 +23,12 @@ class McpIntegrationCubit({required final McpServerRunner _runner})
   }
 
   void disable() async {
+    final runningState = _requireRunning();
+
     try {
       await _runner.disable();
-      emit(Idle());
+      emit(Stopped(lastRunningState: runningState));
+      _events.add(.stopped);
     } catch (_) {
       emit(Failed(action: .stop));
     }
@@ -46,8 +54,16 @@ class McpIntegrationCubit({required final McpServerRunner _runner})
     }
   }
 
+  Running _requireRunning() {
+    return switch (state) {
+      Running runningState => runningState,
+      _ => throw StateError('Tried to disable while not running (was ${state.runtimeType})'),
+    };
+  }
+
   @override
   Future<void> close() async {
+    await _events.close();
     await _runner.disable();
     await super.close();
   }

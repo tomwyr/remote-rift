@@ -29,14 +29,14 @@ class const McpSettingsCard() extends StatelessWidget {
           Text(t.mcp.description),
           const SizedBox(height: 12),
           const _McpLocalInfo(),
-          if (state is! Idle) const SizedBox(height: 16),
+          if (state case Starting() || Running() || Failed()) const SizedBox(height: 16),
           switch (state) {
-            Idle() => const SizedBox.shrink(),
+            Idle() || Stopped() => const SizedBox.shrink(),
             Starting() => const _McpLoadingState(),
             Running() => const _McpActiveSummary(),
-            Failed(:final action) => _McpFailedState(action: action),
+            Failed(:var action) => _McpFailedState(action: action),
           },
-          if (state case Idle() || Failed()) ...[
+          if (state case Idle() || Stopped() || Failed()) ...[
             const SizedBox(height: 16),
             _McpActions(state: state),
           ],
@@ -112,15 +112,24 @@ class const McpDetailsSheet() extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final state = context.watch<McpIntegrationCubit>().state;
+    final cubit = context.read<McpIntegrationCubit>();
 
-    return BlocListener<McpIntegrationCubit, McpIntegrationState>(
-      listenWhen: (previous, current) => previous is Running && current is Idle,
-      listener: (context, _) => Navigator.of(context).pop(),
+    return EventsListener(
+      events: cubit.events,
+      onEvent: (context, event) {
+        if (event case .stopped) {
+          Navigator.of(context).pop();
+        }
+      },
       child: SafeArea(
         child: Padding(
           padding: const .fromLTRB(20, 20, 20, 20),
           child: switch (state) {
-            Running(:final hostConfiguration) => _McpDetails(configuration: hostConfiguration),
+            Running(:var hostConfiguration) ||
+            Stopped(lastRunningState: Running(:var hostConfiguration)) => _McpDetails(
+              configuration: hostConfiguration,
+              state: state,
+            ),
             Starting() => const _McpLoadingState(),
             Failed(:final action) => _McpFailedState(action: action),
             Idle() => const SizedBox.shrink(),
@@ -131,11 +140,12 @@ class const McpDetailsSheet() extends StatelessWidget {
   }
 }
 
-class const _McpDetails({required final String configuration}) extends StatelessWidget {
+class const _McpDetails({
+  required final String configuration,
+  required final McpIntegrationState state,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final state = context.read<McpIntegrationCubit>().state;
-
     return Column(
       mainAxisSize: .min,
       crossAxisAlignment: .stretch,
@@ -233,7 +243,10 @@ class _McpActions({required final McpIntegrationState state}) extends StatelessW
         ],
       ),
       Starting() => const SizedBox.shrink(),
-      Idle() || Failed() => ElevatedButton(onPressed: cubit.enable, child: Text(t.mcp.enable)),
+      Idle() || Stopped() || Failed() => ElevatedButton(
+        onPressed: cubit.enable,
+        child: Text(t.mcp.enable),
+      ),
     };
   }
 }
