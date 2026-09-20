@@ -5,6 +5,8 @@ import 'package:remote_rift_ui/remote_rift_ui.dart';
 
 import '../../i18n/strings.g.dart';
 import '../app/app_notifications.dart';
+import '../widgets/app_icon_button.dart';
+import '../widgets/app_switch.dart';
 import '../widgets/app_value_box.dart';
 import '../widgets/layout.dart';
 import 'mcp_integration_cubit.dart';
@@ -14,6 +16,7 @@ class const McpSettingsCard() extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final state = context.watch<McpIntegrationCubit>().state;
+    final status = state.status;
     final colors = context.remoteRiftTheme.colorScheme;
 
     return AppCard(
@@ -29,17 +32,21 @@ class const McpSettingsCard() extends StatelessWidget {
           Text(t.mcp.description),
           const SizedBox(height: 12),
           const _McpLocalInfo(),
-          if (state case Starting() || Resetting() || Running() || Failed())
+          if (status case Starting() || Resetting() || Running() || Failed())
             const SizedBox(height: 16),
-          switch (state) {
+          switch (status) {
             Idle() || Stopped() => const SizedBox.shrink(),
             Starting() => const _McpLoadingState(),
             Resetting() || Running() => const _McpActiveSummary(),
             Failed(:var action) => _McpFailedState(action: action),
           },
-          if (state case Idle() || Stopped() || Failed()) ...[
+          if (status case Running() || Resetting()) ...[
+            const _McpSettingDivider(),
+            const _McpStartOnLaunchSetting(),
+          ],
+          if (status case Idle() || Stopped() || Failed()) ...[
             const SizedBox(height: 16),
-            _McpActions(state: state),
+            _McpActions(status: status),
           ],
         ],
       ),
@@ -70,6 +77,54 @@ class const _McpLocalInfo() extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class const _McpSettingDivider() extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.remoteRiftTheme.colorScheme;
+
+    return Divider(
+      color: colors.navy.withValues(alpha: .12),
+      height: 24,
+    );
+  }
+}
+
+class const _McpStartOnLaunchSetting() extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final cubit = context.read<McpIntegrationCubit>();
+    final startsOnLaunch = context.select(
+      (McpIntegrationCubit cubit) => cubit.state.startsOnLaunch,
+    );
+    final colors = context.remoteRiftTheme.colorScheme;
+
+    return Column(
+      crossAxisAlignment: .stretch,
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: Text(t.mcp.startOnLaunch, style: Theme.of(context).textTheme.titleSmall),
+            ),
+            const SizedBox(width: 12),
+            AppSwitch(
+              value: startsOnLaunch,
+              onChanged: cubit.updateStartsOnLaunch,
+            ),
+          ],
+        ),
+        const SizedBox(height: 2),
+        Text(
+          t.mcp.startOnLaunchDescription,
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+            color: colors.navy.withValues(alpha: .72),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -113,6 +168,7 @@ class const McpDetailsSheet() extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final state = context.watch<McpIntegrationCubit>().state;
+    final status = state.status;
     final cubit = context.read<McpIntegrationCubit>();
 
     return EventsListener(
@@ -125,12 +181,12 @@ class const McpDetailsSheet() extends StatelessWidget {
       child: SafeArea(
         child: Padding(
           padding: const .fromLTRB(20, 20, 20, 20),
-          child: switch (state) {
+          child: switch (status) {
             Running(:var hostConfiguration) ||
             Resetting(lastRunningState: Running(:var hostConfiguration)) ||
             Stopped(lastRunningState: Running(:var hostConfiguration)) => _McpDetails(
               configuration: hostConfiguration,
-              state: state,
+              status: status,
             ),
             Starting() => const _McpLoadingState(),
             Failed(:final action) => _McpFailedState(action: action),
@@ -144,7 +200,7 @@ class const McpDetailsSheet() extends StatelessWidget {
 
 class const _McpDetails({
   required final String configuration,
-  required final McpIntegrationState state,
+  required final McpIntegrationStatus status,
 }) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -152,7 +208,17 @@ class const _McpDetails({
       mainAxisSize: .min,
       crossAxisAlignment: .stretch,
       children: [
-        Text(t.mcp.configuration, style: Theme.of(context).textTheme.titleLarge),
+        Row(
+          children: [
+            Expanded(
+              child: Text(t.mcp.configuration, style: Theme.of(context).textTheme.titleLarge),
+            ),
+            AppIconButton(
+              icon: Icons.close,
+              onPressed: Navigator.of(context).pop,
+            ),
+          ],
+        ),
         const SizedBox(height: 4),
         Text(
           t.mcp.configurationDescription,
@@ -173,7 +239,7 @@ class const _McpDetails({
           label: Text(t.mcp.copy),
         ),
         const SizedBox(height: 8),
-        _McpActions(state: state),
+        _McpActions(status: status),
       ],
     );
   }
@@ -212,6 +278,7 @@ class const _McpFailedState({required final McpAction action}) extends Stateless
       .start => t.mcp.startError,
       .reset => t.mcp.resetError,
       .stop => t.mcp.stopError,
+      .configuration => t.mcp.configurationError,
     };
 
     return Container(
@@ -230,12 +297,12 @@ class const _McpFailedState({required final McpAction action}) extends Stateless
   }
 }
 
-class _McpActions({required final McpIntegrationState state}) extends StatelessWidget {
+class _McpActions({required final McpIntegrationStatus status}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<McpIntegrationCubit>();
 
-    return switch (state) {
+    return switch (status) {
       Running() => Column(
         crossAxisAlignment: .stretch,
         children: [

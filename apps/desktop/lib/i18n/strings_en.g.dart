@@ -20,20 +20,21 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	/// Constructing via the enum [AppLocale.build] is preferred.
 	Translations({Map<String, Node>? overrides, PluralResolver? cardinalResolver, PluralResolver? ordinalResolver, TranslationMetadata<AppLocale, Translations>? meta})
 		: assert(overrides == null, 'Set "translation_overrides: true" in order to enable this feature.'),
-		  $meta = meta ?? TranslationMetadata(
+		  _meta = meta ?? TranslationMetadata(
 		    locale: AppLocale.en,
 		    overrides: overrides ?? {},
 		    cardinalResolver: cardinalResolver,
 		    ordinalResolver: ordinalResolver,
 		  ) {
-		$meta.setFlatMapFunction(_flatMapFunction);
+		_meta.setFlatMapFunction(_flatMapFunction);
 	}
 
 	/// Metadata for the translations of <en>.
-	@override final TranslationMetadata<AppLocale, Translations> $meta;
+	final TranslationMetadata<AppLocale, Translations> _meta;
+	@override TranslationMetadata<AppLocale, Translations> get $meta => _meta;
 
 	/// Access flat map
-	dynamic operator[](String key) => $meta.getTranslation(key);
+	dynamic operator[](String key) => _meta.getTranslation(key);
 
 	late final Translations _root = this; // ignore: unused_field
 
@@ -255,14 +256,23 @@ class Translations$mcp$en {
 	/// en: 'For AI hosts to access game state and League actions.'
 	String get description => 'For AI hosts to access game state and League actions.';
 
+	/// en: 'Start automatically'
+	String get startOnLaunch => 'Start automatically';
+
+	/// en: 'Start the MCP server when Remote Rift opens, so it is ready for your AI host.'
+	String get startOnLaunchDescription => 'Start the MCP server when Remote Rift opens, so it is ready for your AI host.';
+
+	/// en: 'Couldn't save the launch preference. Please try again.'
+	String get configurationError => 'Couldn\'t save the launch preference. Please try again.';
+
 	/// en: 'Runs locally'
 	String get localOnly => 'Runs locally';
 
-	/// en: 'Start server'
-	String get enable => 'Start server';
+	/// en: 'Enable'
+	String get enable => 'Enable';
 
-	/// en: 'Stop server'
-	String get disable => 'Stop server';
+	/// en: 'Disable'
+	String get disable => 'Disable';
 
 	/// en: 'Reset access'
 	String get reset => 'Reset access';
@@ -399,9 +409,12 @@ extension on Translations {
 			'mcp.title' => 'MCP server',
 			'mcp.connectTitle' => 'Connect an AI host',
 			'mcp.description' => 'For AI hosts to access game state and League actions.',
+			'mcp.startOnLaunch' => 'Start automatically',
+			'mcp.startOnLaunchDescription' => 'Start the MCP server when Remote Rift opens, so it is ready for your AI host.',
+			'mcp.configurationError' => 'Couldn\'t save the launch preference. Please try again.',
 			'mcp.localOnly' => 'Runs locally',
-			'mcp.enable' => 'Start server',
-			'mcp.disable' => 'Stop server',
+			'mcp.enable' => 'Enable',
+			'mcp.disable' => 'Disable',
 			'mcp.reset' => 'Reset access',
 			'mcp.resetting' => 'Resetting MCP server access...',
 			'mcp.starting' => 'Starting MCP server...',

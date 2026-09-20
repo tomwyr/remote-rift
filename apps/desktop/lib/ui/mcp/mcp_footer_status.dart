@@ -12,20 +12,20 @@ class const McpFooterStatus() extends StatelessWidget {
   Widget build(BuildContext context) {
     final state = context.watch<McpIntegrationCubit>().state;
     final colors = context.remoteRiftTheme.colorScheme;
-    final status = switch (state) {
+    final indicator = switch (state.status) {
       Running() => (color: colors.ready, message: t.mcp.running),
       Starting() => (color: colors.gold, message: t.mcp.starting),
       Resetting() => (color: colors.gold, message: t.mcp.resetting),
       Idle() || Stopped() || Failed() => null,
     };
 
-    if (status == null) {
+    if (indicator == null) {
       return const SizedBox.shrink();
     }
 
     return AppTooltip(
-      message: status.message,
-      child: Icon(Icons.smart_toy_outlined, size: 16, color: status.color),
+      message: indicator.message,
+      child: Icon(Icons.smart_toy_outlined, size: 16, color: indicator.color),
     );
   }
 }

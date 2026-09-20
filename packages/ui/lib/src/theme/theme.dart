@@ -71,6 +71,17 @@ class RemoteRiftTheme {
         }),
       ),
       progressIndicatorTheme: ProgressIndicatorThemeData(color: colors.cyan),
+      switchTheme: SwitchThemeData(
+        materialTapTargetSize: .shrinkWrap,
+        thumbColor: .resolveWith((states) {
+          return states.contains(WidgetState.selected) ? colors.canvas : colors.navy;
+        }),
+        trackColor: .resolveWith((states) {
+          return states.contains(WidgetState.selected)
+              ? colors.navy
+              : colors.navy.withValues(alpha: .04);
+        }),
+      ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: colors.navy,

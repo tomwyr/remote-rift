@@ -19,7 +19,10 @@ class McpScope({
           final cubit = context.read<McpIntegrationCubit>();
 
           return Lifecycle(
-            onInit: () => appManager.addExitListener(cubit.close),
+            onInit: () {
+              appManager.addExitListener(cubit.close);
+              cubit.initialize();
+            },
             onDispose: () => appManager.removeExitListener(cubit.close),
             child: child,
           );

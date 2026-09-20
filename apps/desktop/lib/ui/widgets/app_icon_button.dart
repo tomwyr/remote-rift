@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class const AppIconButton({
   super.key,
-  required final String tooltip,
+  final String? tooltip,
   required final IconData icon,
   required final VoidCallback onPressed,
 }) extends StatelessWidget {

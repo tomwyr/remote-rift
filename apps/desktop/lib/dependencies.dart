@@ -7,6 +7,7 @@ import 'package:remote_rift_updater/remote_rift_updater.dart';
 
 import 'common/platform.dart';
 import 'services/api_service_runner.dart';
+import 'services/mcp_configuration_store.dart';
 import 'services/mcp_secret_store.dart';
 import 'services/noop_updater.dart';
 import 'services/mcp_server_runner.dart';
@@ -37,6 +38,7 @@ class Dependencies {
     );
 
     return McpIntegrationCubit(
+      configurationStore: McpConfigurationStore(),
       runner: McpServerRunner(
         connector: RemoteRiftConnector(),
         secretStore: McpSecretStore(secureStorage: secureStorage),

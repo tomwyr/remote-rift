@@ -1,36 +1,46 @@
+import 'package:copy_with_extension/copy_with_extension.dart';
 import 'package:equatable/equatable.dart';
 
-sealed class const McpIntegrationState() extends Equatable {
+part 'mcp_integration_state.g.dart';
+
+@CopyWith()
+class McpIntegrationState({
+  required final bool startsOnLaunch,
+  required final McpIntegrationStatus status,
+}) extends Equatable {
+  @override
+  List<Object?> get props => [startsOnLaunch, status];
+}
+
+sealed class const McpIntegrationStatus() extends Equatable {
   @override
   List<Object?> get props => [];
 }
 
-class const Idle() extends McpIntegrationState;
+class const Idle() extends McpIntegrationStatus;
 
-class const Starting() extends McpIntegrationState;
+class const Starting() extends McpIntegrationStatus;
 
-class Running({
-  required final String hostConfiguration,
-}) extends McpIntegrationState {
+class Running({required final String hostConfiguration}) extends McpIntegrationStatus {
   @override
-  List<Object?> get props => [...super.props, hostConfiguration];
+  List<Object?> get props => [hostConfiguration];
 }
 
-class Stopped({required final Running lastRunningState}) extends McpIntegrationState {
+class Stopped({required final Running lastRunningState}) extends McpIntegrationStatus {
   @override
-  List<Object?> get props => [...super.props, lastRunningState];
+  List<Object?> get props => [lastRunningState];
 }
 
-class Resetting({required final Running lastRunningState}) extends McpIntegrationState {
+class Resetting({required final Running lastRunningState}) extends McpIntegrationStatus {
   @override
-  List<Object?> get props => [...super.props, lastRunningState];
+  List<Object?> get props => [lastRunningState];
 }
 
-enum McpAction { start, reset, stop }
+enum McpAction { start, reset, stop, configuration }
 
-class Failed({required final McpAction action}) extends McpIntegrationState {
+class Failed({required final McpAction action}) extends McpIntegrationStatus {
   @override
-  List<Object?> get props => [...super.props, action];
+  List<Object?> get props => [action];
 }
 
 enum McpIntegrationEvent { stopped }
