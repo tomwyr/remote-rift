@@ -69,6 +69,8 @@
 - When every state needs an initial snapshot, provide it at construction; load asynchronously from the owning lifecycle, not cubit creation.
 - Keep displayed feature data in feature state; avoid drilling parallel snapshots through descendants that can select feature state.
 - Keep asynchronous action progress and recoverable failure in state; widgets must not catch cubit action failures or duplicate action flags.
+- Expose Cubit commands called by widgets as `void`; keep their asynchronous work and resulting state
+  transitions inside the Cubit rather than returning futures to the UI.
 - Keep platform UI interactions, such as native file selection, at the widget boundary. Cubits accept
   the selected input, perform feature validation and persistence, and emit recoverable typed failures.
 - For actions sharing a finite lifecycle, use an action-to-status map with one status per action instead of separate pending and failure collections; omitted entries are neutral.
@@ -102,6 +104,8 @@
 - Let scope helpers create and clean up temporary resources before passing them to callbacks; keep resource operations at callers when that clarifies sequence.
 - Keep consecutive important asynchronous effects explicit at call sites; do not hide persistence inside a fetching helper.
 - In async contexts, await futures instead of returning them directly.
+- Prefer `await` over `.then` in async methods.
+- Do not nest an async method call inside another call; await it into a named local first.
 - Keep serialization models with related package models, prefer generated serializers, and preserve serialized names unless intentionally changing the schema.
 - In `build` methods, group resolved locals and separate them from the returned widget tree with a blank line.
 - Define const constructors only for widgets; do not require const call sites for ordinary models, but use const where language or framework semantics require it, such as annotation metadata.
@@ -117,6 +121,8 @@
 - Avoid unsafe `!`; bind and promote nullable values with locals or patterns.
 - Avoid `as`; bind and promote narrowed values with locals or patterns.
 - Do not create private pass-through methods; extract private methods only for meaningful shared logic, and keep equivalent duplication in that shared method.
+- Extract a meaningful asynchronous suboperation when it separates concerns such as loading data from
+  coordinating cache or in-flight state.
 - Action helpers may cover only genuinely uniform flows; keep distinct semantics local and require callers to provide every emitted state value rather than hiding transition defaults.
 - Do not nest non-trivial transformations in other calls; keep transformations visible while reusing established helpers for shared behavior such as filtering or deduplication.
 - Use typedefs for long callback signatures; use positional callback parameters unless the contract requires named parameters.
