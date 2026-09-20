@@ -1,13 +1,24 @@
 import 'package:mcp_dart/mcp_dart.dart';
 import 'package:remote_rift_core/remote_rift_core.dart';
 
+import 'mcp_server.dart';
+
 part 'mcp_tools_support.dart';
 
 extension RemoteRiftMcpTools on McpServer {
-  void configure(RemoteRiftConnector connector) {
+  void configure(
+    RemoteRiftMcpServer server,
+    RemoteRiftConnector connector,
+  ) {
+    register(
+      name: 'get_server_status',
+      description: 'Get the MCP server lifecycle status.',
+      (args) async => {'is_running': server.isRunning},
+    );
+
     register(
       name: 'get_connection_status',
-      description: 'Get the connection status.',
+      description: 'Get the League Client connection status.',
       (args) async {
         final status = await connector.getStatus();
         return status.toJson();

@@ -41,6 +41,7 @@ Connect from an MCP-compatible host running on the same computer. Include the be
 
 ## Available tools
 
+- `get_server_status` checks whether the Remote Rift MCP server is running.
 - `get_connection_status` and `get_session` read the League Client connection and game state.
 - `list_queues` and `create_lobby` list available queues and create a lobby.
 - `leave_lobby`, `set_role_preferences`, `start_matchmaking`, and `stop_matchmaking` manage an idle lobby and matchmaking.

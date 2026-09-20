@@ -59,7 +59,7 @@ class RemoteRiftMcpServer({
     return McpServer(
       const Implementation(name: 'remote-rift', version: '0.1.0'),
       options: const McpServerOptions(protocol: .stable),
-    )..configure(_connector);
+    )..configure(this, _connector);
   }
 
   StreamableMcpAuthenticationResult _authenticate(Object? request) {
