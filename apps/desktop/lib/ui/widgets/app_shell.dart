@@ -11,6 +11,7 @@ class const AppShell({
   required final Widget body,
   final String? title,
   final Widget? trailing,
+  final EdgeInsets bodyPadding = const .all(12),
   final bool showUpdateAction = true,
 }) extends StatelessWidget {
   @override
@@ -51,7 +52,10 @@ class const AppShell({
               ),
             ),
             Expanded(
-              child: Padding(padding: .all(12), child: body),
+              child: SingleChildScrollView(
+                padding: bodyPadding,
+                child: body,
+              ),
             ),
             const Padding(
               padding: .fromLTRB(12, 8, 12, 12),

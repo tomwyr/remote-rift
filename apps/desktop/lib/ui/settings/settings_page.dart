@@ -51,16 +51,13 @@ class const SettingsPage({super.key}) extends StatelessWidget {
 class const _SettingsCards({required final Loaded state}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: .only(bottom: 12),
-      child: Column(
-        crossAxisAlignment: .stretch,
-        children: [
-          _LockfileLocationCard(state: state),
-          const SizedBox(height: 12),
-          const McpSettingsCard(),
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: .stretch,
+      children: [
+        _LockfileLocationCard(state: state),
+        const SizedBox(height: 12),
+        const McpSettingsCard(),
+      ],
     );
   }
 }
