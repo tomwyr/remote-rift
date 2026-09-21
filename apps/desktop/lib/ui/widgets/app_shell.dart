@@ -12,7 +12,7 @@ class const AppShell({
   required final Widget body,
   final String? title,
   final Widget? trailing,
-  final EdgeInsets bodyPadding = const .all(12),
+  final EdgeInsets bodyPadding = const .fromLTRB(12, 4, 12, 4),
   final bool showUpdateAction = true,
 }) extends StatelessWidget {
   @override
