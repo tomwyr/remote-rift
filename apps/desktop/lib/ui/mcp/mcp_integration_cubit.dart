@@ -2,12 +2,12 @@ import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../services/mcp_configuration_store.dart';
+import '../../services/app_settings_store.dart';
 import '../../services/mcp_server_runner.dart';
 import 'mcp_integration_state.dart';
 
 class McpIntegrationCubit({
-  required final McpConfigurationStore _configurationStore,
+  required final AppSettingsStore _settingsStore,
   required final McpServerRunner _runner,
 }) extends Cubit<McpIntegrationState> {
   this : super(McpIntegrationState(startsOnLaunch: true, status: Idle()));
@@ -17,13 +17,13 @@ class McpIntegrationCubit({
 
   void initialize() async {
     try {
-      final configuration = await _configurationStore.load();
-      emit(state.copyWith(startsOnLaunch: configuration.startsOnLaunch));
+      final startsOnLaunch = await _settingsStore.loadStartsOnLaunch();
+      emit(state.copyWith(startsOnLaunch: startsOnLaunch));
 
-      if (configuration.startsOnLaunch) {
+      if (startsOnLaunch) {
         await _runServer(.start, Starting(), _runner.enable);
       }
-    } on McpConfigurationError {
+    } on AppSettingsError {
       emit(state.copyWith(status: Failed(action: .configuration)));
     }
   }
@@ -34,7 +34,7 @@ class McpIntegrationCubit({
     try {
       await _saveStartsOnLaunch(startsOnLaunch);
       emit(current.copyWith(startsOnLaunch: startsOnLaunch));
-    } on McpConfigurationError {
+    } on AppSettingsError {
       emit(current.copyWith(status: Failed(action: .configuration)));
     }
   }
@@ -54,7 +54,7 @@ class McpIntegrationCubit({
 
     try {
       await _saveStartsOnLaunch(false);
-    } on McpConfigurationError {
+    } on AppSettingsError {
       emit(state.copyWith(status: Failed(action: .configuration)));
       return;
     }
@@ -102,7 +102,7 @@ class McpIntegrationCubit({
   }
 
   Future<void> _saveStartsOnLaunch(bool startsOnLaunch) async {
-    await _configurationStore.save(McpConfiguration(startsOnLaunch: startsOnLaunch));
+    await _settingsStore.saveStartsOnLaunch(startsOnLaunch);
   }
 
   @override

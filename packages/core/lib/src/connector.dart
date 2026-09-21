@@ -20,9 +20,9 @@ class RemoteRiftConnector._init({
   required final LcuApiClient _lcuApi,
   required final GameDataStore _gameDataStore,
 }) {
-  factory() {
+  factory({LcuConnection? lcuConnection}) {
     final lcuApi = LcuApiClient(
-      lcuConnection: .shared,
+      lcuConnection: lcuConnection ?? LcuConnection(),
       httpClient: ClientFactory.noCertificateVerification(),
     );
     return RemoteRiftConnector._init(

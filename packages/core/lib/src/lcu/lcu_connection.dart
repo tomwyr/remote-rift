@@ -3,19 +3,13 @@ import 'dart:io';
 import 'lcu_connection_store.dart';
 
 class LcuConnection({
-  required final LcuLockfileParser _parser,
-  required final LcuLockfileLoader _loader,
-  required final LcuLockfilePath _path,
+  LcuLockfileParser? parser,
+  LcuLockfileLoader? loader,
+  LcuLockfilePath? path,
 }) {
-  factory createShared() {
-    return LcuConnection(
-      parser: LcuLockfileParser(),
-      loader: LcuLockfileLoader(),
-      path: LcuLockfilePath(store: LcuConnectionConfigurationStore()),
-    );
-  }
-
-  static final shared = LcuConnection.createShared();
+  final LcuLockfileParser _parser = parser ?? LcuLockfileParser();
+  final LcuLockfileLoader _loader = loader ?? LcuLockfileLoader();
+  final LcuLockfilePath _path = path ?? LcuLockfilePath();
 
   LcuLockfileData? _lockfileData;
 
@@ -61,9 +55,9 @@ class LcuConnection({
   }
 }
 
-class LcuLockfilePath({
-  required final LcuConnectionConfigurationStore _store,
-}) {
+class LcuLockfilePath({LcuConnectionConfiguration? configuration}) {
+  final LcuConnectionConfiguration _store = configuration ?? .inMemory();
+
   String? _customPath;
   var _loaded = false;
   Future<void>? _loading;
@@ -79,13 +73,13 @@ class LcuLockfilePath({
 
   Future<void> saveCustomPath(String path) async {
     await _load();
-    await _store.save(LcuConnectionConfiguration(customPath: path));
+    await _store.saveCustomLockfilePath(path);
     _customPath = path;
   }
 
   Future<void> reset() async {
     await _load();
-    await _store.remove();
+    await _store.clearCustomLockfilePath();
     _customPath = null;
   }
 
@@ -108,8 +102,7 @@ class LcuLockfilePath({
   }
 
   Future<void> _loadConfiguration() async {
-    final configuration = await _store.load();
-    _customPath = configuration?.customPath;
+    _customPath = await _store.loadCustomLockfilePath();
     _loaded = true;
   }
 
@@ -168,5 +161,4 @@ enum LcuConnectionError implements Exception {
   unsupportedPlatform,
   lockfileMissing,
   lockfileInvalid,
-  configurationUnavailable,
 }

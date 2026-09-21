@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:remote_rift_core/remote_rift_core.dart';
 
+import '../../services/app_settings_store.dart';
 import 'settings_state.dart';
 
 class SettingsCubit({
@@ -12,12 +13,8 @@ class SettingsCubit({
     try {
       final customPath = await _connection.getLockfileCustomPath();
       emit(Loaded(customPath: customPath));
-    } on LcuConnectionError catch (error) {
-      if (error case .configurationUnavailable) {
-        emit(Loaded(customPath: null, failure: .pathPersistence));
-        return;
-      }
-      rethrow;
+    } on AppSettingsError {
+      emit(Loaded(customPath: null, failure: .pathPersistence));
     }
   }
 
@@ -30,11 +27,9 @@ class SettingsCubit({
       await _connection.saveLockfileCustomPath(path);
       final customPath = await _connection.getLockfileCustomPath();
       emit(Loaded(customPath: customPath));
+    } on AppSettingsError {
+      emit(Loaded(customPath: previous.customPath, failure: .pathPersistence));
     } on LcuConnectionError catch (error) {
-      if (error case .configurationUnavailable) {
-        emit(Loaded(customPath: previous.customPath, failure: .pathPersistence));
-        return;
-      }
       if (error case .lockfileMissing || .lockfileInvalid) {
         emit(Loaded(customPath: previous.customPath, failure: .invalidLockfile));
         return;
@@ -50,12 +45,8 @@ class SettingsCubit({
     try {
       await _connection.resetLockfileCustomPath();
       emit(Loaded(customPath: null));
-    } on LcuConnectionError catch (error) {
-      if (error case .configurationUnavailable) {
-        emit(Loaded(customPath: previous.customPath, failure: .pathPersistence));
-        return;
-      }
-      rethrow;
+    } on AppSettingsError {
+      emit(Loaded(customPath: previous.customPath, failure: .pathPersistence));
     }
   }
 

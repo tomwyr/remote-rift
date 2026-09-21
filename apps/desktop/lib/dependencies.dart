@@ -7,7 +7,7 @@ import 'package:remote_rift_updater/remote_rift_updater.dart';
 
 import 'common/platform.dart';
 import 'services/api_service_runner.dart';
-import 'services/mcp_configuration_store.dart';
+import 'services/app_settings_store.dart';
 import 'services/mcp_secret_store.dart';
 import 'services/noop_updater.dart';
 import 'services/mcp_server_runner.dart';
@@ -18,8 +18,13 @@ import 'ui/settings/settings_cubit.dart';
 import 'ui/update/update_cubit.dart';
 
 class Dependencies {
+  static final _settingsStore = AppSettingsStore();
+  static final _connection = LcuConnection(
+    path: LcuLockfilePath(configuration: _settingsStore),
+  );
+
   static ConnectionCubit connectionCubit(BuildContext context) =>
-      ConnectionCubit(connector: RemoteRiftConnector());
+      ConnectionCubit(connector: RemoteRiftConnector(lcuConnection: _connection));
 
   static ServiceCubit serviceCubit(BuildContext context) => ServiceCubit(
     runner: RemoteRiftApiServiceRunner(
@@ -38,16 +43,16 @@ class Dependencies {
     );
 
     return McpIntegrationCubit(
-      configurationStore: McpConfigurationStore(),
+      settingsStore: _settingsStore,
       runner: McpServerRunner(
-        connector: RemoteRiftConnector(),
+        connector: RemoteRiftConnector(lcuConnection: _connection),
         secretStore: McpSecretStore(secureStorage: secureStorage),
       ),
     );
   }
 
   static SettingsCubit settingsCubit(BuildContext context) {
-    return SettingsCubit(connection: .shared);
+    return SettingsCubit(connection: _connection);
   }
 
   static ApplicationUpdater applicationUpdater() {
