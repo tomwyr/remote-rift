@@ -10,10 +10,15 @@ part 'app_settings_store.g.dart';
 @JsonSerializable()
 @CopyWith()
 class AppSettings({
-  required final bool startsOnLaunch,
+  required final bool mcpPreviouslyEnabled,
+  required final bool mcpStartsOnLaunch,
   required final String? customLockfilePath,
 }) {
-  factory defaults() => AppSettings(startsOnLaunch: true, customLockfilePath: null);
+  factory defaults() => AppSettings(
+    mcpPreviouslyEnabled: false,
+    mcpStartsOnLaunch: true,
+    customLockfilePath: null,
+  );
 
   factory fromJson(Map<String, dynamic> json) => _$AppSettingsFromJson(json);
 
@@ -23,21 +28,26 @@ class AppSettings({
 class AppSettingsStore implements LcuConnectionConfiguration {
   JsonFileStore<AppSettings>? _store;
 
-  Future<bool> loadStartsOnLaunch() async {
-    final settings = await _load();
-    return (settings ?? .defaults()).startsOnLaunch;
+  Future<AppSettings> load() async {
+    return await _load() ?? .defaults();
   }
 
-  Future<void> saveStartsOnLaunch(bool startsOnLaunch) async {
+  Future<void> saveMcpStartsOnLaunch(bool mcpStartsOnLaunch) async {
     await _update(
-      (settings) => settings.copyWith(startsOnLaunch: startsOnLaunch),
+      (settings) => settings.copyWith(mcpStartsOnLaunch: mcpStartsOnLaunch),
+    );
+  }
+
+  Future<void> saveMcpPreviouslyEnabled(bool mcpPreviouslyEnabled) async {
+    await _update(
+      (settings) => settings.copyWith(mcpPreviouslyEnabled: mcpPreviouslyEnabled),
     );
   }
 
   @override
   Future<String?> loadCustomLockfilePath() async {
-    final settings = await _load();
-    return settings?.customLockfilePath;
+    final settings = await load();
+    return settings.customLockfilePath;
   }
 
   @override

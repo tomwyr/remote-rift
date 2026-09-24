@@ -17,10 +17,10 @@ class McpIntegrationCubit({
 
   void initialize() async {
     try {
-      final startsOnLaunch = await _settingsStore.loadStartsOnLaunch();
-      emit(state.copyWith(startsOnLaunch: startsOnLaunch));
+      final settings = await _settingsStore.load();
+      emit(state.copyWith(startsOnLaunch: settings.mcpStartsOnLaunch));
 
-      if (startsOnLaunch) {
+      if (settings.mcpPreviouslyEnabled && settings.mcpStartsOnLaunch) {
         await _runServer(.start, Starting(), _runner.enable);
       }
     } on AppSettingsError {
@@ -46,6 +46,13 @@ class McpIntegrationCubit({
       );
     }
 
+    try {
+      await _settingsStore.saveMcpPreviouslyEnabled(true);
+    } on AppSettingsError {
+      emit(state.copyWith(status: Failed(action: .configuration)));
+      return;
+    }
+
     await _runServer(.start, Starting(), _runner.enable);
   }
 
@@ -53,7 +60,7 @@ class McpIntegrationCubit({
     final runningState = _requireRunning();
 
     try {
-      await _saveStartsOnLaunch(false);
+      await _settingsStore.saveMcpPreviouslyEnabled(false);
     } on AppSettingsError {
       emit(state.copyWith(status: Failed(action: .configuration)));
       return;
@@ -61,10 +68,10 @@ class McpIntegrationCubit({
 
     try {
       await _runner.disable();
-      emit(state.copyWith(status: Stopped(lastRunningState: runningState), startsOnLaunch: false));
+      emit(state.copyWith(status: Stopped(lastRunningState: runningState)));
       _events.add(.stopped);
     } catch (_) {
-      emit(state.copyWith(status: Failed(action: .stop), startsOnLaunch: false));
+      emit(state.copyWith(status: Failed(action: .stop)));
     }
   }
 
@@ -102,7 +109,7 @@ class McpIntegrationCubit({
   }
 
   Future<void> _saveStartsOnLaunch(bool startsOnLaunch) async {
-    await _settingsStore.saveStartsOnLaunch(startsOnLaunch);
+    await _settingsStore.saveMcpStartsOnLaunch(startsOnLaunch);
   }
 
   @override

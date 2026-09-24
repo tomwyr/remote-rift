@@ -7,7 +7,9 @@ part of 'app_settings_store.dart';
 // **************************************************************************
 
 abstract class _$AppSettingsCWProxy {
-  AppSettings startsOnLaunch(bool startsOnLaunch);
+  AppSettings mcpPreviouslyEnabled(bool mcpPreviouslyEnabled);
+
+  AppSettings mcpStartsOnLaunch(bool mcpStartsOnLaunch);
 
   AppSettings customLockfilePath(String? customLockfilePath);
 
@@ -18,7 +20,11 @@ abstract class _$AppSettingsCWProxy {
   /// ```dart
   /// AppSettings(...).copyWith(id: 12, name: "My name")
   /// ```
-  AppSettings call({bool startsOnLaunch, String? customLockfilePath});
+  AppSettings call({
+    bool mcpPreviouslyEnabled,
+    bool mcpStartsOnLaunch,
+    String? customLockfilePath,
+  });
 }
 
 /// Callable proxy for `copyWith` functionality.
@@ -29,8 +35,12 @@ class _$AppSettingsCWProxyImpl implements _$AppSettingsCWProxy {
   final AppSettings _value;
 
   @override
-  AppSettings startsOnLaunch(bool startsOnLaunch) =>
-      call(startsOnLaunch: startsOnLaunch);
+  AppSettings mcpPreviouslyEnabled(bool mcpPreviouslyEnabled) =>
+      call(mcpPreviouslyEnabled: mcpPreviouslyEnabled);
+
+  @override
+  AppSettings mcpStartsOnLaunch(bool mcpStartsOnLaunch) =>
+      call(mcpStartsOnLaunch: mcpStartsOnLaunch);
 
   @override
   AppSettings customLockfilePath(String? customLockfilePath) =>
@@ -45,16 +55,23 @@ class _$AppSettingsCWProxyImpl implements _$AppSettingsCWProxy {
   /// ```
   @override
   AppSettings call({
-    Object? startsOnLaunch = const $CopyWithPlaceholder(),
+    Object? mcpPreviouslyEnabled = const $CopyWithPlaceholder(),
+    Object? mcpStartsOnLaunch = const $CopyWithPlaceholder(),
     Object? customLockfilePath = const $CopyWithPlaceholder(),
   }) {
     return AppSettings(
-      startsOnLaunch:
-          startsOnLaunch == const $CopyWithPlaceholder() ||
-              startsOnLaunch == null
-          ? _value.startsOnLaunch
+      mcpPreviouslyEnabled:
+          mcpPreviouslyEnabled == const $CopyWithPlaceholder() ||
+              mcpPreviouslyEnabled == null
+          ? _value.mcpPreviouslyEnabled
           // ignore: cast_nullable_to_non_nullable
-          : startsOnLaunch as bool,
+          : mcpPreviouslyEnabled as bool,
+      mcpStartsOnLaunch:
+          mcpStartsOnLaunch == const $CopyWithPlaceholder() ||
+              mcpStartsOnLaunch == null
+          ? _value.mcpStartsOnLaunch
+          // ignore: cast_nullable_to_non_nullable
+          : mcpStartsOnLaunch as bool,
       customLockfilePath: customLockfilePath == const $CopyWithPlaceholder()
           ? _value.customLockfilePath
           // ignore: cast_nullable_to_non_nullable
@@ -75,12 +92,14 @@ extension $AppSettingsCopyWith on AppSettings {
 // **************************************************************************
 
 AppSettings _$AppSettingsFromJson(Map<String, dynamic> json) => AppSettings(
-  startsOnLaunch: json['startsOnLaunch'] as bool,
+  mcpPreviouslyEnabled: json['mcpPreviouslyEnabled'] as bool,
+  mcpStartsOnLaunch: json['mcpStartsOnLaunch'] as bool,
   customLockfilePath: json['customLockfilePath'] as String?,
 );
 
 Map<String, dynamic> _$AppSettingsToJson(AppSettings instance) =>
     <String, dynamic>{
-      'startsOnLaunch': instance.startsOnLaunch,
+      'mcpPreviouslyEnabled': instance.mcpPreviouslyEnabled,
+      'mcpStartsOnLaunch': instance.mcpStartsOnLaunch,
       'customLockfilePath': instance.customLockfilePath,
     };
