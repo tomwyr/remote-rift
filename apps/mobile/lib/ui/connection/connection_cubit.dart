@@ -22,6 +22,7 @@ class ConnectionCubit({
   CancelableStream<RemoteRiftStatusResponse>? _statusStream;
   RetryScheduler? _reconnectScheduler;
   AppLifecycleListener? _lifecycleListener;
+  Timer? _gameClientLaunchTimeout;
 
   void initialize() {
     _assertInitializeState();
@@ -48,7 +49,14 @@ class ConnectionCubit({
     if (unavailableState == null) return;
 
     emit(UnavailableGameClient(launchStatus: .pending));
+    _gameClientLaunchTimeout = Timer(30.seconds, _resetGameClientLaunchStatus);
     _launchGameClient();
+  }
+
+  void _resetGameClientLaunchStatus() {
+    if (state case UnavailableGameClient(launchStatus: .pending)) {
+      emit(UnavailableGameClient());
+    }
   }
 
   void _connectToGameApi() async {
@@ -89,6 +97,7 @@ class ConnectionCubit({
 
         switch (response) {
           case RemoteRiftData(value: .ready):
+            _gameClientLaunchTimeout?.cancel();
             emit(Connected());
 
           case RemoteRiftData(value: .unavailable) || RemoteRiftError.unableToConnect:
@@ -128,6 +137,7 @@ class ConnectionCubit({
     } catch (error) {
       if (error is! RemoteRiftApiError) rethrow;
       if (state case UnavailableGameClient(launchStatus: .pending)) {
+        _gameClientLaunchTimeout?.cancel();
         emit(UnavailableGameClient(launchStatus: .failed));
       }
     }
@@ -143,6 +153,7 @@ class ConnectionCubit({
     _statusStream?.cancel();
     _reconnectScheduler?.reset();
     _lifecycleListener?.unregister();
+    _gameClientLaunchTimeout?.cancel();
     return super.close();
   }
 }
