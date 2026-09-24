@@ -3,6 +3,7 @@ import 'package:time/time.dart';
 
 import 'common/http_client.dart';
 import 'game_data_store.dart';
+import 'game_client/game_client_launcher.dart';
 import 'lcu/lcu_api_client.dart';
 import 'lcu/lcu_connection.dart';
 import 'lcu/lcu_models.dart' as lcu;
@@ -19,8 +20,12 @@ import 'models/status.dart';
 class RemoteRiftConnector._init({
   required final LcuApiClient _lcuApi,
   required final GameDataStore _gameDataStore,
+  required final GameClientLauncher _gameClientLauncher,
 }) {
-  factory({LcuConnection? lcuConnection}) {
+  factory({
+    LcuConnection? lcuConnection,
+    GameClientLauncher? gameClientLauncher,
+  }) {
     final lcuApi = LcuApiClient(
       lcuConnection: lcuConnection ?? LcuConnection(),
       httpClient: ClientFactory.noCertificateVerification(),
@@ -28,6 +33,7 @@ class RemoteRiftConnector._init({
     return RemoteRiftConnector._init(
       lcuApi: lcuApi,
       gameDataStore: GameDataStore(lcuApi: lcuApi),
+      gameClientLauncher: gameClientLauncher ?? GameClientLauncher(),
     );
   }
 
@@ -45,6 +51,10 @@ class RemoteRiftConnector._init({
   Future<RemoteRiftStatus> getStatus() async {
     final connection = await _lcuApi.getHeartbeatConnection();
     return connection.stableConnection ? .ready : .unavailable;
+  }
+
+  Future<void> launchGameClient() async {
+    await _gameClientLauncher.launch();
   }
 
   Stream<RemoteRiftSession> getCurrentSessionStream() async* {

@@ -1,7 +1,9 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart';
+import 'package:time/time.dart';
 
 import 'lcu_connection.dart';
 import 'lcu_models.dart';
@@ -10,6 +12,8 @@ class LcuApiClient({
   required final LcuConnection _lcuConnection,
   required final Client _httpClient,
 }) {
+  static final _requestTimeout = 5.seconds;
+
   Future<HeartbeatConnection> getHeartbeatConnection() async {
     return _requestJson(
       .post,
@@ -209,6 +213,8 @@ class LcuApiClient({
       }
     } on ClientException catch (_) {
       throw LcuApiClientError.connectionLost;
+    } on TimeoutException catch (_) {
+      throw LcuApiClientError.connectionLost;
     }
   }
 
@@ -226,13 +232,14 @@ class LcuApiClient({
 
     final headers = {'Authorization': 'Basic $authorization', 'Content-Type': 'application/json'};
 
-    return await switch (method) {
+    final request = switch (method) {
       .get => _httpClient.get(url, headers: headers),
       .post => _httpClient.post(url, headers: headers, body: jsonEncode(body)),
       .put => _httpClient.put(url, headers: headers, body: jsonEncode(body)),
       .patch => _httpClient.patch(url, headers: headers, body: jsonEncode(body)),
       .delete => _httpClient.delete(url, headers: headers),
     };
+    return await request.timeout(_requestTimeout);
   }
 
   List<T> _listFromJson<T>(dynamic json, T Function(Map<String, dynamic> json) fromJson) {

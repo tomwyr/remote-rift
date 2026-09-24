@@ -2,6 +2,7 @@ library;
 
 export 'src/connector.dart';
 export 'src/common/json_file_store.dart';
+export 'src/game_client/game_client_launcher.dart';
 export 'src/lcu/lcu_connection.dart';
 export 'src/lcu/lcu_connection_store.dart';
 export 'src/models/queue.dart';

@@ -17,6 +17,13 @@ class Connecting extends ConnectionState;
 
 class Connected extends ConnectionState;
 
+class UnavailableGameClient({
+  final GameClientLaunchStatus launchStatus = .idle,
+}) extends ConnectionState {
+  @override
+  List<Object?> get props => [launchStatus];
+}
+
 class ConnectedIncompatible({
   required final ConnectionIncompatibility cause,
 }) extends ConnectionState {
@@ -49,6 +56,8 @@ extension ConnectionStateStrings on ConnectionState {
 }
 
 enum ConnectionIncompatibility { apiVersionTooLow }
+
+enum GameClientLaunchStatus { idle, pending, failed }
 
 enum ConnectionErrorCause {
   serviceNotFound,

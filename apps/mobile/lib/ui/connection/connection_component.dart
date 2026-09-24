@@ -49,6 +49,22 @@ class const ConnectionComponent({
             ),
           ),
 
+          UnavailableGameClient(:var launchStatus) => AppStatusLayout(
+            title: t.connection.unavailableGameClientTitle,
+            description: switch (launchStatus) {
+              .idle => t.connection.unavailableGameClientDescription,
+              .pending => t.connection.startingGameClientDescription,
+              .failed => t.connection.gameClientLaunchFailedDescription,
+            },
+            loading: launchStatus == .pending,
+            tone: launchStatus == .failed ? .error : .warning,
+            icon: Icons.play_circle_outline,
+            action: AppStatusAction(
+              label: t.connection.openRiotClient,
+              onPressed: launchStatus == .pending ? null : cubit.launchGameClient,
+            ),
+          ),
+
           ConnectionError(:var cause, :var reconnectTriggered) => AppStatusLayout(
             title: t.connection.errorTitle,
             description: cause.description,

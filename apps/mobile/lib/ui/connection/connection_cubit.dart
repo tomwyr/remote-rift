@@ -40,6 +40,17 @@ class ConnectionCubit({
     scheduler.trigger();
   }
 
+  void launchGameClient() {
+    final unavailableState = switch (state) {
+      UnavailableGameClient state when state.launchStatus != .pending => state,
+      _ => null,
+    };
+    if (unavailableState == null) return;
+
+    emit(UnavailableGameClient(launchStatus: .pending));
+    _launchGameClient();
+  }
+
   void _connectToGameApi() async {
     emit(Connecting());
     await _verifyAndConnectGameApi();
@@ -80,8 +91,10 @@ class ConnectionCubit({
           case RemoteRiftData(value: .ready):
             emit(Connected());
 
-          case RemoteRiftData(value: .unavailable):
-            emit(Connecting());
+          case RemoteRiftData(value: .unavailable) || RemoteRiftError.unableToConnect:
+            if (state is! UnavailableGameClient) {
+              emit(UnavailableGameClient());
+            }
 
           case RemoteRiftError error:
             emit(ConnectedWithError(cause: error));
@@ -94,7 +107,8 @@ class ConnectionCubit({
     try {
       return await callback();
     } catch (error) {
-      if (state case Connecting() || Connected() || ConnectedWithError()) {
+      if (state
+          case Connecting() || Connected() || UnavailableGameClient() || ConnectedWithError()) {
         _initReconnectScheduler();
       }
 
@@ -106,6 +120,17 @@ class ConnectionCubit({
     }
 
     return null;
+  }
+
+  void _launchGameClient() async {
+    try {
+      await _apiClient.launchGameClient();
+    } catch (error) {
+      if (error is! RemoteRiftApiError) rethrow;
+      if (state case UnavailableGameClient(launchStatus: .pending)) {
+        emit(UnavailableGameClient(launchStatus: .failed));
+      }
+    }
   }
 
   void _initReconnectScheduler() {
@@ -132,7 +157,11 @@ extension ConnectionLifecycleListener on ConnectionCubit {
       switch (state) {
         case ConnectionError():
           _initReconnectScheduler();
-        case Connecting() || Connected() || ConnectedWithError() || ConnectedIncompatible():
+        case Connecting() ||
+            Connected() ||
+            UnavailableGameClient() ||
+            ConnectedWithError() ||
+            ConnectedIncompatible():
           _connectToGameApi();
         case Initial():
           // No need to resume the connection at this point.

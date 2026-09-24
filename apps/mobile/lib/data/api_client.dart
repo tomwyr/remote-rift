@@ -86,6 +86,11 @@ class RemoteRiftApiClient.withClients({
     await _post(.parse(url));
   }
 
+  Future<void> launchGameClient() async {
+    final url = '${await _httpBaseUrl}/game-client/launch';
+    await _post(.parse(url));
+  }
+
   Future<ChampionSelectCatalog> getChampSelectCatalog() async {
     final url = '${await _httpBaseUrl}/champ-select/catalog';
     final response = await _get(.parse(url));

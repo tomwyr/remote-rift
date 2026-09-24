@@ -7,6 +7,7 @@ import 'handlers.dart';
 Router configureRouter() {
   return Router()
     ..configureService()
+    ..configureGameClient()
     ..configureStatus()
     ..configureSession()
     ..configureLobby()
@@ -15,6 +16,13 @@ Router configureRouter() {
 }
 
 extension on Router {
+  void configureGameClient() {
+    postJson('/game-client/launch', (request) async {
+      await RemoteRiftConnector().launchGameClient();
+      return .noContent();
+    });
+  }
+
   void configureService() {
     String route(String value) => '/service/$value';
 
