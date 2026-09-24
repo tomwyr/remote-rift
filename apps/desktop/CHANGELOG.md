@@ -1,8 +1,10 @@
-## [0.12.0] - Unreleased
+## [0.12.0] - 2026-09-24
 
 - Added the application version to screen footers
 - Added post-update status notifications
 - Added local MCP server integration for AI clients
+- Added support for opening Riot Client from Mobile
+- Added configurable League Client lockfile location
 
 ## [0.11.0] - 2026-09-13
 

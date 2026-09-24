@@ -1,6 +1,7 @@
-## [0.14.0] - Unreleased
+## [0.14.0] - 2026-09-24
 
 - Added the application version to screen footers
+- Added support for opening Riot Client from Mobile
 
 ## [0.13.0] - 2026-09-13
 
