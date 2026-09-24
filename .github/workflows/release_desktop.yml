@@ -86,7 +86,7 @@ jobs:
 
       - name: Build macOS app
         working-directory: apps/desktop
-        run: flutter build macos --release
+        run: flutter build macos --release --no-codesign
 
       - name: Package macOS asset
         run: scripts/release/package-release.sh macos "${{ needs.prepare.outputs.version }}"
