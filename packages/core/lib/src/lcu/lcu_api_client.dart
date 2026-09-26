@@ -211,10 +211,11 @@ class LcuApiClient({
       } on SocketException catch (_) {
         throw LcuApiClientError.unreachable;
       }
-    } on ClientException catch (_) {
-      throw LcuApiClientError.connectionLost;
-    } on TimeoutException catch (_) {
-      throw LcuApiClientError.connectionLost;
+    } catch (error) {
+      if (error case ClientException() || IOException() || TimeoutException()) {
+        throw LcuApiClientError.connectionLost;
+      }
+      rethrow;
     }
   }
 
