@@ -145,11 +145,11 @@ Map<String, dynamic> _$ChampSelectPlayerToJson(ChampSelectPlayer instance) =>
     };
 
 const _$ChampSelectAssignedPositionEnumMap = {
-  ChampSelectAssignedPosition.top: 'TOP',
-  ChampSelectAssignedPosition.jungle: 'JUNGLE',
-  ChampSelectAssignedPosition.middle: 'MIDDLE',
-  ChampSelectAssignedPosition.bottom: 'BOTTOM',
-  ChampSelectAssignedPosition.utility: 'UTILITY',
+  ChampSelectAssignedPosition.top: 'top',
+  ChampSelectAssignedPosition.jungle: 'jungle',
+  ChampSelectAssignedPosition.middle: 'middle',
+  ChampSelectAssignedPosition.bottom: 'bottom',
+  ChampSelectAssignedPosition.utility: 'utility',
 };
 
 ChampSelectMySelectionUpdate _$ChampSelectMySelectionUpdateFromJson(

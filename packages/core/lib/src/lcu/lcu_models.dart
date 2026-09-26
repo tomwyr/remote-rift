@@ -117,7 +117,7 @@ class ChampSelectMySelectionUpdate({
   Map<String, dynamic> toJson() => _$ChampSelectMySelectionUpdateToJson(this);
 }
 
-@JsonEnum(fieldRename: .screamingSnake)
+@JsonEnum(fieldRename: .snake)
 enum ChampSelectAssignedPosition { top, jungle, middle, bottom, utility }
 
 @JsonSerializable()
