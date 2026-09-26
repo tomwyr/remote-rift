@@ -197,12 +197,18 @@ class const GameComponent({super.key}) extends StatelessWidget {
       return !stateMatches(previous, matching) && stateMatches(current, matching);
     }
 
+    bool changedFromTo<T extends RemoteRiftState, U extends RemoteRiftState>() {
+      return stateMatches<T>(previous, null) && stateMatches<U>(current, null);
+    }
+
     if (changedTo<Lobby>(matching: (value) => value.state == .searching) || changedTo<InGame>()) {
-      vibrateMillis(100);
+      hapticFeedback();
+    } else if (changedFromTo<InGame, PreGame>()) {
+      hapticFeedback();
     } else if (changedTo<Unknown>()) {
-      vibrateMillis(300);
+      vibrateMillis(100);
     } else if (changedTo<Found>(matching: (value) => value.state == .pending)) {
-      vibrateMillis(500);
+      vibrateMillis(300);
     }
   }
 }

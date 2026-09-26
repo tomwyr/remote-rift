@@ -107,7 +107,7 @@ class const ConnectionComponent({
     }
 
     if (changedTo<ConnectionError>() || changedTo<ConnectedWithError>()) {
-      vibrateMillis(300);
+      vibrateMillis(100);
     }
   }
 }

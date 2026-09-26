@@ -10,10 +10,13 @@ import '../../data/models.dart';
 import '../../dependencies.dart';
 import '../../i18n/strings.g.dart';
 import '../common/duration.dart';
+import '../common/utils.dart';
 import '../game/widgets/game_data_body.dart';
+import '../widgets/bloc_listener.dart';
 import '../widgets/layout.dart';
 import '../widgets/time_countdown.dart';
 import 'champion_select_cubit.dart';
+import 'champion_select_state.dart';
 import 'widgets/picker_sheet.dart';
 
 class const ChampionSelectComponent({
@@ -42,19 +45,42 @@ class const ChampionSelectComponent({
   Widget build(BuildContext context) {
     final cubit = context.watch<ChampionSelectCubit>();
 
-    return Lifecycle(
-      onInit: cubit.loadCatalog,
-      child: AppStatusLayout(
-        body: GameDataBody(
-          queueName: queueName,
-          title: t.championSelect.title,
-          description: t.championSelect.description,
-          tone: .active,
-          icon: Icons.shield_outlined,
-          child: _BodyContent(),
+    return BlocTransitionListener(
+      bloc: cubit,
+      listener: _vibrateOnStateChange,
+      child: Lifecycle(
+        onInit: cubit.loadCatalog,
+        child: AppStatusLayout(
+          body: GameDataBody(
+            queueName: queueName,
+            title: t.championSelect.title,
+            description: t.championSelect.description,
+            tone: .active,
+            icon: Icons.shield_outlined,
+            child: _BodyContent(),
+          ),
         ),
       ),
     );
+  }
+
+  void _vibrateOnStateChange(
+    ChampionSelectState previous,
+    ChampionSelectState current,
+  ) {
+    ChampionSelectAction? requiredAction(ChampionSelectState state) {
+      return switch (state.championSelect.actionAvailability) {
+        .pick => .pickChampion,
+        .ban => .banChampion,
+        _ => null,
+      };
+    }
+
+    final previousAction = requiredAction(previous);
+    final currentAction = requiredAction(current);
+    if (currentAction != null && currentAction != previousAction) {
+      hapticFeedback();
+    }
   }
 }
 
