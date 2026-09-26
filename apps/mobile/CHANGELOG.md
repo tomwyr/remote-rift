@@ -1,3 +1,9 @@
+## [0.14.1] - 2026-09-26
+
+- Refined haptic feedback for game and champion-select state changes
+- Improved handling of lost client connections and game-client launches
+- Fixed displaying the assigned champion-select position
+
 ## [0.14.0] - 2026-09-24
 
 - Added the application version to screen footers

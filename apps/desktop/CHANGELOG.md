@@ -1,3 +1,9 @@
+## [0.12.1] - 2026-09-26
+
+- Added MCP server activation and auto-start controls
+- Improved handling of lost League Client connections
+- Fixed champion-select position serialization
+
 ## [0.12.0] - 2026-09-24
 
 - Added the application version to screen footers
