@@ -259,6 +259,13 @@ class _CatalogPickerState extends State<_CatalogPicker> {
                   ? Center(child: Text(t.championSelect.noSearchResults))
                   : ListView(
                       children: [
+                        if (widget.action == .banChampion)
+                          ListTile(
+                            enabled: actionStatus != .submitting,
+                            onTap: _banNoChampion,
+                            leading: const Icon(Icons.block),
+                            title: Text(t.championSelect.noChampion),
+                          ),
                         for (final entry in items)
                           ListTile(
                             enabled: entry.enabled && actionStatus != .submitting,
@@ -292,5 +299,9 @@ class _CatalogPickerState extends State<_CatalogPicker> {
       case .lockIn:
         return;
     }
+  }
+
+  void _banNoChampion() async {
+    await context.read<ChampionSelectCubit>().banNoChampion();
   }
 }

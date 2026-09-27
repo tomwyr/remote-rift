@@ -127,6 +127,11 @@ extension on Router {
       return .noContent();
     });
 
+    postJson(route('ban-none'), (request) async {
+      await RemoteRiftConnector().banNoChampion();
+      return .noContent();
+    });
+
     postJson(route('lock-in'), (request) async {
       await RemoteRiftConnector().lockInChampion();
       return .noContent();

@@ -113,6 +113,8 @@ class RemoteRiftApiClient.withClients({
     ).toJson(),
   );
 
+  Future<void> banNoChampion() => _postChampSelect('ban-none');
+
   Future<void> lockInChampion() => _postChampSelect('lock-in');
 
   Future<void> changeSummonerSpell({

@@ -167,6 +167,14 @@ class RemoteRiftConnector._init({
     );
   }
 
+  Future<void> banNoChampion() async {
+    await _selectChampion(
+      championId: -1,
+      actionType: .banChampion,
+      lcuActionType: .ban,
+    );
+  }
+
   Future<void> lockInChampion() async {
     await _runChampionSelectAction(.lockInChampion, (session, player) async {
       final actionAssignment = session.activeLocalAction;
@@ -178,7 +186,8 @@ class RemoteRiftConnector._init({
         throw RemoteRiftStateError.championSelectActionUnavailable;
       }
       final championId = actionAssignment.championId;
-      if (championId == null || championId <= 0) {
+      final isNoChampionBan = championId == -1 && actionAssignment.type == .ban;
+      if (championId == null || championId <= 0 && !isNoChampionBan) {
         throw RemoteRiftStateError.championSelectActionRejected;
       }
       await _lcuApi.updateChampSelectAction(
@@ -409,7 +418,8 @@ class RemoteRiftConnector._init({
     required lcu.ChampSelectActionType lcuActionType,
   }) async {
     await _runChampionSelectAction(actionType, (session, player) async {
-      if (championId <= 0) {
+      final isNoChampionBan = championId == -1 && actionType == .banChampion;
+      if (championId <= 0 && !isNoChampionBan) {
         throw RemoteRiftStateError.championSelectActionUnavailable;
       }
       final actionAssignment = session.activeLocalAction;

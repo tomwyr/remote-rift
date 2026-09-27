@@ -49,6 +49,10 @@ class ChampionSelectCubit({
     });
   }
 
+  Future<void> banNoChampion() async {
+    await _runAction(.banChampion, _apiClient.banNoChampion);
+  }
+
   Future<void> changeSummonerSpell({
     required int spellId,
     required ChampionSelectSummonerSpellSlot slot,

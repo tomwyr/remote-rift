@@ -155,6 +155,15 @@ extension RemoteRiftMcpTools on McpServer {
     );
 
     register(
+      name: 'ban_no_champion',
+      description: 'Complete the current ban without banning a champion.',
+      (args) async {
+        await connector.banNoChampion();
+        return completion('ban_no_champion');
+      },
+    );
+
+    register(
       name: 'set_summoner_spell',
       description: 'Set a summoner spell during champion select.',
       properties: {
