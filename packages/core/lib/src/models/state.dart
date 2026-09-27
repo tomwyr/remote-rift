@@ -136,6 +136,7 @@ class Found({
 @JsonSerializable()
 class ChampionSelect({
   required final ChampionSelectPhase phase,
+  required final ChampionSelectTurn? turn,
   @DurationMillisecondsConverter() required final Duration timeLeft,
   required final Champion? champion,
   required final ChampionSelectChampionAction? championAction,
@@ -152,6 +153,7 @@ class ChampionSelect({
   @override
   List<Object?> get props => [
     phase,
+    turn,
     timeLeft,
     champion,
     championAction,
@@ -202,5 +204,14 @@ enum LobbyRole { top, jungle, middle, bottom, support }
 enum GameFoundState { pending, accepted, declined }
 
 enum ChampionSelectPhase { planning, banPick, finalization, gameStarting }
+
+enum ChampionSelectTurn {
+  playerBan,
+  playerPick,
+  teammateBan,
+  teammatePick,
+  enemyBan,
+  enemyPick,
+}
 
 enum ChampionSelectPosition { top, jungle, middle, bottom, support }

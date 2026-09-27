@@ -394,6 +394,7 @@ class RemoteRiftConnector._init({
 
     return ChampionSelect(
       phase: phase,
+      turn: session.currentTurn,
       timeLeft: timeLeftInPhase.milliseconds,
       champion: champion,
       championAction: championAction,

@@ -206,12 +206,6 @@ class Translations$championSelect$en {
 	/// en: 'Choices unavailable'
 	String get catalogFailureTitle => 'Choices unavailable';
 
-	/// en: 'Phase'
-	String get phaseLabel => 'Phase';
-
-	/// en: 'Time left'
-	String get timeLeftLabel => 'Time left';
-
 	/// en: 'Champion'
 	String get championLabel => 'Champion';
 
@@ -233,7 +227,7 @@ class Translations$championSelect$en {
 	/// en: 'No champion selected'
 	String get noChampion => 'No champion selected';
 
-	late final Translations$championSelect$phase$en phase = Translations$championSelect$phase$en._(_root);
+	late final Translations$championSelect$status$en status = Translations$championSelect$status$en._(_root);
 	late final Translations$championSelect$position$en position = Translations$championSelect$position$en._(_root);
 }
 
@@ -412,25 +406,43 @@ class Translations$home$en {
 	String get declineGameButton => 'Decline Game';
 }
 
-// Path: championSelect.phase
-class Translations$championSelect$phase$en {
-	Translations$championSelect$phase$en._(this._root);
+// Path: championSelect.status
+class Translations$championSelect$status$en {
+	Translations$championSelect$status$en._(this._root);
 
 	final Translations _root; // ignore: unused_field
 
 	// Translations
 
-	/// en: 'Planning'
-	String get planning => 'Planning';
+	/// en: 'Prepare your loadout'
+	String get planning => 'Prepare your loadout';
 
-	/// en: 'Ban / Pick'
-	String get banPick => 'Ban / Pick';
+	/// en: 'Ban a champion'
+	String get playerBan => 'Ban a champion';
 
-	/// en: 'Finalization'
-	String get finalization => 'Finalization';
+	/// en: 'Pick a champion'
+	String get playerPick => 'Pick a champion';
 
-	/// en: 'Game starting'
-	String get gameStarting => 'Game starting';
+	/// en: 'Your team is banning'
+	String get teammateBan => 'Your team is banning';
+
+	/// en: 'Your team is picking'
+	String get teammatePick => 'Your team is picking';
+
+	/// en: 'Enemy team is banning'
+	String get enemyBan => 'Enemy team is banning';
+
+	/// en: 'Enemy team is picking'
+	String get enemyPick => 'Enemy team is picking';
+
+	/// en: 'Waiting for the next turn'
+	String get waitingForTurn => 'Waiting for the next turn';
+
+	/// en: 'Prepare your loadout'
+	String get finalization => 'Prepare your loadout';
+
+	/// en: 'Game is starting'
+	String get gameStarting => 'Game is starting';
 }
 
 // Path: championSelect.position
@@ -553,8 +565,6 @@ extension on Translations {
 			'championSelect.actionFailed' => 'Couldn\'t send that action. Try again.',
 			'championSelect.catalogFailed' => 'Couldn\'t load choices. Check your connection and retry.',
 			'championSelect.catalogFailureTitle' => 'Choices unavailable',
-			'championSelect.phaseLabel' => 'Phase',
-			'championSelect.timeLeftLabel' => 'Time left',
 			'championSelect.championLabel' => 'Champion',
 			'championSelect.positionLabel' => 'Position',
 			'championSelect.spellsLabel' => 'Summoner spells',
@@ -562,10 +572,16 @@ extension on Translations {
 			'championSelect.spell2Label' => 'Spell 2',
 			'championSelect.unavailable' => 'Unavailable',
 			'championSelect.noChampion' => 'No champion selected',
-			'championSelect.phase.planning' => 'Planning',
-			'championSelect.phase.banPick' => 'Ban / Pick',
-			'championSelect.phase.finalization' => 'Finalization',
-			'championSelect.phase.gameStarting' => 'Game starting',
+			'championSelect.status.planning' => 'Prepare your loadout',
+			'championSelect.status.playerBan' => 'Ban a champion',
+			'championSelect.status.playerPick' => 'Pick a champion',
+			'championSelect.status.teammateBan' => 'Your team is banning',
+			'championSelect.status.teammatePick' => 'Your team is picking',
+			'championSelect.status.enemyBan' => 'Enemy team is banning',
+			'championSelect.status.enemyPick' => 'Enemy team is picking',
+			'championSelect.status.waitingForTurn' => 'Waiting for the next turn',
+			'championSelect.status.finalization' => 'Prepare your loadout',
+			'championSelect.status.gameStarting' => 'Game is starting',
 			'championSelect.position.top' => 'Top',
 			'championSelect.position.jungle' => 'Jungle',
 			'championSelect.position.middle' => 'Middle',

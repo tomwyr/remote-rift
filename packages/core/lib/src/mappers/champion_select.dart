@@ -29,6 +29,40 @@ extension ChampSelectSessionExtensions on lcu.ChampSelectSession {
     return null;
   }
 
+  lcu.ChampSelectActionAssignment? get activeAction {
+    for (var actionTurn in actions) {
+      for (var action in actionTurn) {
+        if (action.isInProgress == true && action.completed != true) {
+          return action;
+        }
+      }
+    }
+    return null;
+  }
+
+  ChampionSelectTurn? get currentTurn {
+    final action = activeAction;
+    final cellId = action?.actorCellId;
+    final type = action?.type;
+    if (cellId == null || (type != .pick && type != .ban)) {
+      return null;
+    }
+
+    final playerCellId = localPlayerCellId;
+    if (cellId == playerCellId) {
+      return type == .ban ? .playerBan : .playerPick;
+    }
+
+    final isTeammate = myTeam.any((player) => player.cellId == cellId);
+    return switch ((isTeammate, type)) {
+      (true, .ban) => .teammateBan,
+      (true, .pick) => .teammatePick,
+      (false, .ban) => .enemyBan,
+      (false, .pick) => .enemyPick,
+      _ => null,
+    };
+  }
+
   lcu.ChampSelectActionAssignment? get localChampionActionAssignment {
     if (activeLocalAction case var action?) {
       return action;

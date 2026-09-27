@@ -25,12 +25,23 @@ extension GameQueueGroupStrings on GameQueueGroup {
   };
 }
 
-extension ChampionSelectPhaseStrings on ChampionSelectPhase {
-  String get displayName => switch (this) {
-    .planning => t.championSelect.phase.planning,
-    .banPick => t.championSelect.phase.banPick,
-    .finalization => t.championSelect.phase.finalization,
-    .gameStarting => t.championSelect.phase.gameStarting,
+extension ChampionSelectStatusStrings on ChampionSelect {
+  String get timeLeftLabel => switch (phase) {
+    .planning => t.championSelect.status.planning,
+    .banPick => turn?.timeLeftLabel ?? t.championSelect.status.waitingForTurn,
+    .finalization => t.championSelect.status.finalization,
+    .gameStarting => t.championSelect.status.gameStarting,
+  };
+}
+
+extension ChampionSelectTurnStrings on ChampionSelectTurn {
+  String get timeLeftLabel => switch (this) {
+    .playerBan => t.championSelect.status.playerBan,
+    .playerPick => t.championSelect.status.playerPick,
+    .teammateBan => t.championSelect.status.teammateBan,
+    .teammatePick => t.championSelect.status.teammatePick,
+    .enemyBan => t.championSelect.status.enemyBan,
+    .enemyPick => t.championSelect.status.enemyPick,
   };
 }
 

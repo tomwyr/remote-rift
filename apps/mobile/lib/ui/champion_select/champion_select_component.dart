@@ -95,11 +95,7 @@ class const _BodyContent() extends StatelessWidget {
       crossAxisAlignment: .stretch,
       spacing: 12,
       children: [
-        AppStatusSection(
-          label: t.championSelect.phaseLabel,
-          title: championSelect.phase.displayName,
-        ),
-        _ChampionSelectCountdown(timeLeft: championSelect.timeLeft),
+        _ChampionSelectPhase(championSelect: championSelect),
 
         _ChampionCard(),
 
@@ -227,12 +223,12 @@ class const _SpellRow({
   );
 }
 
-class const _ChampionSelectCountdown({
-  required final Duration timeLeft,
+class const _ChampionSelectPhase({
+  required final ChampionSelect championSelect,
 }) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final effectiveTimeLeft = timeLeft.nonNegative;
+    final effectiveTimeLeft = championSelect.timeLeft.nonNegative;
     final seconds = effectiveTimeLeft.inSecondsDouble;
 
     return TimeCountdown(
@@ -240,7 +236,7 @@ class const _ChampionSelectCountdown({
       current: seconds,
       drift: 1.5,
       builder: (_, currentSeconds) => AppStatusSection(
-        label: t.championSelect.timeLeftLabel,
+        label: championSelect.timeLeftLabel,
         title: _formatTime(currentSeconds),
         titleFontSize: .large,
         tone: .active,
