@@ -29,16 +29,13 @@ class const AppStatusLayout({
       children: [
         Expanded(
           child: FitViewportScrollView(
-            padding: const .fromLTRB(20, 16, 20, 24),
+            padding: const .fromLTRB(20, 16, 20, 16),
             child: Column(
               crossAxisAlignment: .stretch,
               mainAxisAlignment: .spaceBetween,
               children: [
                 _topContent(context),
-                if (bottomContent case var content?) ...[
-                  content,
-                  const SizedBox(height: 16),
-                ],
+                ?bottomContent,
               ],
             ),
           ),
