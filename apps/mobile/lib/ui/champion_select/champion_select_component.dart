@@ -79,7 +79,9 @@ class const ChampionSelectComponent({
     final previousAction = requiredAction(previous);
     final currentAction = requiredAction(current);
     if (currentAction != null && currentAction != previousAction) {
-      hapticFeedback();
+      vibrateMillis(100);
+    } else if (!previous.canLockIn && current.canLockIn) {
+      vibrateMillis(100);
     }
   }
 }

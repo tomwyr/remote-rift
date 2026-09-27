@@ -7,7 +7,7 @@ Future<void> hapticFeedback() async {
     return;
   }
 
-  await HapticFeedback.mediumImpact();
+  await HapticFeedback.heavyImpact();
 }
 
 Future<void> vibrateMillis(int duration) async {
