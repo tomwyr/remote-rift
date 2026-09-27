@@ -16,6 +16,7 @@ import 'models/response.dart';
 import 'models/session.dart';
 import 'models/state.dart';
 import 'models/status.dart';
+import 'ready_check_timer.dart';
 
 class RemoteRiftConnector._init({
   required final LcuApiClient _lcuApi,
@@ -37,7 +38,7 @@ class RemoteRiftConnector._init({
     );
   }
 
-  static final _readyCheckMaxTime = 10.seconds;
+  ReadyCheckTimer? _readyCheckTimer;
 
   Stream<RemoteRiftResponse<RemoteRiftStatus>> getStatusStream() async* {
     await for (var _ in _tickStream(seconds: 1)) {
@@ -61,7 +62,8 @@ class RemoteRiftConnector._init({
     RemoteRiftSession? previousSession;
     await for (var _ in _tickStream(seconds: 1)) {
       try {
-        if (await getCurrentSession() case var session when session != previousSession) {
+        final session = await _getCurrentSession(trackTimer: true);
+        if (session != previousSession) {
           yield session;
           previousSession = session;
         }
@@ -254,7 +256,14 @@ class RemoteRiftConnector._init({
   }
 
   Future<RemoteRiftSession> getCurrentSession() async {
-    var (queueName, state) = await (_getQueueNameOrNull(), _getCurrentState()).waitUnwrapped;
+    return await _getCurrentSession(trackTimer: false);
+  }
+
+  Future<RemoteRiftSession> _getCurrentSession({required bool trackTimer}) async {
+    var (queueName, state) = await (
+      _getQueueNameOrNull(),
+      _getCurrentState(trackTimer: trackTimer),
+    ).waitUnwrapped;
     if (state case PreGame()) {
       // Clear the queue if the session data is out of sync with the state.
       queueName = null;
@@ -284,8 +293,11 @@ class RemoteRiftConnector._init({
     }
   }
 
-  Future<RemoteRiftState> _getCurrentState() async {
+  Future<RemoteRiftState> _getCurrentState({bool trackTimer = false}) async {
     final gameflowPhase = await _lcuApi.getGameflowPhase();
+    if (trackTimer && gameflowPhase != .readyCheck) {
+      _clearReadyCheckTimer();
+    }
     switch (gameflowPhase) {
       case .none:
         final availableQueues = await _getAvailableQueues();
@@ -311,14 +323,18 @@ class RemoteRiftConnector._init({
               .accepted => .accepted,
               .declined => .declined,
             };
-            final answerTimeLeft = (_readyCheckMaxTime - readyCheck.timer.seconds).nonNegative;
+            final timer = _getReadyCheckTimer();
+            if (trackTimer) {
+              timer.start(readyCheck);
+            }
             return Found(
               state: state,
-              answerMaxTime: _readyCheckMaxTime,
-              answerTimeLeft: answerTimeLeft,
+              answerMaxTime: timer.maxTime,
+              answerTimeLeft: timer.timeLeft(readyCheck),
             );
 
           case .invalid:
+            _clearReadyCheckTimer();
             return Unknown();
         }
 
@@ -328,6 +344,15 @@ class RemoteRiftConnector._init({
       case .inProgress || .waitingForStats || .preEndOfGame || .endOfGame:
         return InGame();
     }
+  }
+
+  ReadyCheckTimer _getReadyCheckTimer() {
+    return _readyCheckTimer ??= ReadyCheckTimer(lcuApi: _lcuApi);
+  }
+
+  void _clearReadyCheckTimer() {
+    _readyCheckTimer?.clear();
+    _readyCheckTimer = null;
   }
 
   Future<RemoteRiftState> _getChampionSelectState() async {

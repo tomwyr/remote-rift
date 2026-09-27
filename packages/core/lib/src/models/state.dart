@@ -130,7 +130,7 @@ class Found({
   Map<String, dynamic> toJson() => _$FoundToJson(this);
 
   @override
-  List<Object?> get props => [state];
+  List<Object?> get props => [state, answerMaxTime, answerTimeLeft];
 }
 
 @JsonSerializable()
