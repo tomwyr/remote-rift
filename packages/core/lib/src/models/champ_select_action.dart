@@ -94,6 +94,13 @@ class const ChampionSelectActionAvailability({
     changeSummonerSpells: true,
   );
 
+  static const planning = ChampionSelectActionAvailability(
+    pickChampion: true,
+    banChampion: false,
+    lockInChampion: false,
+    changeSummonerSpells: true,
+  );
+
   static const spells = ChampionSelectActionAvailability(
     pickChampion: false,
     banChampion: false,

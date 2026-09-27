@@ -152,11 +152,18 @@ class RemoteRiftConnector._init({
   }
 
   Future<void> pickChampion({required int championId}) async {
-    await _selectChampion(
-      championId: championId,
-      actionType: .pickChampion,
-      lcuActionType: .pick,
-    );
+    await _runChampionSelectAction(.pickChampion, (session, player) async {
+      if (session.timer?.phase == .planning) {
+        await _setChampionPickIntent(championId: championId);
+      } else {
+        await _selectChampionInAction(
+          session: session,
+          championId: championId,
+          actionType: .pickChampion,
+          lcuActionType: .pick,
+        );
+      }
+    });
   }
 
   Future<void> banChampion({required int championId}) async {
@@ -418,26 +425,54 @@ class RemoteRiftConnector._init({
     required lcu.ChampSelectActionType lcuActionType,
   }) async {
     await _runChampionSelectAction(actionType, (session, player) async {
-      final isNoChampionBan = championId == -1 && actionType == .banChampion;
-      if (championId <= 0 && !isNoChampionBan) {
-        throw RemoteRiftStateError.championSelectActionUnavailable;
-      }
-      final actionAssignment = session.activeLocalAction;
-      if (actionAssignment == null || actionAssignment.type != lcuActionType) {
-        throw RemoteRiftStateError.championSelectActionUnavailable;
-      }
-      final actionId = actionAssignment.id;
-      if (actionId == null) {
-        throw RemoteRiftStateError.championSelectActionUnavailable;
-      }
-      final update = lcu.ChampSelectActionUpdate(championId: championId);
-      await _lcuApi.updateChampSelectAction(actionId: actionId, update: update);
-
-      final updatedSession = await _lcuApi.getChampSelectSession();
-      if (updatedSession.actionWithId(actionId)?.championId != championId) {
-        throw RemoteRiftStateError.championSelectActionRejected;
-      }
+      await _selectChampionInAction(
+        session: session,
+        championId: championId,
+        actionType: actionType,
+        lcuActionType: lcuActionType,
+      );
     });
+  }
+
+  Future<void> _selectChampionInAction({
+    required lcu.ChampSelectSession session,
+    required int championId,
+    required ChampionSelectActionType actionType,
+    required lcu.ChampSelectActionType lcuActionType,
+  }) async {
+    final isNoChampionBan = championId == -1 && actionType == .banChampion;
+    if (championId <= 0 && !isNoChampionBan) {
+      throw RemoteRiftStateError.championSelectActionUnavailable;
+    }
+    final actionAssignment = session.activeLocalAction;
+    if (actionAssignment == null || actionAssignment.type != lcuActionType) {
+      throw RemoteRiftStateError.championSelectActionUnavailable;
+    }
+    final actionId = actionAssignment.id;
+    if (actionId == null) {
+      throw RemoteRiftStateError.championSelectActionUnavailable;
+    }
+    final update = lcu.ChampSelectActionUpdate(championId: championId);
+    await _lcuApi.updateChampSelectAction(actionId: actionId, update: update);
+
+    final updatedSession = await _lcuApi.getChampSelectSession();
+    if (updatedSession.actionWithId(actionId)?.championId != championId) {
+      throw RemoteRiftStateError.championSelectActionRejected;
+    }
+  }
+
+  Future<void> _setChampionPickIntent({required int championId}) async {
+    if (championId <= 0) {
+      throw RemoteRiftStateError.championSelectActionUnavailable;
+    }
+    await _lcuApi.updateMyChampSelectSelection(
+      lcu.ChampSelectMySelectionUpdate(championPickIntent: championId),
+    );
+
+    final updatedSession = await _lcuApi.getChampSelectSession();
+    if (updatedSession.localPlayer?.preferredChampionId != championId) {
+      throw RemoteRiftStateError.championSelectActionRejected;
+    }
   }
 
   Future<void> _runChampionSelectAction(

@@ -129,13 +129,16 @@ class const _ChampionCard() extends StatelessWidget {
         : null;
 
     if (availability.pickChampion) {
+      final isPlanning = championSelect.phase == .planning;
       return InkWell(
         onTap: () => ChampionSelectPickerSheet.showChampion(context, action: .pick),
         borderRadius: const .all(.circular(16)),
         child: AppStatusSection(
-          label: t.championSelect.pickAction,
+          label: isPlanning ? t.championSelect.preferredAction : t.championSelect.pickAction,
           title: championTitle,
-          description: t.championSelect.pickGuidance,
+          description: isPlanning
+              ? t.championSelect.preferredGuidance
+              : t.championSelect.pickGuidance,
           action: lockInAction,
         ),
       );

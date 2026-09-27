@@ -146,11 +146,17 @@ class Translations$championSelect$en {
 	/// en: 'Choose champion'
 	String get pickTitle => 'Choose champion';
 
+	/// en: 'Choose Pick Intent'
+	String get preferredTitle => 'Choose Pick Intent';
+
 	/// en: 'Choose champion to ban'
 	String get banTitle => 'Choose champion to ban';
 
 	/// en: 'Choose a champion for your turn.'
 	String get pickGuidance => 'Choose a champion for your turn.';
+
+	/// en: 'Choose a champion to declare your intent to your team.'
+	String get preferredGuidance => 'Choose a champion to declare your intent to your team.';
 
 	/// en: 'Choose a champion to ban for your turn.'
 	String get banGuidance => 'Choose a champion to ban for your turn.';
@@ -169,6 +175,9 @@ class Translations$championSelect$en {
 
 	/// en: 'Pick champion'
 	String get pickAction => 'Pick champion';
+
+	/// en: 'Pick Intent'
+	String get preferredAction => 'Pick Intent';
 
 	/// en: 'Ban champion'
 	String get banAction => 'Ban champion';
@@ -524,14 +533,17 @@ extension on Translations {
 			'championSelect.title' => 'Champion select',
 			'championSelect.description' => 'Review your current champion-select choices.',
 			'championSelect.pickTitle' => 'Choose champion',
+			'championSelect.preferredTitle' => 'Choose Pick Intent',
 			'championSelect.banTitle' => 'Choose champion to ban',
 			'championSelect.pickGuidance' => 'Choose a champion for your turn.',
+			'championSelect.preferredGuidance' => 'Choose a champion to declare your intent to your team.',
 			'championSelect.banGuidance' => 'Choose a champion to ban for your turn.',
 			'championSelect.spell1Title' => 'Choose Spell 1',
 			'championSelect.spell2Title' => 'Choose Spell 2',
 			'championSelect.spellGuidance' => 'Choose a summoner spell for this slot.',
 			'championSelect.cancel' => 'Cancel',
 			'championSelect.pickAction' => 'Pick champion',
+			'championSelect.preferredAction' => 'Pick Intent',
 			'championSelect.banAction' => 'Ban champion',
 			'championSelect.lockInAction' => 'Lock In',
 			'championSelect.retry' => 'Retry',

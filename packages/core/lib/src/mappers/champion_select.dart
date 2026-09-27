@@ -141,7 +141,7 @@ extension ChampSelectSessionAvailabilityMapper on lcu.ChampSelectSession {
       return .unavailable;
     }
     if (timer?.phase == .planning) {
-      return .spells;
+      return .planning;
     }
     return switch (activeLocalAction?.type) {
       .pick => .pick,

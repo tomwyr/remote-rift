@@ -25,10 +25,12 @@ class const ChampionSelectPickerSheet({
     await _show(
       context,
       title: switch (action) {
+        .pick when championSelect.phase == .planning => t.championSelect.preferredTitle,
         .pick => t.championSelect.pickTitle,
         .ban => t.championSelect.banTitle,
       },
       guidance: switch (action) {
+        .pick when championSelect.phase == .planning => t.championSelect.preferredGuidance,
         .pick => t.championSelect.pickGuidance,
         .ban => t.championSelect.banGuidance,
       },
