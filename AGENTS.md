@@ -44,6 +44,7 @@
 - Keep gateways limited to remote-service models and transport behavior; put product policy, staging, retries, selection, and application-model mapping in callers or domain layers.
 - Gateway operations must express provider-specific capability through inputs or results; move generic-input operations, such as arbitrary-URI handling, to provider-neutral layers.
 - Define interfaces from consumers' minimal needs; expose provider names, protocol models, or transport types only when genuinely required.
+- Export a package type only when a package consumer needs it; internal implementation types stay unexported.
 - Treat malformed gateway inputs as invalid input to that gateway; reserve invalid-response errors for remote-service data.
 - Define extensions on non-null receivers; handle nullable values explicitly at call sites.
 - Move self-contained parameter logic into a natural extension; inline one-line helpers that provide no useful abstraction.
@@ -66,6 +67,7 @@
 
 - A sealed state's base type may expose only values valid for every variant; model differing capabilities in the hierarchy instead of using getters that throw.
 - Give states value equality; every `Equatable.props` value, including nested models and collection elements, must have stable value equality.
+- Include every property that can change an emitted state's consumer-visible result in its equality.
 - When every state needs an initial snapshot, provide it at construction; load asynchronously from the owning lifecycle, not cubit creation.
 - Keep displayed feature data in feature state; avoid drilling parallel snapshots through descendants that can select feature state.
 - Keep asynchronous action progress and recoverable failure in state; widgets must not catch cubit action failures or duplicate action flags.
@@ -112,7 +114,7 @@
 - Resolve non-simple constructor arguments before construction; keep final property assignments simple, including asynchronous values and method calls.
 - Order model members as declared properties, adjacent `fromJson`/`toJson` APIs, then equality or derived members such as `props`.
 - Use `=>` only for simple redirections or one straightforward condition; use blocks for compound logic.
-- Use braces for `if` control flows.
+- Use braces for `if` control flows, except an early return that fits within 40 characters.
 - Non-empty Dart `switch` cases end automatically; use `break` only for intentional no-op cases.
 - Prefer pattern matching and guards when clearer than chained conditions for nullable, validated values.
 - Prefer `var` over `final` in pattern matches.
@@ -126,6 +128,7 @@
 - Action helpers may cover only genuinely uniform flows; keep distinct semantics local and require callers to provide every emitted state value rather than hiding transition defaults.
 - Do not nest non-trivial transformations in other calls; keep transformations visible while reusing established helpers for shared behavior such as filtering or deduplication.
 - Use typedefs for long callback signatures; use positional callback parameters unless the contract requires named parameters.
+- Use positional parameters for unambiguous private method inputs; use named parameters when they clarify the call site.
 - Do not create separate types solely for identical shape and behavior; keep distinct domain concepts separate even when their current fields match.
 - Order class members with public declarations first, then private members in natural call order, with called members after callers; put private top-level declarations below public ones.
 - Remove unused public APIs rather than retaining speculative entry points.
