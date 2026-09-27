@@ -1,3 +1,9 @@
+## [0.15.0] - 2026-09-27
+
+- Added champion pick-intent selection
+- Improved champion-select status, bans, and layout
+- Improved ready-check timer synchronization
+
 ## [0.14.1] - 2026-09-26
 
 - Refined haptic feedback for game and champion-select state changes

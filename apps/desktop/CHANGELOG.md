@@ -1,3 +1,9 @@
+## [0.13.0] - 2026-09-27
+
+- Added champion pick-intent selection
+- Improved champion-select game-state messaging
+- Improved ready-check timer synchronization
+
 ## [0.12.1] - 2026-09-26
 
 - Added MCP server activation and auto-start controls
