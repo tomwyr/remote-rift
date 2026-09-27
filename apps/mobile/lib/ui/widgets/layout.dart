@@ -24,25 +24,30 @@ class const AppStatusLayout({
   Widget build(BuildContext context) {
     final bottomContent = _bottomContent(context);
 
-    return FitViewportScrollView(
-      child: Column(
-        crossAxisAlignment: .stretch,
-        mainAxisAlignment: .spaceBetween,
-        children: [
-          _topContent(context),
-          Column(
-            crossAxisAlignment: .stretch,
-            children: [
-              if (bottomContent case var content?) ...[
-                content,
-                const SizedBox(height: 16),
+    return Column(
+      crossAxisAlignment: .stretch,
+      children: [
+        Expanded(
+          child: FitViewportScrollView(
+            padding: const .fromLTRB(20, 16, 20, 24),
+            child: Column(
+              crossAxisAlignment: .stretch,
+              mainAxisAlignment: .spaceBetween,
+              children: [
+                _topContent(context),
+                if (bottomContent case var content?) ...[
+                  content,
+                  const SizedBox(height: 16),
+                ],
               ],
-              const AppVersion(),
-              const SizedBox(height: 12),
-            ],
+            ),
           ),
-        ],
-      ),
+        ),
+        const Padding(
+          padding: .fromLTRB(20, 8, 20, 12),
+          child: AppVersion(),
+        ),
+      ],
     );
   }
 

@@ -34,11 +34,8 @@ class const HomePage({super.key}) extends StatelessWidget {
       ),
       body: SafeArea(
         top: false,
-        child: Padding(
-          padding: const .fromLTRB(20, 16, 20, 0),
-          child: ConnectionComponent(
-            connectedBuilder: (_) => GameComponent.builder(),
-          ),
+        child: ConnectionComponent(
+          connectedBuilder: (_) => GameComponent.builder(),
         ),
       ),
     );

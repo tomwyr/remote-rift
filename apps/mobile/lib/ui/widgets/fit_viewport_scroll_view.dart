@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class const FitViewportScrollView({
   super.key,
   final ScrollController? controller,
+  final EdgeInsets? padding,
   required final Widget child,
 }) extends StatelessWidget {
   @override
@@ -10,6 +11,7 @@ class const FitViewportScrollView({
     return LayoutBuilder(
       builder: (context, constraints) => SingleChildScrollView(
         controller: controller,
+        padding: padding,
         child: ConstrainedBox(
           constraints: BoxConstraints(minHeight: constraints.maxHeight),
           child: child,
