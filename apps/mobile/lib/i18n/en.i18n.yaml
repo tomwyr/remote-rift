@@ -53,6 +53,8 @@ championSelect:
   spell2Label: "Spell 2"
   unavailable: "Unavailable"
   noChampion: "No champion selected"
+  favorites: "Favorites"
+  champions: "Champions"
   status:
     planning: "Prepare your loadout"
     playerBan: "Ban a champion"

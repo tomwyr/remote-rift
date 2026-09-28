@@ -50,6 +50,7 @@ class const ChampionSelectCatalog({
 @JsonSerializable()
 class const ChampionSelectCatalogChampion({
   required final int id,
+  required final bool isFavorite,
   required final String name,
 }) extends Equatable {
   factory fromJson(Map<String, dynamic> json) => _$ChampionSelectCatalogChampionFromJson(json);
@@ -57,7 +58,7 @@ class const ChampionSelectCatalogChampion({
   Map<String, dynamic> toJson() => _$ChampionSelectCatalogChampionToJson(this);
 
   @override
-  List<Object?> get props => [id, name];
+  List<Object?> get props => [id, isFavorite, name];
 }
 
 @JsonSerializable()

@@ -1,3 +1,9 @@
+## [0.15.1] - 2026-09-28
+
+- Improved status layout spacing
+- Modernized iOS build configuration
+- Champion pick and ban lists now show favorite champions before the remaining catalog entries
+
 ## [0.15.0] - 2026-09-27
 
 - Added champion pick-intent selection

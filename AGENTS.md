@@ -102,6 +102,8 @@
 - Express construction-time invariants with constructor assertions; reserve typed runtime errors for failures during operations.
 - Prefer `if-case` over `switch` when one pattern is handled and all others propagate.
 - Keep collections readable: resolve meaningful setup before long collections or loops, but do not extract trivial pure expressions merely to shorten them.
+- Prefer collection literals with `if` and `for` elements over building collections through mutable `.add()` calls.
+- Put common list operations in generic extensions on `List<T>` rather than feature-local helper functions.
 - Separate self-contained phases of long methods with blank lines; extract helpers only for meaningful operations, not parameter forwarding.
 - Let scope helpers create and clean up temporary resources before passing them to callbacks; keep resource operations at callers when that clarifies sequence.
 - Keep consecutive important asynchronous effects explicit at call sites; do not hide persistence inside a fetching helper.
@@ -113,7 +115,7 @@
 - Define const constructors only for widgets; do not require const call sites for ordinary models, but use const where language or framework semantics require it, such as annotation metadata.
 - Resolve non-simple constructor arguments before construction; keep final property assignments simple, including asynchronous values and method calls.
 - Order model members as declared properties, adjacent `fromJson`/`toJson` APIs, then equality or derived members such as `props`.
-- Use `=>` only for simple redirections or one straightforward condition; use blocks for compound logic.
+- Use `=>` only for simple redirections, one straightforward condition, or a single switch expression; use blocks for compound logic.
 - Use braces for `if` control flows, except an early return that fits within 40 characters.
 - Non-empty Dart `switch` cases end automatically; use `break` only for intentional no-op cases.
 - Prefer pattern matching and guards when clearer than chained conditions for nullable, validated values.
@@ -130,6 +132,10 @@
 - Use typedefs for long callback signatures; use positional callback parameters unless the contract requires named parameters.
 - Use positional parameters for unambiguous private method inputs; use named parameters when they clarify the call site.
 - Do not create separate types solely for identical shape and behavior; keep distinct domain concepts separate even when their current fields match.
+- When a UI list displays distinct widget variants, model its rows as sealed entry types, resolve them before rendering, then switch on the row type in the list builder.
+- Name subclasses relative to their shared base; do not repeat the base type's context in every subclass name.
+- Prefer positional record results when result positions are unambiguous at the call site.
+- Omit trailing commas when an invocation fits cleanly on one line.
 - Order class members with public declarations first, then private members in natural call order, with called members after callers; put private top-level declarations below public ones.
 - Remove unused public APIs rather than retaining speculative entry points.
 - Put localized enum display values in named shared presentation extensions, not widget-local extensions.

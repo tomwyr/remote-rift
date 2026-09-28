@@ -227,6 +227,12 @@ class Translations$championSelect$en {
 	/// en: 'No champion selected'
 	String get noChampion => 'No champion selected';
 
+	/// en: 'Favorites'
+	String get favorites => 'Favorites';
+
+	/// en: 'Champions'
+	String get champions => 'Champions';
+
 	late final Translations$championSelect$status$en status = Translations$championSelect$status$en._(_root);
 	late final Translations$championSelect$position$en position = Translations$championSelect$position$en._(_root);
 }
@@ -572,6 +578,8 @@ extension on Translations {
 			'championSelect.spell2Label' => 'Spell 2',
 			'championSelect.unavailable' => 'Unavailable',
 			'championSelect.noChampion' => 'No champion selected',
+			'championSelect.favorites' => 'Favorites',
+			'championSelect.champions' => 'Champions',
 			'championSelect.status.planning' => 'Prepare your loadout',
 			'championSelect.status.playerBan' => 'Ban a champion',
 			'championSelect.status.playerPick' => 'Pick a champion',

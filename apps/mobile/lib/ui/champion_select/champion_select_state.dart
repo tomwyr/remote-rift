@@ -54,6 +54,7 @@ class const Data({
 
 class ChampionSelectCatalogEntry({
   required final int id,
+  required final bool isFavorite,
   required final String name,
   final bool enabled = true,
 });
@@ -73,6 +74,7 @@ extension on ChampionSelectCatalog {
         .map(
           (champion) => ChampionSelectCatalogEntry(
             id: champion.id,
+            isFavorite: champion.isFavorite,
             name: champion.name,
             enabled: !unavailable.contains(champion.id),
           ),
@@ -84,7 +86,13 @@ extension on ChampionSelectCatalog {
 extension on ChampionSelectCatalog {
   List<ChampionSelectCatalogEntry> summonterSpellsEntries() {
     return summonerSpells
-        .map((spell) => ChampionSelectCatalogEntry(id: spell.id, name: spell.name))
+        .map(
+          (spell) => ChampionSelectCatalogEntry(
+            id: spell.id,
+            isFavorite: false,
+            name: spell.name,
+          ),
+        )
         .toList();
   }
 }

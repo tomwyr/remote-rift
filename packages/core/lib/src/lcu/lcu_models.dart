@@ -140,6 +140,7 @@ enum ChampSelectTimerPhase {
 
 @JsonSerializable()
 class ChampGridChampion({
+  final bool? favorite,
   final int? id,
   final String? name,
 }) {

@@ -192,12 +192,17 @@ const _$ChampSelectTimerPhaseEnumMap = {
 
 ChampGridChampion _$ChampGridChampionFromJson(Map<String, dynamic> json) =>
     ChampGridChampion(
+      favorite: json['favorite'] as bool?,
       id: (json['id'] as num?)?.toInt(),
       name: json['name'] as String?,
     );
 
 Map<String, dynamic> _$ChampGridChampionToJson(ChampGridChampion instance) =>
-    <String, dynamic>{'id': instance.id, 'name': instance.name};
+    <String, dynamic>{
+      'favorite': instance.favorite,
+      'id': instance.id,
+      'name': instance.name,
+    };
 
 SummonerSpell _$SummonerSpellFromJson(Map<String, dynamic> json) =>
     SummonerSpell(

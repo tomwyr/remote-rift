@@ -7,6 +7,7 @@ import '../../../i18n/strings.g.dart';
 import '../../widgets/layout.dart';
 import '../champion_select_cubit.dart';
 import '../champion_select_state.dart';
+import 'picker_list_entries.dart';
 
 class const ChampionSelectPickerSheet({
   super.key,
@@ -222,9 +223,12 @@ class _CatalogPickerState extends State<_CatalogPicker> {
   Widget build(BuildContext context) {
     final items = widget.state.entries(widget.catalogType, query: _query);
     final actionStatus = widget.state.statusOf(widget.action);
+    final listEntries = items.toPickerListEntries(action: widget.action);
+    final listBottomPadding = MediaQuery.paddingOf(context).bottom;
 
     return SafeArea(
       top: false,
+      bottom: false,
       child: Padding(
         padding: const .fromLTRB(20, 4, 20, 0),
         child: Column(
@@ -259,26 +263,33 @@ class _CatalogPickerState extends State<_CatalogPicker> {
             Expanded(
               child: items.isEmpty
                   ? Center(child: Text(t.championSelect.noSearchResults))
-                  : ListView(
-                      children: [
-                        if (widget.action == .banChampion)
-                          ListTile(
-                            enabled: actionStatus != .submitting,
-                            onTap: _banNoChampion,
-                            leading: const Icon(Icons.block),
-                            title: Text(t.championSelect.noChampion),
-                          ),
-                        for (final entry in items)
-                          ListTile(
-                            enabled: entry.enabled && actionStatus != .submitting,
-                            onTap: () => _select(entry.id),
-                            selected: entry.name == widget.selectedName,
-                            title: Text(entry.name),
-                            trailing: entry.name == widget.selectedName
-                                ? const Icon(Icons.check)
-                                : null,
-                          ),
-                      ],
+                  : ListView.builder(
+                      padding: .only(bottom: listBottomPadding),
+                      itemCount: listEntries.length,
+                      itemBuilder: (_, index) => switch (listEntries[index]) {
+                        NoChampion() => ListTile(
+                          enabled: actionStatus != .submitting,
+                          onTap: _banNoChampion,
+                          leading: const Icon(Icons.block),
+                          title: Text(t.championSelect.noChampion),
+                        ),
+                        Section(:final section) => _CatalogSectionHeader(
+                          title: switch (section) {
+                            .favorites => t.championSelect.favorites,
+                            .champions => t.championSelect.champions,
+                          },
+                        ),
+                        Catalog(:final entry) => ListTile(
+                          key: ValueKey(entry.id),
+                          enabled: entry.enabled && actionStatus != .submitting,
+                          onTap: () => _select(entry.id),
+                          selected: entry.name == widget.selectedName,
+                          title: Text(entry.name),
+                          trailing: entry.name == widget.selectedName
+                              ? const Icon(Icons.check)
+                              : null,
+                        ),
+                      },
                     ),
             ),
           ],
@@ -305,5 +316,29 @@ class _CatalogPickerState extends State<_CatalogPicker> {
 
   void _banNoChampion() async {
     await context.read<ChampionSelectCubit>().banNoChampion();
+  }
+}
+
+class const _CatalogSectionHeader({
+  required final String title,
+}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = context.remoteRiftTheme.colorScheme;
+
+    return Padding(
+      padding: const .only(top: 12, bottom: 4),
+      child: Row(
+        children: [
+          Text(
+            title,
+            style: theme.textTheme.labelLarge?.copyWith(color: colors.navy),
+          ),
+          const SizedBox(width: 12),
+          const Expanded(child: Divider()),
+        ],
+      ),
+    );
   }
 }

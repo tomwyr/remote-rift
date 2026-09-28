@@ -262,7 +262,11 @@ extension ChampGridChampionMapper on lcu.ChampGridChampion {
     if (id == null || id <= 0 || name == null || name.isEmpty) {
       return null;
     }
-    return ChampionSelectCatalogChampion(id: id, name: name);
+    return ChampionSelectCatalogChampion(
+      id: id,
+      isFavorite: favorite ?? false,
+      name: name,
+    );
   }
 }
 

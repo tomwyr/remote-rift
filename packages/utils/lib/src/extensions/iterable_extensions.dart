@@ -28,4 +28,19 @@ extension IterableExtensions<T> on Iterable<T> {
   }
 }
 
+extension ListExtensions<T> on List<T> {
+  (List<T>, List<T>) splitWhere(bool Function(T) predicate) {
+    final matching = <T>[];
+    final remaining = <T>[];
+    for (final value in this) {
+      if (predicate(value)) {
+        matching.add(value);
+      } else {
+        remaining.add(value);
+      }
+    }
+    return (matching, remaining);
+  }
+}
+
 enum IterableOrder { asc, desc }

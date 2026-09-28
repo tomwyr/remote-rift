@@ -73,12 +73,17 @@ ChampionSelectCatalogChampion _$ChampionSelectCatalogChampionFromJson(
   Map<String, dynamic> json,
 ) => ChampionSelectCatalogChampion(
   id: (json['id'] as num).toInt(),
+  isFavorite: json['isFavorite'] as bool,
   name: json['name'] as String,
 );
 
 Map<String, dynamic> _$ChampionSelectCatalogChampionToJson(
   ChampionSelectCatalogChampion instance,
-) => <String, dynamic>{'id': instance.id, 'name': instance.name};
+) => <String, dynamic>{
+  'id': instance.id,
+  'isFavorite': instance.isFavorite,
+  'name': instance.name,
+};
 
 ChampionSelectCatalogSummonerSpell _$ChampionSelectCatalogSummonerSpellFromJson(
   Map<String, dynamic> json,
