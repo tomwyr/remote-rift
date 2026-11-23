@@ -4,20 +4,39 @@ import 'dart:io';
 import 'package:http/http.dart';
 import 'package:http/io_client.dart';
 import 'package:remote_rift_core/remote_rift_core.dart';
+import 'package:remote_rift_logging/remote_rift_logging.dart';
 import 'package:remote_rift_utils/remote_rift_utils.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart' show WebSocketChannelException;
 
+import 'api_errors.dart';
+import 'diagnostic_events.dart';
+
+export 'api_errors.dart';
+
 class RemoteRiftApiClient.withClients({
   required final Client _httpClient,
   required final HttpClient _webSocketClient,
+  required final AppLogger _logger,
 }) {
-  factory({required HttpClient client}) => .withClients(
+  factory({required HttpClient client, required AppLogger logger}) => .withClients(
     httpClient: IOClient(client),
     webSocketClient: client,
+    logger: logger,
   );
 
   String? _apiAddress;
+
+  Future<String> get _httpBaseUrl async {
+    final apiAddress = await _requireApiAddres();
+    return 'http://$apiAddress';
+  }
+
+  Future<String> get _webSocketBaseUrl async {
+    final apiAddress = await _requireApiAddres();
+    return 'ws://$apiAddress';
+  }
+
   void setApiAddress(String? value) {
     _apiAddress = value;
   }
@@ -46,49 +65,44 @@ class RemoteRiftApiClient.withClients({
     }
   }
 
-  Future<void> createLobby({required int queueId}) async {
-    final url = '${await _httpBaseUrl}/lobby/create?queueId=$queueId';
-    await _post(.parse(url));
+  Future<void> launchGameClient() async {
+    await _post('/game-client/launch', _logger.launchGameClientCompleted);
   }
 
-  Future<void> leaveLobby() async {
-    final url = '${await _httpBaseUrl}/lobby/leave';
-    await _post(.parse(url));
+  Future<void> createLobby({required int queueId}) async {
+    await _post('/lobby/create?queueId=$queueId', _logger.createLobbyCompleted);
   }
 
   Future<void> updateLobbyRolePreferences({
     required LobbyRole first,
     required LobbyRole second,
   }) async {
-    final baseUrl = await _httpBaseUrl;
     final input = RolePreferenceInput(first: first, second: second);
-    final url = Uri.parse('$baseUrl/lobby/role-preferences');
-    await _post(url, body: jsonEncode(input.toJson()));
+    await _post(
+      '/lobby/role-preferences',
+      _logger.updateRolePreferencesCompleted,
+      body: jsonEncode(input.toJson()),
+    );
+  }
+
+  Future<void> leaveLobby() async {
+    await _post('/lobby/leave', _logger.leaveLobbyCompleted);
   }
 
   Future<void> searchMatch() async {
-    final url = '${await _httpBaseUrl}/queue/start';
-    await _post(.parse(url));
+    await _post('/queue/start', _logger.searchMatchCompleted);
   }
 
   Future<void> stopMatchSearch() async {
-    final url = '${await _httpBaseUrl}/queue/stop';
-    await _post(.parse(url));
+    await _post('/queue/stop', _logger.stopMatchSearchCompleted);
   }
 
   Future<void> acceptMatch() async {
-    final url = '${await _httpBaseUrl}/queue/accept';
-    await _post(.parse(url));
+    await _post('/queue/accept', _logger.acceptMatchCompleted);
   }
 
   Future<void> declineMatch() async {
-    final url = '${await _httpBaseUrl}/queue/decline';
-    await _post(.parse(url));
-  }
-
-  Future<void> launchGameClient() async {
-    final url = '${await _httpBaseUrl}/game-client/launch';
-    await _post(.parse(url));
+    await _post('/queue/decline', _logger.declineMatchCompleted);
   }
 
   Future<ChampionSelectCatalog> getChampSelectCatalog() async {
@@ -97,59 +111,53 @@ class RemoteRiftApiClient.withClients({
     return .fromJson(jsonDecode(response.body));
   }
 
-  Future<void> pickChampion({required int championId}) => _postChampSelect(
-    'champion',
-    ChampionSelectChampionInput(
-      championId: championId,
-      action: .pick,
-    ).toJson(),
-  );
+  Future<void> pickChampion({required int championId}) async {
+    final input = ChampionSelectChampionInput(championId: championId, action: .pick);
+    await _post(
+      '/champ-select/champion',
+      _logger.pickChampionCompleted,
+      body: jsonEncode(input.toJson()),
+    );
+  }
 
-  Future<void> banChampion({required int championId}) => _postChampSelect(
-    'champion',
-    ChampionSelectChampionInput(
-      championId: championId,
-      action: .ban,
-    ).toJson(),
-  );
+  Future<void> banChampion({required int championId}) async {
+    final input = ChampionSelectChampionInput(championId: championId, action: .ban);
+    await _post(
+      '/champ-select/champion',
+      _logger.banChampionCompleted,
+      body: jsonEncode(input.toJson()),
+    );
+  }
 
-  Future<void> banNoChampion() => _postChampSelect('ban-none');
-
-  Future<void> lockInChampion() => _postChampSelect('lock-in');
+  Future<void> banNoChampion() async {
+    await _post('/champ-select/ban-none', _logger.banNoChampionCompleted);
+  }
 
   Future<void> changeSummonerSpell({
     required int spellId,
     required ChampionSelectSummonerSpellSlot slot,
-  }) => _postChampSelect(
-    'spell',
-    ChangeSummonerSpellInput(spellId: spellId, slot: slot).toJson(),
-  );
-
-  Future<void> _postChampSelect(String route, [Map<String, dynamic>? body]) async {
-    final url = '${await _httpBaseUrl}/champ-select/$route';
-    await _post(.parse(url), body: body == null ? null : jsonEncode(body));
+  }) async {
+    final input = ChangeSummonerSpellInput(spellId: spellId, slot: slot);
+    await _post(
+      '/champ-select/spell',
+      _logger.changeSummonerSpellCompleted,
+      body: jsonEncode(input.toJson()),
+    );
   }
 
-  Future<String> get _httpBaseUrl async {
-    final apiAddress = await _requireApiAddres();
-    return 'http://$apiAddress';
+  Future<void> lockInChampion() async {
+    await _post('/champ-select/lock-in', _logger.lockInChampionCompleted);
   }
 
-  Future<String> get _webSocketBaseUrl async {
-    final apiAddress = await _requireApiAddres();
-    return 'ws://$apiAddress';
-  }
-
-  Future<String> _requireApiAddres() async {
-    if (_apiAddress case var value?) {
-      return value;
-    } else {
-      throw ApiAddressNotSet();
+  Future<void> _post(String route, void Function(Object?) recordCompletion, {String? body}) async {
+    try {
+      final url = Uri.parse('${await _httpBaseUrl}$route');
+      await _request(() => _httpClient.post(url, body: body));
+    } catch (error) {
+      recordCompletion(error);
+      rethrow;
     }
-  }
-
-  Future<Response> _post(Uri url, {String? body}) async {
-    return _request(() => _httpClient.post(url, body: body));
+    recordCompletion(null);
   }
 
   Future<Response> _get(Uri url) async {
@@ -169,17 +177,15 @@ class RemoteRiftApiClient.withClients({
       throw ApiTransportError();
     }
   }
+
+  Future<String> _requireApiAddres() async {
+    if (_apiAddress case var value?) {
+      return value;
+    } else {
+      throw ApiAddressNotSet();
+    }
+  }
 }
-
-sealed class RemoteRiftApiError implements Exception;
-
-class ApiAddressNotSet extends RemoteRiftApiError;
-
-class ApiConnectionTimeout extends RemoteRiftApiError;
-
-class ApiRequestError(final int statusCode) extends RemoteRiftApiError;
-
-class ApiTransportError extends RemoteRiftApiError;
 
 extension<T> on Stream<T> {
   Stream<T> applyTimeLimit(Duration? timeLimit) {

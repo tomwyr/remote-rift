@@ -15,8 +15,6 @@ class const LobbyRolePreferencesCard({
 }) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final colors = context.remoteRiftTheme.colorScheme;
-
     return AppCard(
       child: Material(
         color: Colors.transparent,
@@ -27,14 +25,7 @@ class const LobbyRolePreferencesCard({
           children: [
             Padding(
               padding: const .fromLTRB(16, 16, 16, 8),
-              child: Text(
-                t.lobbyRolePreferences.title.toUpperCase(),
-                style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                  color: colors.navy.withValues(alpha: 0.72),
-                  fontWeight: .w800,
-                  letterSpacing: 1.2,
-                ),
-              ),
+              child: AppEyebrow(label: t.lobbyRolePreferences.title),
             ),
             switch (preferences) {
               LobbyRoleSelection preferences => _SelectedRolePreferences(

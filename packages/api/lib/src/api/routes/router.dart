@@ -1,41 +1,48 @@
+import 'dart:async';
+
 import 'package:remote_rift_core/remote_rift_core.dart';
+import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 
 import '../data/repository.dart';
 import 'handlers.dart';
 
-Router configureRouter() {
-  return Router()
-    ..configureService()
-    ..configureGameClient()
-    ..configureStatus()
-    ..configureSession()
-    ..configureLobby()
-    ..configureQueue()
-    ..configureChampSelect();
-}
+part 'route_registration.dart';
 
-extension on Router {
-  void configureGameClient() {
-    postJson('/game-client/launch', (request) async {
-      await RemoteRiftConnector().launchGameClient();
-      return .noContent();
-    });
+class ConnectorRoutes(final Router _router, final ConnectorFailureObserver? _onFailure) {
+  static Router configure(ConnectorFailureObserver? onFailure) {
+    final router = Router();
+    ConnectorRoutes(router, onFailure)
+      ..configureService()
+      ..configureGameClient()
+      ..configureStatus()
+      ..configureSession()
+      ..configureLobby()
+      ..configureQueue()
+      ..configureChampSelect();
+    return router;
   }
 
   void configureService() {
     String route(String value) => '/service/$value';
 
-    getJson(route('info'), (request) async {
+    _get(route('info'), (request) async {
       final info = await ApiServiceRepository().getServiceInfo();
       return .ok(info.toJson());
+    });
+  }
+
+  void configureGameClient() {
+    _post('/game-client/launch', (request) async {
+      await RemoteRiftConnector().launchGameClient();
+      return .noContent();
     });
   }
 
   void configureStatus() {
     String route(String value) => '/status/$value';
 
-    mountWs(route('watch'), (webSocket) async {
+    _mountWs(route('watch'), (webSocket) async {
       await for (var status in RemoteRiftConnector().getStatusStream()) {
         if (webSocket.status == .closed) break;
         webSocket.sink.addJson(status.sealedToJson());
@@ -46,7 +53,7 @@ extension on Router {
   void configureSession() {
     String route(String value) => '/session/$value';
 
-    mountWs(route('watch'), (webSocket) async {
+    _mountWs(route('watch'), (webSocket) async {
       await for (var session in RemoteRiftConnector().getCurrentSessionStream()) {
         if (webSocket.status == .closed) break;
         webSocket.sink.addJson(session.toJson());
@@ -57,7 +64,7 @@ extension on Router {
   void configureLobby() {
     String route(String value) => '/lobby/$value';
 
-    postJson(route('create'), (request) async {
+    _post(route('create'), (request) async {
       final queueId = request.intQueryParam('queueId');
       if (queueId == null) return .badRequest();
 
@@ -65,12 +72,12 @@ extension on Router {
       return .noContent();
     });
 
-    postJson(route('leave'), (request) async {
+    _post(route('leave'), (request) async {
       await RemoteRiftConnector().leaveLobby();
       return .noContent();
     });
 
-    postJson(route('role-preferences'), (request) async {
+    _post(route('role-preferences'), (request) async {
       final input = await request.decodeBodyOrNull(RolePreferenceInput.fromJson);
       if (input == null || input.first == input.second) return .badRequest();
 
@@ -85,22 +92,22 @@ extension on Router {
   void configureQueue() {
     String route(String value) => '/queue/$value';
 
-    postJson(route('start'), (request) async {
+    _post(route('start'), (request) async {
       await RemoteRiftConnector().searchMatch();
       return .noContent();
     });
 
-    postJson(route('stop'), (request) async {
+    _post(route('stop'), (request) async {
       await RemoteRiftConnector().stopMatchSearch();
       return .noContent();
     });
 
-    postJson(route('accept'), (request) async {
+    _post(route('accept'), (request) async {
       await RemoteRiftConnector().acceptMatch();
       return .noContent();
     });
 
-    postJson(route('decline'), (request) async {
+    _post(route('decline'), (request) async {
       await RemoteRiftConnector().declineMatch();
       return .noContent();
     });
@@ -109,12 +116,12 @@ extension on Router {
   void configureChampSelect() {
     String route(String value) => '/champ-select/$value';
 
-    getJson(route('catalog'), (request) async {
+    _get(route('catalog'), (request) async {
       final catalog = await RemoteRiftConnector().getChampionSelectCatalog();
       return .ok(catalog.toJson());
     });
 
-    postJson(route('champion'), (request) async {
+    _post(route('champion'), (request) async {
       final input = await request.decodeBodyOrNull(ChampionSelectChampionInput.fromJson);
       if (input == null || input.championId <= 0) {
         return .badRequest();
@@ -127,17 +134,17 @@ extension on Router {
       return .noContent();
     });
 
-    postJson(route('ban-none'), (request) async {
+    _post(route('ban-none'), (request) async {
       await RemoteRiftConnector().banNoChampion();
       return .noContent();
     });
 
-    postJson(route('lock-in'), (request) async {
+    _post(route('lock-in'), (request) async {
       await RemoteRiftConnector().lockInChampion();
       return .noContent();
     });
 
-    postJson(route('spell'), (request) async {
+    _post(route('spell'), (request) async {
       final input = await request.decodeBodyOrNull(ChangeSummonerSpellInput.fromJson);
       if (input == null || input.spellId <= 0) {
         return .badRequest();
@@ -150,3 +157,6 @@ extension on Router {
     });
   }
 }
+
+/// Observes failures using the registered connector operation and HTTP status.
+typedef ConnectorFailureObserver = void Function(String operation, int statusCode, Object? error);

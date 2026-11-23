@@ -5,6 +5,8 @@ import 'package:http/http.dart';
 import 'package:http/testing.dart';
 import 'package:remote_rift_mobile/data/api_client.dart';
 
+import '../mocks.dart';
+
 void main() {
   late HttpClient webSocketClient;
   late Future<Response> Function(Request request) serviceInfoHandler;
@@ -16,6 +18,7 @@ void main() {
     apiClient = RemoteRiftApiClient.withClients(
       httpClient: MockClient((request) => serviceInfoHandler(request)),
       webSocketClient: webSocketClient,
+      logger: FakeAppLogger(),
     );
   });
 

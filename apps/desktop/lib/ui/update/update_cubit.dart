@@ -17,6 +17,8 @@ class UpdateCubit({
     _assertInitializeState();
 
     final startupResult = await _updater.acknowledgeHealthyStart();
+    if (isClosed) return;
+
     switch (startupResult) {
       case Acknowledged():
         _events.add(.installed);
@@ -28,12 +30,15 @@ class UpdateCubit({
 
     try {
       final update = await _updater.checkUpdateAvailable();
+      if (isClosed) return;
+
       if (update != null) {
         emit(UpdateAvailable(update: update));
       } else {
         emit(UpToDate());
       }
     } on ApplicationUpdaterError {
+      if (isClosed) return;
       emit(UpdateCheckFailed());
     }
   }
@@ -44,6 +49,7 @@ class UpdateCubit({
       emit(UpdateInProgress());
       await _updater.installUpdate(update: update);
     } on ApplicationUpdaterError {
+      if (isClosed) return;
       emit(UpdateError(update: update));
     }
   }
@@ -56,8 +62,7 @@ class UpdateCubit({
 
   @override
   Future<void> close() async {
-    await _events.close();
-    await super.close();
+    await [_events.close(), super.close()].wait;
   }
 }
 

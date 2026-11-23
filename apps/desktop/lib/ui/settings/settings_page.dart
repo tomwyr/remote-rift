@@ -5,6 +5,7 @@ import 'package:remote_rift_ui/remote_rift_ui.dart';
 
 import '../../dependencies.dart';
 import '../../i18n/strings.g.dart';
+import '../diagnostics/diagnostics_settings_card.dart';
 import '../widgets/app_shell.dart';
 import '../widgets/app_icon_button.dart';
 import '../widgets/app_value_box.dart';
@@ -57,6 +58,8 @@ class const _SettingsCards({required final Loaded state}) extends StatelessWidge
         _LockfileLocationCard(state: state),
         const SizedBox(height: 12),
         const McpSettingsCard(),
+        const SizedBox(height: 12),
+        const DiagnosticsSettingsCard(),
       ],
     );
   }

@@ -13,11 +13,13 @@ class AppSettings({
   required final bool mcpPreviouslyEnabled,
   required final bool mcpStartsOnLaunch,
   required final String? customLockfilePath,
+  required final bool diagnosticLoggingEnabled,
 }) {
   factory defaults() => AppSettings(
     mcpPreviouslyEnabled: false,
     mcpStartsOnLaunch: true,
     customLockfilePath: null,
+    diagnosticLoggingEnabled: false,
   );
 
   factory fromJson(Map<String, dynamic> json) => _$AppSettingsFromJson(json);
@@ -30,6 +32,10 @@ class AppSettingsStore implements LcuConnectionConfiguration {
 
   Future<AppSettings> load() async {
     return await _load() ?? .defaults();
+  }
+
+  Future<void> saveDiagnosticLoggingEnabled(bool enabled) async {
+    await _update((settings) => settings.copyWith(diagnosticLoggingEnabled: enabled));
   }
 
   Future<void> saveMcpStartsOnLaunch(bool mcpStartsOnLaunch) async {

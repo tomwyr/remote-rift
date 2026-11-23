@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:path/path.dart';
+import 'package:remote_rift_utils/remote_rift_utils.dart';
 
 import 'file_utils.dart';
 import 'models.dart';
@@ -207,7 +208,7 @@ abstract class UpdateRunner({
 
   Future<void> _cleanupStaging(String archivePath) async {
     final directory = File(archivePath).parent;
-    if (basename(directory.path).startsWith('updater-update-') && await directory.exists()) {
+    if (directory.basename.startsWith('updater-update-') && await directory.exists()) {
       await directory.delete(recursive: true);
     }
   }

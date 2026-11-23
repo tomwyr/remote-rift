@@ -1,11 +1,15 @@
 import 'dart:io';
 
 import 'package:remote_rift_api/remote_rift_api.dart';
+import 'package:remote_rift_logging/remote_rift_logging.dart';
 import 'package:remote_rift_ui/remote_rift_ui.dart';
+
+import 'diagnostic_events.dart';
 
 class RemoteRiftApiServiceRunner({
   required final RemoteRiftApiService _service,
   required final ServiceRegistry _registry,
+  required final AppLogger _logger,
 }) {
   List<HttpServer> _servers = [];
   ServiceBroadcast? _broadcast;
@@ -15,15 +19,18 @@ class RemoteRiftApiServiceRunner({
   Future<void> run() async {
     if (_running) return;
     _running = true;
+    _logger.connectorServiceStarting();
 
     try {
       final (servers, broadcast) = await _runAndBroadcast();
       _servers = servers;
       _broadcast = broadcast;
-    } catch (_) {
+    } catch (error) {
+      _logger.connectorServiceStartCompleted(error);
       await close();
       rethrow;
     }
+    _logger.connectorServiceStartCompleted();
   }
 
   Future<(List<HttpServer>, ServiceBroadcast)> _runAndBroadcast() async {
@@ -53,10 +60,21 @@ class RemoteRiftApiServiceRunner({
   }
 
   Future<void> close() async {
-    await _broadcast?.dispose();
-    await _servers.map((server) => server.close()).wait;
-    _broadcast = null;
-    _servers = [];
-    _running = false;
+    final wasServing = _broadcast != null;
+    Object? stopError;
+    try {
+      await _broadcast?.dispose();
+      await _servers.map((server) => server.close()).wait;
+      _broadcast = null;
+      _servers = [];
+      _running = false;
+    } catch (error) {
+      stopError = error;
+      rethrow;
+    } finally {
+      if (wasServing) {
+        await _logger.connectorServiceStopCompleted(stopError);
+      }
+    }
   }
 }

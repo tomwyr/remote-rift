@@ -49,6 +49,8 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	late final Translations$gameQueue$en gameQueue = Translations$gameQueue$en._(_root);
 	late final Translations$connection$en connection = Translations$connection$en._(_root);
 	late final Translations$home$en home = Translations$home$en._(_root);
+	late final Translations$settings$en settings = Translations$settings$en._(_root);
+	late final Translations$diagnostics$en diagnostics = Translations$diagnostics$en._(_root);
 }
 
 // Path: app
@@ -412,6 +414,75 @@ class Translations$home$en {
 	String get declineGameButton => 'Decline Game';
 }
 
+// Path: settings
+class Translations$settings$en {
+	Translations$settings$en._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Settings'
+	String get title => 'Settings';
+}
+
+// Path: diagnostics
+class Translations$diagnostics$en {
+	Translations$diagnostics$en._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Diagnostics'
+	String get title => 'Diagnostics';
+
+	/// en: 'Diagnostic logging'
+	String get logging => 'Diagnostic logging';
+
+	/// en: 'Logs stay on this device until you share them. Turning logging off keeps existing logs within the retention limits.'
+	String get privacy => 'Logs stay on this device until you share them. Turning logging off keeps existing logs within the retention limits.';
+
+	/// en: 'Couldn't load the logging preference.'
+	String get settingUnavailable => 'Couldn\'t load the logging preference.';
+
+	/// en: 'Couldn't save the logging preference. Try again.'
+	String get settingFailed => 'Couldn\'t save the logging preference. Try again.';
+
+	/// en: 'Log storage is unavailable. Check that the device has free space.'
+	String get storageUnavailable => 'Log storage is unavailable. Check that the device has free space.';
+
+	/// en: 'Share logs'
+	String get share => 'Share logs';
+
+	/// en: 'Sharing logs…'
+	String get sharing => 'Sharing logs…';
+
+	/// en: 'There are no logs to share.'
+	String get shareEmpty => 'There are no logs to share.';
+
+	/// en: 'Sharing cancelled.'
+	String get shareCancelled => 'Sharing cancelled.';
+
+	/// en: 'Couldn't prepare logs for sharing. Try again.'
+	String get sharePreparationFailed => 'Couldn\'t prepare logs for sharing. Try again.';
+
+	/// en: 'Couldn't share logs. Try again.'
+	String get shareFailed => 'Couldn\'t share logs. Try again.';
+
+	/// en: 'Clear logs'
+	String get clear => 'Clear logs';
+
+	/// en: 'Clearing logs…'
+	String get clearing => 'Clearing logs…';
+
+	/// en: 'Logs cleared.'
+	String get cleared => 'Logs cleared.';
+
+	/// en: 'Couldn't clear logs. Try again.'
+	String get clearFailed => 'Couldn\'t clear logs. Try again.';
+}
+
 // Path: championSelect.status
 class Translations$championSelect$status$en {
 	Translations$championSelect$status$en._(this._root);
@@ -646,6 +717,23 @@ extension on Translations {
 			'home.cancelSearchButton' => 'Cancel Search',
 			'home.acceptGameButton' => 'Accept Game',
 			'home.declineGameButton' => 'Decline Game',
+			'settings.title' => 'Settings',
+			'diagnostics.title' => 'Diagnostics',
+			'diagnostics.logging' => 'Diagnostic logging',
+			'diagnostics.privacy' => 'Logs stay on this device until you share them. Turning logging off keeps existing logs within the retention limits.',
+			'diagnostics.settingUnavailable' => 'Couldn\'t load the logging preference.',
+			'diagnostics.settingFailed' => 'Couldn\'t save the logging preference. Try again.',
+			'diagnostics.storageUnavailable' => 'Log storage is unavailable. Check that the device has free space.',
+			'diagnostics.share' => 'Share logs',
+			'diagnostics.sharing' => 'Sharing logs…',
+			'diagnostics.shareEmpty' => 'There are no logs to share.',
+			'diagnostics.shareCancelled' => 'Sharing cancelled.',
+			'diagnostics.sharePreparationFailed' => 'Couldn\'t prepare logs for sharing. Try again.',
+			'diagnostics.shareFailed' => 'Couldn\'t share logs. Try again.',
+			'diagnostics.clear' => 'Clear logs',
+			'diagnostics.clearing' => 'Clearing logs…',
+			'diagnostics.cleared' => 'Logs cleared.',
+			'diagnostics.clearFailed' => 'Couldn\'t clear logs. Try again.',
 			_ => null,
 		};
 	}

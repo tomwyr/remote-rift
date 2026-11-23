@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:remote_rift_ui/remote_rift_ui.dart';
 import 'package:toastification/toastification.dart';
 
-enum AppNotificationType { success, error }
+enum AppNotificationType { success, error, info }
 
 class const AppNotifications({
   super.key,
@@ -40,10 +40,12 @@ class const AppNotifications({
     final icon = switch (type) {
       .success => Icons.check_rounded,
       .error => Icons.error_outline_rounded,
+      .info => Icons.info_outline_rounded,
     };
     final color = switch (type) {
       .success => colors.success,
       .error => colors.error,
+      .info => colors.navy,
     };
 
     toastification.show(
@@ -54,6 +56,7 @@ class const AppNotifications({
       type: switch (type) {
         .success => .success,
         .error => .error,
+        .info => .info,
       },
       style: .flat,
       icon: Icon(icon, color: color, size: 22),

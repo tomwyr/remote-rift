@@ -4,12 +4,15 @@ import 'dart:ui';
 import 'package:cancelable_stream/cancelable_stream.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:remote_rift_core/remote_rift_core.dart';
+import 'package:remote_rift_logging/remote_rift_logging.dart';
 import 'package:remote_rift_utils/remote_rift_utils.dart';
 
+import '../../services/diagnostic_events.dart';
 import 'connection_state.dart';
 
 class ConnectionCubit({
   required final RemoteRiftConnector _connector,
+  required final AppLogger _logger,
 }) extends Cubit<ConnectionState> {
   this : super(Initial());
 
@@ -45,6 +48,9 @@ class ConnectionCubit({
   }
 
   void _connectToGameClient() {
+    if (state is Connected) {
+      _logger.leagueClientDetached();
+    }
     emit(Connecting());
     _resetStatusListener();
   }
@@ -56,11 +62,15 @@ class ConnectionCubit({
   }
 
   void _resetStatusListener({VoidCallback? onConnectionAttempted}) {
+    _logger.leagueClientConnectionStarted();
     final stream = _connector
         .getStatusStream()
         .peek(
           onFirstOrError: onConnectionAttempted,
-          onDone: _connectToGameClient,
+          onDone: () {
+            _logger.leagueClientStatusInterrupted();
+            _connectToGameClient();
+          },
         )
         .cancelable();
     _statusStream?.cancel();
@@ -85,22 +95,43 @@ class ConnectionCubit({
             );
         }
 
-        switch (response) {
-          case RemoteRiftData(value: .ready):
-            emit(Connected());
+        final next = switch (response) {
+          RemoteRiftData(value: .ready) => Connected(),
+          RemoteRiftData(value: .unavailable) => Connecting(),
+          RemoteRiftError error => ConnectedWithError(cause: error),
+        };
 
-          case RemoteRiftData(value: .unavailable):
-            emit(Connecting());
-
-          case RemoteRiftError error:
-            emit(ConnectedWithError(cause: error));
-        }
+        _logStatusChange(response, next);
+        emit(next);
       }
-    } catch (_) {
+    } catch (error) {
+      _logStatusError(error);
       if (state case Connecting() || Connected()) {
         _initReconnectScheduler();
       }
       emit(ConnectionError());
+    }
+  }
+
+  void _logStatusChange(RemoteRiftStatusResponse response, ConnectionState next) {
+    final previous = state;
+    if (previous == next) return;
+
+    _logger.leagueClientStatusChanged(response);
+    switch ((previous, next)) {
+      case (Connected(), _):
+        _logger.leagueClientDetached();
+      case (_, Connected()):
+        _logger.leagueClientAttached();
+      default:
+        break;
+    }
+  }
+
+  void _logStatusError(Object error) {
+    _logger.leagueClientStatusInterrupted(error);
+    if (state is Connected) {
+      _logger.leagueClientDetached();
     }
   }
 

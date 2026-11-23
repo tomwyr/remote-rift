@@ -14,6 +14,3 @@ apps/website/web/styles.css
 
 # macOS.
 .DS_Store
-
-# Local planning notes.
-docs/plans/

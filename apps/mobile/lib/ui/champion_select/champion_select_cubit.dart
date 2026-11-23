@@ -22,8 +22,10 @@ class ChampionSelectCubit({
     emit(Loading(championSelect: championSelect));
     try {
       final catalog = await _apiClient.getChampSelectCatalog();
+      if (isClosed) return;
       emit(Data(championSelect: championSelect, catalog: catalog.sorted()));
     } catch (_) {
+      if (isClosed) return;
       emit(Failed(championSelect: championSelect));
     }
   }
@@ -84,9 +86,11 @@ class ChampionSelectCubit({
     }
     try {
       await operation();
+      if (isClosed) return;
       _finishAction(action);
       _events.add(completedEvent);
     } catch (_) {
+      if (isClosed) return;
       _finishAction(action, failed: true);
     }
   }
@@ -128,7 +132,6 @@ class ChampionSelectCubit({
 
   @override
   Future<void> close() async {
-    await _events.close();
-    await super.close();
+    await [_events.close(), super.close()].wait;
   }
 }

@@ -58,6 +58,25 @@ settings:
     invalid: "Choose a valid League Client lockfile."
     persistenceFailed: "Couldn't save the lockfile location. Please try again."
 
+diagnostics:
+  title: "Diagnostics"
+  logging: "Diagnostic logging"
+  privacy: "Logs stay on this device until you export them. Turning logging off keeps existing logs within the retention limits."
+  storageUnavailable: "Log storage is unavailable. Check that the device has free space and Remote Rift can write to its support folder."
+  settingUnavailable: "Couldn't load the logging preference."
+  settingFailed: "Couldn't save the logging preference. Try again."
+  export: "Export logs"
+  exporting: "Exporting logs…"
+  exported: "Logs exported."
+  exportEmpty: "There are no logs to export."
+  exportCancelled: "Export cancelled."
+  exportPreparationFailed: "Couldn't prepare logs for export. Try again."
+  exportSaveFailed: "Couldn't save the export. Try again or choose another location."
+  clear: "Clear logs"
+  clearing: "Clearing logs…"
+  cleared: "Logs cleared."
+  clearFailed: "Couldn't clear logs. Try again."
+
 gameError:
   unableToConnectTitle: "Unable to connect"
   unknownTitle: "Unknown game state"

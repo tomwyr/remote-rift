@@ -18,12 +18,14 @@ class McpIntegrationCubit({
   void initialize() async {
     try {
       final settings = await _settingsStore.load();
+      if (isClosed) return;
       emit(state.copyWith(startsOnLaunch: settings.mcpStartsOnLaunch));
 
       if (settings.mcpPreviouslyEnabled && settings.mcpStartsOnLaunch) {
         await _runServer(.start, Starting(), _runner.enable);
       }
     } on AppSettingsError {
+      if (isClosed) return;
       emit(state.copyWith(status: Failed(action: .configuration)));
     }
   }
@@ -33,8 +35,10 @@ class McpIntegrationCubit({
 
     try {
       await _saveStartsOnLaunch(startsOnLaunch);
+      if (isClosed) return;
       emit(current.copyWith(startsOnLaunch: startsOnLaunch));
     } on AppSettingsError {
+      if (isClosed) return;
       emit(current.copyWith(status: Failed(action: .configuration)));
     }
   }
@@ -49,10 +53,12 @@ class McpIntegrationCubit({
     try {
       await _settingsStore.saveMcpPreviouslyEnabled(true);
     } on AppSettingsError {
+      if (isClosed) return;
       emit(state.copyWith(status: Failed(action: .configuration)));
       return;
     }
 
+    if (isClosed) return;
     await _runServer(.start, Starting(), _runner.enable);
   }
 
@@ -62,15 +68,18 @@ class McpIntegrationCubit({
     try {
       await _settingsStore.saveMcpPreviouslyEnabled(false);
     } on AppSettingsError {
+      if (isClosed) return;
       emit(state.copyWith(status: Failed(action: .configuration)));
       return;
     }
 
     try {
       await _runner.disable();
+      if (isClosed) return;
       emit(state.copyWith(status: Stopped(lastRunningState: runningState)));
       _events.add(.stopped);
     } catch (_) {
+      if (isClosed) return;
       emit(state.copyWith(status: Failed(action: .stop)));
     }
   }
@@ -93,8 +102,10 @@ class McpIntegrationCubit({
     emit(state.copyWith(status: pendingStatus));
     try {
       final info = await run();
+      if (isClosed) return;
       emit(state.copyWith(status: Running(hostConfiguration: info.hostConfiguration)));
     } catch (_) {
+      if (isClosed) return;
       emit(state.copyWith(status: Failed(action: action)));
     }
   }
@@ -114,8 +125,10 @@ class McpIntegrationCubit({
 
   @override
   Future<void> close() async {
-    await _events.close();
-    await _runner.disable();
-    await super.close();
+    try {
+      await _runner.disable();
+    } finally {
+      await [_events.close(), super.close()].wait;
+    }
   }
 }

@@ -84,31 +84,6 @@ class const AppStatusLayout({
   }
 }
 
-class const AppEyebrow({
-  required final String label,
-  required final Color accent,
-}) extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final colors = context.remoteRiftTheme.colorScheme;
-
-    return Row(
-      children: [
-        Container(width: 3, height: 16, color: accent),
-        const SizedBox(width: 8),
-        Text(
-          label.toUpperCase(),
-          style: Theme.of(context).textTheme.labelSmall?.copyWith(
-            color: colors.navy.withValues(alpha: 0.72),
-            fontWeight: .w600,
-            letterSpacing: 1.15,
-          ),
-        ),
-      ],
-    );
-  }
-}
-
 class const _StatusDetails({
   required final String? title,
   required final String? description,

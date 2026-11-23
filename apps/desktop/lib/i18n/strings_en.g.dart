@@ -47,6 +47,7 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	late final Translations$service$en service = Translations$service$en._(_root);
 	late final Translations$connection$en connection = Translations$connection$en._(_root);
 	late final Translations$settings$en settings = Translations$settings$en._(_root);
+	late final Translations$diagnostics$en diagnostics = Translations$diagnostics$en._(_root);
 	late final Translations$gameError$en gameError = Translations$gameError$en._(_root);
 	late final Translations$mcp$en mcp = Translations$mcp$en._(_root);
 }
@@ -216,6 +217,66 @@ class Translations$settings$en {
 	String get close => 'Close settings';
 
 	late final Translations$settings$lockfile$en lockfile = Translations$settings$lockfile$en._(_root);
+}
+
+// Path: diagnostics
+class Translations$diagnostics$en {
+	Translations$diagnostics$en._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Diagnostics'
+	String get title => 'Diagnostics';
+
+	/// en: 'Diagnostic logging'
+	String get logging => 'Diagnostic logging';
+
+	/// en: 'Logs stay on this device until you export them. Turning logging off keeps existing logs within the retention limits.'
+	String get privacy => 'Logs stay on this device until you export them. Turning logging off keeps existing logs within the retention limits.';
+
+	/// en: 'Log storage is unavailable. Check that the device has free space and Remote Rift can write to its support folder.'
+	String get storageUnavailable => 'Log storage is unavailable. Check that the device has free space and Remote Rift can write to its support folder.';
+
+	/// en: 'Couldn't load the logging preference.'
+	String get settingUnavailable => 'Couldn\'t load the logging preference.';
+
+	/// en: 'Couldn't save the logging preference. Try again.'
+	String get settingFailed => 'Couldn\'t save the logging preference. Try again.';
+
+	/// en: 'Export logs'
+	String get export => 'Export logs';
+
+	/// en: 'Exporting logs…'
+	String get exporting => 'Exporting logs…';
+
+	/// en: 'Logs exported.'
+	String get exported => 'Logs exported.';
+
+	/// en: 'There are no logs to export.'
+	String get exportEmpty => 'There are no logs to export.';
+
+	/// en: 'Export cancelled.'
+	String get exportCancelled => 'Export cancelled.';
+
+	/// en: 'Couldn't prepare logs for export. Try again.'
+	String get exportPreparationFailed => 'Couldn\'t prepare logs for export. Try again.';
+
+	/// en: 'Couldn't save the export. Try again or choose another location.'
+	String get exportSaveFailed => 'Couldn\'t save the export. Try again or choose another location.';
+
+	/// en: 'Clear logs'
+	String get clear => 'Clear logs';
+
+	/// en: 'Clearing logs…'
+	String get clearing => 'Clearing logs…';
+
+	/// en: 'Logs cleared.'
+	String get cleared => 'Logs cleared.';
+
+	/// en: 'Couldn't clear logs. Try again.'
+	String get clearFailed => 'Couldn\'t clear logs. Try again.';
 }
 
 // Path: gameError
@@ -402,6 +463,23 @@ extension on Translations {
 			'settings.lockfile.reset' => 'Reset to default',
 			'settings.lockfile.invalid' => 'Choose a valid League Client lockfile.',
 			'settings.lockfile.persistenceFailed' => 'Couldn\'t save the lockfile location. Please try again.',
+			'diagnostics.title' => 'Diagnostics',
+			'diagnostics.logging' => 'Diagnostic logging',
+			'diagnostics.privacy' => 'Logs stay on this device until you export them. Turning logging off keeps existing logs within the retention limits.',
+			'diagnostics.storageUnavailable' => 'Log storage is unavailable. Check that the device has free space and Remote Rift can write to its support folder.',
+			'diagnostics.settingUnavailable' => 'Couldn\'t load the logging preference.',
+			'diagnostics.settingFailed' => 'Couldn\'t save the logging preference. Try again.',
+			'diagnostics.export' => 'Export logs',
+			'diagnostics.exporting' => 'Exporting logs…',
+			'diagnostics.exported' => 'Logs exported.',
+			'diagnostics.exportEmpty' => 'There are no logs to export.',
+			'diagnostics.exportCancelled' => 'Export cancelled.',
+			'diagnostics.exportPreparationFailed' => 'Couldn\'t prepare logs for export. Try again.',
+			'diagnostics.exportSaveFailed' => 'Couldn\'t save the export. Try again or choose another location.',
+			'diagnostics.clear' => 'Clear logs',
+			'diagnostics.clearing' => 'Clearing logs…',
+			'diagnostics.cleared' => 'Logs cleared.',
+			'diagnostics.clearFailed' => 'Couldn\'t clear logs. Try again.',
 			'gameError.unableToConnectTitle' => 'Unable to connect',
 			'gameError.unknownTitle' => 'Unknown game state',
 			'gameError.unableToConnectDescription' => 'The game client could not be reached. Make sure that it is running to interact with the game.',

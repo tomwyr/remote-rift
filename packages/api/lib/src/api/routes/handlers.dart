@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:shelf/shelf.dart';
@@ -14,8 +15,9 @@ extension RouterHandlers on Router {
     post(route, handler);
   }
 
-  void mountWs(String prefix, WebSocketHandler handler) {
-    mount(prefix, webSocketHandler((webSocket, _) => handler(webSocket)));
+  void mountWs(String route, WebSocketHandler handler, {Middleware? middleware}) {
+    final upgrade = webSocketHandler((webSocket, _) => handler(webSocket));
+    mount(route, middleware == null ? upgrade : middleware(upgrade));
   }
 }
 
@@ -31,7 +33,7 @@ class JsonResponse extends Response {
   new badRequest() : super(400);
 }
 
-typedef JsonRequestHandler = Future<JsonResponse> Function(Request request);
+typedef JsonRequestHandler = FutureOr<JsonResponse> Function(Request request);
 typedef WebSocketHandler = void Function(WebSocketChannel webSocket);
 
 enum WebSocketStatus { open, closed }

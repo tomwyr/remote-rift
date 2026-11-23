@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class const AppSwitch({
   required final bool value,
-  required final ValueChanged<bool> onChanged,
+  required final ValueChanged<bool>? onChanged,
 }) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

@@ -4,6 +4,13 @@
 
 - Store created implementation plans in `docs/plans`.
 
+## Package READMEs
+
+- Explain the package's purpose, capabilities, and stable behavior at the level of detail used by
+  comparable packages. Name specific callers only when that helps the reader.
+- Include short code examples when they clarify configuration or normal use. Keep session history
+  and incidental implementation details out of the README.
+
 ## Commits
 
 - Use a short, imperative, sentence-case subject without a conventional-commit prefix or period.
@@ -44,6 +51,8 @@
 - Keep gateways limited to remote-service models and transport behavior; put product policy, staging, retries, selection, and application-model mapping in callers or domain layers.
 - Gateway operations must express provider-specific capability through inputs or results; move generic-input operations, such as arbitrary-URI handling, to provider-neutral layers.
 - Define interfaces from consumers' minimal needs; expose provider names, protocol models, or transport types only when genuinely required.
+- Let shared packages own reusable contracts and infrastructure. Keep consumer-specific domain
+  concepts and policies with the consumers that own them.
 - Export a package type only when a package consumer needs it; internal implementation types stay unexported.
 - Treat malformed gateway inputs as invalid input to that gateway; reserve invalid-response errors for remote-service data.
 - Define extensions on non-null receivers; handle nullable values explicitly at call sites.
@@ -97,25 +106,39 @@
 - Use dot shorthand when the receiver type is inferred, including `.infinity` and `.all`; spell out unnamed constructors rather than using `.new(...)`.
 - When dot shorthand lacks an inferred receiver, restructure to establish context rather than adding an explicit local type solely for shorthand.
 - In primary constructors, use `final` field parameters only when values are used after construction; keep values used only for initialization as ordinary parameters.
+- Use primary constructors to assign fields and validate inputs. Use a factory for setup that
+  derives the initial state.
+- Use private properties only when they protect an invariant or hide an implementation detail.
+- Use public constructors for simple data holders. Make a constructor private only when callers
+  must use a specific creation path to enforce an invariant.
 - When expected error types share handling, catch untyped errors, narrow with `if (error case ...)`, and rethrow unexpected errors.
 - Retry only explicitly classified transient failures; immediately preserve invalid-data and unexpected failures, and distinguish final-attempt translation from non-final retry behavior.
-- Express construction-time invariants with constructor assertions; reserve typed runtime errors for failures during operations.
+- Use assertions for programmer-only construction invariants. Validate inputs in the constructor
+  when invalid values must be rejected in release builds. Reserve typed feature errors for failures
+  during operations.
 - Prefer `if-case` over `switch` when one pattern is handled and all others propagate.
 - Keep collections readable: resolve meaningful setup before long collections or loops, but do not extract trivial pure expressions merely to shorten them.
 - Prefer collection literals with `if` and `for` elements over building collections through mutable `.add()` calls.
-- Put common list operations in generic extensions on `List<T>` rather than feature-local helper functions.
+- Use spread literals such as `[...source]` to copy lists. Use `UnmodifiableListView` when callers
+  need a live read-only view.
+- Put reusable collection operations in shared extensions on their natural receiver types.
+- Keep the steps in longer methods at a consistent level of detail. Extract self-contained
+  low-level work such as parsing bytes so the calling method shows the order of operations.
 - Separate self-contained phases of long methods with blank lines; extract helpers only for meaningful operations, not parameter forwarding.
 - Let scope helpers create and clean up temporary resources before passing them to callbacks; keep resource operations at callers when that clarifies sequence.
 - Keep consecutive important asynchronous effects explicit at call sites; do not hide persistence inside a fetching helper.
 - In async contexts, await futures instead of returning them directly.
 - Prefer `await` over `.then` in async methods.
+- Do not use `unawaited()`. It has no effect on Future execution or error handling.
 - Do not nest an async method call inside another call; await it into a named local first.
 - Keep serialization models with related package models, prefer generated serializers, and preserve serialized names unless intentionally changing the schema.
 - In `build` methods, group resolved locals and separate them from the returned widget tree with a blank line.
 - Define const constructors only for widgets; do not require const call sites for ordinary models, but use const where language or framework semantics require it, such as annotation metadata.
 - Resolve non-simple constructor arguments before construction; keep final property assignments simple, including asynchronous values and method calls.
 - Order model members as declared properties, adjacent `fromJson`/`toJson` APIs, then equality or derived members such as `props`.
-- Use `=>` only for simple redirections, one straightforward condition, or a single switch expression; use blocks for compound logic.
+- Use `=>` only where comparable declarations use expression bodies, and only for simple
+  redirections, one straightforward condition, or a single switch expression.
+- Use a conditional expression when returning one of two simple values.
 - Use braces for `if` control flows, except an early return that fits within 40 characters.
 - Non-empty Dart `switch` cases end automatically; use `break` only for intentional no-op cases.
 - Prefer pattern matching and guards when clearer than chained conditions for nullable, validated values.
@@ -124,7 +147,10 @@
   followed by a separate null check.
 - Avoid unsafe `!`; bind and promote nullable values with locals or patterns.
 - Avoid `as`; bind and promote narrowed values with locals or patterns.
+- Use `==` when it provides the required comparison. Reserve `identical` for checks that require
+  object identity.
 - Do not create private pass-through methods; extract private methods only for meaningful shared logic, and keep equivalent duplication in that shared method.
+- Keep helpers called only from instance members as instance methods.
 - Extract a meaningful asynchronous suboperation when it separates concerns such as loading data from
   coordinating cache or in-flight state.
 - Action helpers may cover only genuinely uniform flows; keep distinct semantics local and require callers to provide every emitted state value rather than hiding transition defaults.
@@ -134,14 +160,28 @@
 - Do not create separate types solely for identical shape and behavior; keep distinct domain concepts separate even when their current fields match.
 - When a UI list displays distinct widget variants, model its rows as sealed entry types, resolve them before rendering, then switch on the row type in the list builder.
 - Name subclasses relative to their shared base; do not repeat the base type's context in every subclass name.
+- Keep private and local names concise when the scope supplies the context. Name a transformed
+  result for what the transformation produced.
 - Prefer positional record results when result positions are unambiguous at the call site.
 - Omit trailing commas when an invocation fits cleanly on one line.
-- Order class members with public declarations first, then private members in natural call order, with called members after callers; put private top-level declarations below public ones.
+- Order top-level types from the main abstraction to its supporting types. Place private top-level
+  declarations below public ones.
+- Place getters before methods. Within each group, put public members first and order private
+  methods by call flow, with helpers after their callers.
 - Remove unused public APIs rather than retaining speculative entry points.
 - Put localized enum display values in named shared presentation extensions, not widget-local extensions.
-- Keep comments concise, wrap at 100 characters, and separate sentences with periods rather than semicolons.
 - Do not add `// ignore` directives; make unambiguous fixes or ask when intent is unclear.
 - Name related typed errors as a consistent family with the same concise prefix or suffix.
+
+## Comments
+
+- Start documentation comments with what the declaration does or represents. Describe the normal
+  result before exceptions, side effects, or caller responsibilities.
+- Make instructions self-contained. Name who acts, what they act on, and when the action is due.
+  Explain how a resource comes into scope before assigning responsibility for it.
+- Document resource lifetime and cleanup on the operation that creates or returns the resource.
+- Use implementation comments to explain the reason for a non-obvious decision.
+- Keep comments concise. Wrap them at 100 characters and separate sentences with periods.
 
 ## Tooling and verification
 

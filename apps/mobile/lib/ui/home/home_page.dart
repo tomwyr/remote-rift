@@ -9,6 +9,7 @@ import '../connection/connection_component.dart';
 import '../connection/connection_cubit.dart';
 import '../connection/connection_state.dart';
 import '../game/game_component.dart';
+import '../settings/settings_page.dart';
 
 class const HomePage({super.key}) extends StatelessWidget {
   static Widget builder() {
@@ -30,7 +31,10 @@ class const HomePage({super.key}) extends StatelessWidget {
           child: Image.asset(Assets.logo),
         ),
         title: Text(t.app.title, style: Theme.of(context).textTheme.titleLarge),
-        actions: [_ConnectionStatusIcon(state: state)],
+        actions: [
+          const _SettingsButton(),
+          _ConnectionStatusIcon(state: state),
+        ],
       ),
       body: SafeArea(
         top: false,
@@ -38,6 +42,17 @@ class const HomePage({super.key}) extends StatelessWidget {
           connectedBuilder: (_) => GameComponent.builder(),
         ),
       ),
+    );
+  }
+}
+
+class const _SettingsButton() extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      tooltip: t.settings.title,
+      icon: const Icon(Icons.settings_outlined),
+      onPressed: () => SettingsPage.show(context),
     );
   }
 }

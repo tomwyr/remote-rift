@@ -135,3 +135,24 @@ home:
   cancelSearchButton: "Cancel Search"
   acceptGameButton: "Accept Game"
   declineGameButton: "Decline Game"
+
+settings:
+  title: "Settings"
+
+diagnostics:
+  title: "Diagnostics"
+  logging: "Diagnostic logging"
+  privacy: "Logs stay on this device until you share them. Turning logging off keeps existing logs within the retention limits."
+  settingUnavailable: "Couldn't load the logging preference."
+  settingFailed: "Couldn't save the logging preference. Try again."
+  storageUnavailable: "Log storage is unavailable. Check that the device has free space."
+  share: "Share logs"
+  sharing: "Sharing logs…"
+  shareEmpty: "There are no logs to share."
+  shareCancelled: "Sharing cancelled."
+  sharePreparationFailed: "Couldn't prepare logs for sharing. Try again."
+  shareFailed: "Couldn't share logs. Try again."
+  clear: "Clear logs"
+  clearing: "Clearing logs…"
+  cleared: "Logs cleared."
+  clearFailed: "Couldn't clear logs. Try again."

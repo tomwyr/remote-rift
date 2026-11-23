@@ -15,6 +15,7 @@ void main() {
   late MockRemoteRiftApiClient apiClient;
   late MockServiceRegistry serviceRegistry;
   late MockAppConfig appConfig;
+  late MockAppSettingsStore settingsStore;
   late ConnectionCubit cubit;
   late StreamController<RemoteRiftStatusResponse> statusController;
 
@@ -28,11 +29,14 @@ void main() {
     apiClient = MockRemoteRiftApiClient();
     serviceRegistry = MockServiceRegistry();
     appConfig = MockAppConfig();
+    settingsStore = MockAppSettingsStore();
     statusController = StreamController.broadcast();
     cubit = ConnectionCubit(
       appConfig: appConfig,
       apiClient: apiClient,
       serviceRegistry: serviceRegistry,
+      settingsStore: settingsStore,
+      logger: FakeAppLogger(),
     );
   });
 
@@ -42,6 +46,7 @@ void main() {
   });
 
   test('reports incompatibility when service version is below the minimum', () async {
+    when(() => settingsStore.load()).thenAnswer((_) async => .defaults());
     when(() => appConfig.apiMinVersion).thenReturn('0.12.0');
     when(() => serviceRegistry.discover(timeLimit: timeLimit)).thenAnswer(
       (_) async => [serviceAddress('192.168.1.4')],
@@ -57,6 +62,7 @@ void main() {
   });
 
   test('reports service not found when no endpoint is reachable', () async {
+    when(() => settingsStore.load()).thenAnswer((_) async => .defaults());
     when(() => appConfig.apiMinVersion).thenReturn('0.12.0');
     when(() => serviceRegistry.discover(timeLimit: timeLimit)).thenAnswer(
       (_) async => [
@@ -78,6 +84,7 @@ void main() {
   });
 
   test('uses the next endpoint when the first endpoint is unreachable', () async {
+    when(() => settingsStore.load()).thenAnswer((_) async => .defaults());
     when(() => appConfig.apiMinVersion).thenReturn('0.12.0');
     when(() => serviceRegistry.discover(timeLimit: timeLimit)).thenAnswer(
       (_) async => [
@@ -107,6 +114,7 @@ void main() {
   });
 
   test('uses the next endpoint when the first response is malformed', () async {
+    when(() => settingsStore.load()).thenAnswer((_) async => .defaults());
     when(() => appConfig.apiMinVersion).thenReturn('0.12.0');
     when(() => serviceRegistry.discover(timeLimit: timeLimit)).thenAnswer(
       (_) async => [
@@ -136,6 +144,7 @@ void main() {
   });
 
   test('uses an IPv6 endpoint during ordered connection attempts', () async {
+    when(() => settingsStore.load()).thenAnswer((_) async => .defaults());
     when(() => appConfig.apiMinVersion).thenReturn('0.12.0');
     when(() => serviceRegistry.discover(timeLimit: timeLimit)).thenAnswer(
       (_) async => [

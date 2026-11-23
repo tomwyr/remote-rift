@@ -172,16 +172,10 @@ class const AppStatusSection({
       child: Column(
         crossAxisAlignment: .start,
         children: [
-          if (label case var label?)
-            Text(
-              label.toUpperCase(),
-              style: textTheme.labelSmall?.copyWith(
-                color: colors.navy.withValues(alpha: 0.72),
-                fontWeight: .w800,
-                letterSpacing: 1.2,
-              ),
-            ),
-          if (label != null) const SizedBox(height: 8),
+          if (label case var label?) ...[
+            AppEyebrow(label: label),
+            const SizedBox(height: 8),
+          ],
           if (title case var title?)
             Row(
               crossAxisAlignment: .start,

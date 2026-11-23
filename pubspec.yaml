@@ -10,6 +10,7 @@ workspace:
   - apps/desktop
   - packages/api
   - packages/core
+  - packages/logging
   - packages/mcp
   - packages/ui
   - packages/utils

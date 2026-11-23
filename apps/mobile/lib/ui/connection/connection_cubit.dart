@@ -4,18 +4,23 @@ import 'dart:ui';
 import 'package:cancelable_stream/cancelable_stream.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:remote_rift_core/remote_rift_core.dart';
+import 'package:remote_rift_logging/remote_rift_logging.dart';
 import 'package:remote_rift_ui/remote_rift_ui.dart';
 import 'package:remote_rift_utils/remote_rift_utils.dart';
 import 'package:time/time.dart';
 
 import '../../data/api_client.dart';
 import '../../data/app_config.dart';
+import '../../data/app_settings_store.dart';
+import '../../data/diagnostic_events.dart';
 import 'connection_state.dart';
 
 class ConnectionCubit({
   required final AppConfig _appConfig,
   required final RemoteRiftApiClient _apiClient,
   required final ServiceRegistry _serviceRegistry,
+  required final AppSettingsStore _settingsStore,
+  required final AppLogger _logger,
 }) extends Cubit<ConnectionState> {
   this : super(Initial());
 
@@ -24,9 +29,12 @@ class ConnectionCubit({
   AppLifecycleListener? _lifecycleListener;
   Timer? _gameClientLaunchTimeout;
 
-  void initialize() {
+  void initialize() async {
     _assertInitializeState();
     _initLifecycleListener();
+    await _initializeDiagnostics();
+    if (isClosed) return;
+
     _connectToGameApi();
   }
 
@@ -51,6 +59,17 @@ class ConnectionCubit({
     emit(UnavailableGameClient(launchStatus: .pending));
     _gameClientLaunchTimeout = Timer(30.seconds, _resetGameClientLaunchStatus);
     _launchGameClient();
+  }
+
+  Future<void> _initializeDiagnostics() async {
+    try {
+      final settings = await _settingsStore.load();
+      _logger.setCaptureEnabled(settings.diagnosticLoggingEnabled);
+    } on AppSettingsError {
+      // Leave capture off when the saved preference cannot be read.
+    }
+
+    _logger.appStarted();
   }
 
   void _resetGameClientLaunchStatus() {
@@ -81,7 +100,12 @@ class ConnectionCubit({
   void _restartStatusStream() {
     final stream = _apiClient
         .getStatusStream(timeLimit: 10.seconds)
-        .peek(onDone: _connectToGameApi)
+        .peek(
+          onDone: () {
+            _logger.statusInterrupted();
+            _connectToGameApi();
+          },
+        )
         .cancelable();
     _statusStream?.cancel();
     _statusStream = stream;
@@ -91,22 +115,33 @@ class ConnectionCubit({
   void _listenStatus(Stream<RemoteRiftStatusResponse> statusStream) async {
     _connectApiCatching(() async {
       await for (var response in statusStream) {
-        if (state is ConnectionError) {
+        if (state case ConnectionError(:var cause)) {
+          if (cause == .connectionLost || cause == .unknown) {
+            _logger.statusRecovered();
+          }
           _reconnectScheduler?.reset();
         }
 
         switch (response) {
           case RemoteRiftData(value: .ready):
             _gameClientLaunchTimeout?.cancel();
+            if (state is! Connected) {
+              _logger.statusChanged(response);
+            }
             emit(Connected());
 
           case RemoteRiftData(value: .unavailable) || RemoteRiftError.unableToConnect:
             if (state is! UnavailableGameClient) {
+              _logger.statusChanged(response);
               emit(UnavailableGameClient());
             }
 
           case RemoteRiftError error:
-            emit(ConnectedWithError(cause: error));
+            final nextState = ConnectedWithError(cause: error);
+            if (state != nextState) {
+              _logger.statusChanged(response);
+            }
+            emit(nextState);
         }
       }
     });
@@ -116,6 +151,7 @@ class ConnectionCubit({
     try {
       return await callback();
     } catch (error) {
+      _logger.statusInterrupted(error);
       if (state
           case Connecting() || Connected() || UnavailableGameClient() || ConnectedWithError()) {
         _initReconnectScheduler();
@@ -187,25 +223,50 @@ extension ConnectionLifecycleListener on ConnectionCubit {
 
 extension ConnectionApiVerification on ConnectionCubit {
   Future<ConnectionApiVerificationResult> _verifyApiConnection() async {
-    final serviceInfo = await _resolveApiAddress();
-    if (serviceInfo == null) {
-      return .addressUnknown;
+    _logger.connectionStarted();
+    try {
+      final addresses = await _discoverAddresses();
+      final serviceInfo = await _resolveApiAddress(addresses);
+      if (serviceInfo == null) {
+        _logger.connectionAddressUnresolved(found: addresses.isNotEmpty);
+        return .addressUnknown;
+      }
+      if (!_verifyApiMinVersion(serviceInfo)) {
+        _logger.connectionIncompatible();
+        return .apiVersionToLow;
+      }
+    } catch (error) {
+      _logger.connectionFailed(error);
+      rethrow;
     }
-    if (!_verifyApiMinVersion(serviceInfo)) {
-      return .apiVersionToLow;
-    }
+    _logger.connectionCompleted();
     return .allowed;
   }
 
-  Future<RemoteRiftApiServiceInfo?> _resolveApiAddress() async {
-    final addressCandidates = await _serviceRegistry.discover(timeLimit: 5.seconds);
+  Future<List<ServiceAddress>> _discoverAddresses() async {
+    _logger.discoveryStarted();
+    try {
+      final addresses = await _serviceRegistry.discover(timeLimit: 5.seconds);
+      _logger.discoveryCompleted(found: addresses.isNotEmpty);
+      return addresses;
+    } catch (error) {
+      _logger.discoveryFailed(error);
+      rethrow;
+    }
+  }
 
+  Future<RemoteRiftApiServiceInfo?> _resolveApiAddress(
+    List<ServiceAddress> addressCandidates,
+  ) async {
     for (var next in addressCandidates) {
+      _logger.serviceInfoStarted();
       try {
         _apiClient.setApiAddress(next.addressString);
         final serviceInfo = await _apiClient.getServiceInfo().timeout(2.seconds);
+        _logger.serviceInfoCompleted();
         return serviceInfo;
-      } catch (_) {
+      } catch (error) {
+        _logger.serviceInfoCompleted(error);
         // Try the next endpoint resolved for the same service instance.
       }
     }

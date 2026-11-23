@@ -13,6 +13,8 @@ abstract class _$AppSettingsCWProxy {
 
   AppSettings customLockfilePath(String? customLockfilePath);
 
+  AppSettings diagnosticLoggingEnabled(bool diagnosticLoggingEnabled);
+
   /// Creates a new instance with the provided field values.
   /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `AppSettings(...).copyWith.fieldName(value)`.
   ///
@@ -24,6 +26,7 @@ abstract class _$AppSettingsCWProxy {
     bool mcpPreviouslyEnabled,
     bool mcpStartsOnLaunch,
     String? customLockfilePath,
+    bool diagnosticLoggingEnabled,
   });
 }
 
@@ -46,6 +49,10 @@ class _$AppSettingsCWProxyImpl implements _$AppSettingsCWProxy {
   AppSettings customLockfilePath(String? customLockfilePath) =>
       call(customLockfilePath: customLockfilePath);
 
+  @override
+  AppSettings diagnosticLoggingEnabled(bool diagnosticLoggingEnabled) =>
+      call(diagnosticLoggingEnabled: diagnosticLoggingEnabled);
+
   /// Creates a new instance with the provided field values.
   /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `AppSettings(...).copyWith.fieldName(value)`.
   ///
@@ -58,6 +65,7 @@ class _$AppSettingsCWProxyImpl implements _$AppSettingsCWProxy {
     Object? mcpPreviouslyEnabled = const $CopyWithPlaceholder(),
     Object? mcpStartsOnLaunch = const $CopyWithPlaceholder(),
     Object? customLockfilePath = const $CopyWithPlaceholder(),
+    Object? diagnosticLoggingEnabled = const $CopyWithPlaceholder(),
   }) {
     return AppSettings(
       mcpPreviouslyEnabled:
@@ -76,6 +84,12 @@ class _$AppSettingsCWProxyImpl implements _$AppSettingsCWProxy {
           ? _value.customLockfilePath
           // ignore: cast_nullable_to_non_nullable
           : customLockfilePath as String?,
+      diagnosticLoggingEnabled:
+          diagnosticLoggingEnabled == const $CopyWithPlaceholder() ||
+              diagnosticLoggingEnabled == null
+          ? _value.diagnosticLoggingEnabled
+          // ignore: cast_nullable_to_non_nullable
+          : diagnosticLoggingEnabled as bool,
     );
   }
 }
@@ -95,6 +109,7 @@ AppSettings _$AppSettingsFromJson(Map<String, dynamic> json) => AppSettings(
   mcpPreviouslyEnabled: json['mcpPreviouslyEnabled'] as bool,
   mcpStartsOnLaunch: json['mcpStartsOnLaunch'] as bool,
   customLockfilePath: json['customLockfilePath'] as String?,
+  diagnosticLoggingEnabled: json['diagnosticLoggingEnabled'] as bool,
 );
 
 Map<String, dynamic> _$AppSettingsToJson(AppSettings instance) =>
@@ -102,4 +117,5 @@ Map<String, dynamic> _$AppSettingsToJson(AppSettings instance) =>
       'mcpPreviouslyEnabled': instance.mcpPreviouslyEnabled,
       'mcpStartsOnLaunch': instance.mcpStartsOnLaunch,
       'customLockfilePath': instance.customLockfilePath,
+      'diagnosticLoggingEnabled': instance.diagnosticLoggingEnabled,
     };
