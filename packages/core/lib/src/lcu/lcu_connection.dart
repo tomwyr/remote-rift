@@ -1,6 +1,9 @@
 import 'dart:io';
 
+import 'package:path/path.dart' as p;
+
 import 'lcu_connection_store.dart';
+import 'lcu_simulator_protocol.dart';
 
 class LcuConnection({
   LcuLockfileParser? parser,
@@ -12,6 +15,9 @@ class LcuConnection({
   final LcuLockfilePath _path = path ?? LcuLockfilePath();
 
   LcuLockfileData? _lockfileData;
+  var _lockfilePathRevision = 0;
+
+  int get lockfilePathRevision => _lockfilePathRevision;
 
   Future<LcuLockfileData> getLockfileData() async {
     if (_lockfileData case var data?) {
@@ -21,14 +27,18 @@ class LcuConnection({
   }
 
   Future<LcuLockfileData> refreshLockfileData() async {
+    final revision = _lockfilePathRevision;
     try {
       final activePath = await _path.getActivePath();
+      requireLockfilePathRevision(revision);
       final lockfile = _loader.loadLockfile(activePath);
       final data = _parser.parseLockfile(lockfile);
       _lockfileData = data;
       return data;
     } catch (_) {
-      _lockfileData = null;
+      if (_lockfilePathRevision == revision) {
+        _lockfileData = null;
+      }
       rethrow;
     }
   }
@@ -40,6 +50,17 @@ class LcuConnection({
 
   Future<String?> getLockfileCustomPath() => _path.getCustomPath();
 
+  void requireLockfilePathRevision(int revision) {
+    if (_lockfilePathRevision != revision) {
+      throw LcuConnectionError.lockfilePathChanged;
+    }
+  }
+
+  Future<bool> usesSimulator() async {
+    final path = await _path.getCustomPath();
+    return path != null && p.basename(path) == LcuSimulatorProtocol.lockfileName;
+  }
+
   Future<void> saveLockfileCustomPath(String path) async {
     if (_path.isDefaultPath(path)) {
       await _path.reset();
@@ -47,11 +68,13 @@ class LcuConnection({
       await _path.saveCustomPath(path);
     }
     _lockfileData = null;
+    _lockfilePathRevision++;
   }
 
   Future<void> resetLockfileCustomPath() async {
     await _path.reset();
     _lockfileData = null;
+    _lockfilePathRevision++;
   }
 }
 
@@ -161,4 +184,5 @@ enum LcuConnectionError implements Exception {
   unsupportedPlatform,
   lockfileMissing,
   lockfileInvalid,
+  lockfilePathChanged,
 }

@@ -20,25 +20,36 @@ import 'ready_check_timer.dart';
 
 class RemoteRiftConnector._init({
   required final LcuApiClient _lcuApi,
-  required final GameDataStore _gameDataStore,
   required final GameClientLauncher _gameClientLauncher,
+  required final LcuConnection _lcuConnection,
 }) {
   factory({
     LcuConnection? lcuConnection,
     GameClientLauncher? gameClientLauncher,
   }) {
+    final connection = lcuConnection ?? LcuConnection();
     final lcuApi = LcuApiClient(
-      lcuConnection: lcuConnection ?? LcuConnection(),
+      lcuConnection: connection,
       httpClient: ClientFactory.noCertificateVerification(),
     );
     return RemoteRiftConnector._init(
       lcuApi: lcuApi,
-      gameDataStore: GameDataStore(lcuApi: lcuApi),
       gameClientLauncher: gameClientLauncher ?? GameClientLauncher(),
+      lcuConnection: connection,
     );
   }
 
-  ReadyCheckTimer? _readyCheckTimer;
+  (int, GameDataStore)? _cachedGameData;
+
+  GameDataStore get _gameDataStore {
+    final revision = _lcuConnection.lockfilePathRevision;
+    if (_cachedGameData case (var cachedRevision, var store) when cachedRevision == revision) {
+      return store;
+    }
+    final store = GameDataStore(lcuApi: _lcuApi);
+    _cachedGameData = (revision, store);
+    return store;
+  }
 
   Stream<RemoteRiftResponse<RemoteRiftStatus>> getStatusStream() async* {
     await for (var _ in _tickStream(seconds: 1)) {
@@ -55,42 +66,64 @@ class RemoteRiftConnector._init({
   }
 
   Future<void> launchGameClient() async {
+    final revision = _lcuConnection.lockfilePathRevision;
+    final usesSimulator = await _lcuConnection.usesSimulator();
+    _lcuConnection.requireLockfilePathRevision(revision);
+
+    if (usesSimulator) {
+      await _lcuApi.launchSimulator();
+      return;
+    }
+
     await _gameClientLauncher.launch();
   }
 
   Stream<RemoteRiftSession> getCurrentSessionStream() async* {
+    final timer = ReadyCheckTimer(lcuApi: _lcuApi);
+    var revision = _lcuConnection.lockfilePathRevision;
     RemoteRiftSession? previousSession;
-    await for (var _ in _tickStream(seconds: 1)) {
-      try {
-        final session = await _getCurrentSession(trackTimer: true);
-        if (session != previousSession) {
-          yield session;
-          previousSession = session;
-        }
-      } catch (error) {
-        if (error case LcuConnectionError() || LcuApiClientError()) {
+    try {
+      await for (var _ in _tickStream(seconds: 1)) {
+        final currentRevision = _lcuConnection.lockfilePathRevision;
+        if (revision != currentRevision) {
+          timer.clear();
           previousSession = null;
-          continue;
+          revision = currentRevision;
         }
-        rethrow;
+
+        try {
+          final session = await _getCurrentSession(readyCheckTimer: timer);
+          if (session != previousSession) {
+            yield session;
+            previousSession = session;
+          }
+        } catch (error) {
+          if (error case LcuConnectionError() || LcuApiClientError()) {
+            previousSession = null;
+            continue;
+          }
+          rethrow;
+        }
       }
+    } finally {
+      timer.clear();
     }
   }
 
   Future<void> createLobby({required int queueId}) async {
-    if (await _getCurrentState() case PreGame()) {
-      await _lcuApi.createLobby(queueId: queueId);
-    } else {
-      throw RemoteRiftStateError.notPreGame;
-    }
+    await _runMatchmakingAction(
+      canRun: (state) => state is PreGame,
+      stateError: .notPreGame,
+      run: () => _lcuApi.createLobby(queueId: queueId),
+    );
   }
 
   Future<void> leaveLobby() async {
-    if (await _getCurrentState() case Lobby(state: .idle)) {
-      await _lcuApi.deleteLobby();
-    } else {
-      throw RemoteRiftStateError.notIdleState;
-    }
+    await _runMatchmakingAction(
+      canRun: (state) => state is Lobby && state.state == .idle,
+      stateError: .notIdleState,
+      run: _lcuApi.deleteLobby,
+    );
   }
 
   Future<void> updateLobbyRolePreferences({
@@ -98,6 +131,7 @@ class RemoteRiftConnector._init({
     required LobbyRole second,
   }) async {
     if (first == second) throw RemoteRiftStateError.invalidRolePreferences;
+    final revision = _lcuConnection.lockfilePathRevision;
     if (await _lcuApi.getGameflowPhase() != .lobby) {
       throw RemoteRiftStateError.notIdleState;
     }
@@ -116,39 +150,40 @@ class RemoteRiftConnector._init({
       firstPreference: firstPreference,
       secondPreference: secondPreference,
     );
+    _lcuConnection.requireLockfilePathRevision(revision);
     await _lcuApi.updateLocalMemberPositionPreferences(preferences);
   }
 
   Future<void> searchMatch() async {
-    if (await _getCurrentState() case Lobby(state: .idle)) {
-      await _lcuApi.startMatchmakingSearch();
-    } else {
-      throw RemoteRiftStateError.notIdleState;
-    }
+    await _runMatchmakingAction(
+      canRun: (state) => state is Lobby && state.state == .idle,
+      stateError: .notIdleState,
+      run: _lcuApi.startMatchmakingSearch,
+    );
   }
 
   Future<void> stopMatchSearch() async {
-    if (await _getCurrentState() case Lobby(state: .searching)) {
-      await _lcuApi.stopMatchmakingSearch();
-    } else {
-      throw RemoteRiftStateError.notSearchingState;
-    }
+    await _runMatchmakingAction(
+      canRun: (state) => state is Lobby && state.state == .searching,
+      stateError: .notSearchingState,
+      run: _lcuApi.stopMatchmakingSearch,
+    );
   }
 
   Future<void> acceptMatch() async {
-    if (await _getCurrentState() case Found(state: .pending)) {
-      await _lcuApi.acceptReadyCheck();
-    } else {
-      throw RemoteRiftStateError.notPendingState;
-    }
+    await _runMatchmakingAction(
+      canRun: (state) => state is Found && state.state == .pending,
+      stateError: .notPendingState,
+      run: _lcuApi.acceptReadyCheck,
+    );
   }
 
   Future<void> declineMatch() async {
-    if (await _getCurrentState() case Found(state: .pending)) {
-      await _lcuApi.declineReadyCheck();
-    } else {
-      throw RemoteRiftStateError.notPendingState;
-    }
+    await _runMatchmakingAction(
+      canRun: (state) => state is Found && state.state == .pending,
+      stateError: .notPendingState,
+      run: _lcuApi.declineReadyCheck,
+    );
   }
 
   Future<void> pickChampion({required int championId}) async {
@@ -231,6 +266,7 @@ class RemoteRiftConnector._init({
   }
 
   Future<ChampionSelectCatalog> getChampionSelectCatalog() async {
+    final revision = _lcuConnection.lockfilePathRevision;
     if (await _lcuApi.getGameflowPhase() != .champSelect) {
       throw RemoteRiftStateError.notChampionSelect;
     }
@@ -240,6 +276,7 @@ class RemoteRiftConnector._init({
       _lcuApi.getChampGridChampions(),
       _lcuApi.getSummonerSpells(),
     ).wait;
+    _lcuConnection.requireLockfilePathRevision(revision);
     if (session.localPlayer == null) {
       throw RemoteRiftStateError.championSelectUnavailable;
     }
@@ -253,6 +290,10 @@ class RemoteRiftConnector._init({
       throw RemoteRiftStateError.championSelectUnavailable;
     }
     return ChampionSelectCatalog(champions: catalogChampions, summonerSpells: catalogSpells);
+  }
+
+  Future<RemoteRiftSession> getCurrentSession() async {
+    return await _getCurrentSession();
   }
 
   Stream<void> _tickStream({required int seconds}) {
@@ -271,15 +312,25 @@ class RemoteRiftConnector._init({
     }
   }
 
-  Future<RemoteRiftSession> getCurrentSession() async {
-    return await _getCurrentSession(trackTimer: false);
+  Future<void> _runMatchmakingAction({
+    required bool Function(RemoteRiftState) canRun,
+    required RemoteRiftStateError stateError,
+    required Future<void> Function() run,
+  }) async {
+    final revision = _lcuConnection.lockfilePathRevision;
+    final state = await _getCurrentState();
+    _lcuConnection.requireLockfilePathRevision(revision);
+    if (!canRun(state)) throw stateError;
+    await run();
   }
 
-  Future<RemoteRiftSession> _getCurrentSession({required bool trackTimer}) async {
+  Future<RemoteRiftSession> _getCurrentSession({ReadyCheckTimer? readyCheckTimer}) async {
+    final revision = _lcuConnection.lockfilePathRevision;
     var (queueName, state) = await (
       _getQueueNameOrNull(),
-      _getCurrentState(trackTimer: trackTimer),
+      _getCurrentState(readyCheckTimer: readyCheckTimer),
     ).waitUnwrapped;
+    _lcuConnection.requireLockfilePathRevision(revision);
     if (state case PreGame()) {
       // Clear the queue if the session data is out of sync with the state.
       queueName = null;
@@ -309,10 +360,10 @@ class RemoteRiftConnector._init({
     }
   }
 
-  Future<RemoteRiftState> _getCurrentState({bool trackTimer = false}) async {
+  Future<RemoteRiftState> _getCurrentState({ReadyCheckTimer? readyCheckTimer}) async {
     final gameflowPhase = await _lcuApi.getGameflowPhase();
-    if (trackTimer && gameflowPhase != .readyCheck) {
-      _clearReadyCheckTimer();
+    if (gameflowPhase != .readyCheck) {
+      readyCheckTimer?.clear();
     }
     switch (gameflowPhase) {
       case .none:
@@ -339,10 +390,8 @@ class RemoteRiftConnector._init({
               .accepted => .accepted,
               .declined => .declined,
             };
-            final timer = _getReadyCheckTimer();
-            if (trackTimer) {
-              timer.start(readyCheck);
-            }
+            readyCheckTimer?.start(readyCheck);
+            final timer = readyCheckTimer ?? ReadyCheckTimer(lcuApi: _lcuApi);
             return Found(
               state: state,
               answerMaxTime: timer.maxTime,
@@ -350,7 +399,7 @@ class RemoteRiftConnector._init({
             );
 
           case .invalid:
-            _clearReadyCheckTimer();
+            readyCheckTimer?.clear();
             return Unknown();
         }
 
@@ -360,15 +409,6 @@ class RemoteRiftConnector._init({
       case .inProgress || .waitingForStats || .preEndOfGame || .endOfGame:
         return InGame();
     }
-  }
-
-  ReadyCheckTimer _getReadyCheckTimer() {
-    return _readyCheckTimer ??= ReadyCheckTimer(lcuApi: _lcuApi);
-  }
-
-  void _clearReadyCheckTimer() {
-    _readyCheckTimer?.clear();
-    _readyCheckTimer = null;
   }
 
   Future<RemoteRiftState> _getChampionSelectState() async {
@@ -386,10 +426,11 @@ class RemoteRiftConnector._init({
     };
     final actionAvailability = session.toChampionSelectActionAvailability();
 
+    final gameData = _gameDataStore;
     final (champion, spell1, spell2) = await (
-      _gameDataStore.getChampion(championId),
-      _gameDataStore.getSummonerSpell(player?.spell1Id),
-      _gameDataStore.getSummonerSpell(player?.spell2Id),
+      gameData.getChampion(championId),
+      gameData.getSummonerSpell(player?.spell1Id),
+      gameData.getSummonerSpell(player?.spell2Id),
     ).wait;
 
     return ChampionSelect(
@@ -480,6 +521,7 @@ class RemoteRiftConnector._init({
     ChampionSelectActionType actionType,
     _ChampionSelectAction execute,
   ) async {
+    final revision = _lcuConnection.lockfilePathRevision;
     try {
       if (await _lcuApi.getGameflowPhase() != .champSelect) {
         throw RemoteRiftStateError.notChampionSelect;
@@ -494,6 +536,7 @@ class RemoteRiftConnector._init({
       if (!availability.allows(actionType)) {
         throw RemoteRiftStateError.championSelectActionUnavailable;
       }
+      _lcuConnection.requireLockfilePathRevision(revision);
       await execute(session, player);
     } on LcuApiClientError catch (error) {
       if (error == .requestRejected) {

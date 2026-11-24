@@ -19,6 +19,10 @@ enum GameflowPhase {
   factory fromJson(String json) {
     return $enumDecode(_$GameflowPhaseEnumMap, json);
   }
+
+  String toJson() {
+    return _$GameflowPhaseEnumMap[this] ?? (throw StateError('Unserialized gameflow phase: $this'));
+  }
 }
 
 @JsonSerializable()
@@ -175,6 +179,22 @@ class GameQueue({
   factory fromJson(Map<String, dynamic> json) => _$GameQueueFromJson(json);
 
   Map<String, dynamic> toJson() => _$GameQueueToJson(this);
+}
+
+@JsonSerializable()
+class LobbyCreateRequest({
+  @JsonKey(fromJson: _readQueueId) required final int queueId,
+}) {
+  factory fromJson(Map<String, dynamic> json) => _$LobbyCreateRequestFromJson(json);
+
+  Map<String, dynamic> toJson() => _$LobbyCreateRequestToJson(this);
+
+  static int _readQueueId(Object? value) {
+    if (value case num number when number.isFinite && number == number.toInt()) {
+      return number.toInt();
+    }
+    throw FormatException('Expected a whole-number queue ID', value);
+  }
 }
 
 @JsonSerializable()

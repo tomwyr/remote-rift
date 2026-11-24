@@ -73,6 +73,9 @@ To run the project locally:
 4. Run the application using `flutter run` or an IDE.
 5. After modifying source files, restart the application or use hot reload.
 
+Use the [League Client Simulator](../league_client_simulator) to exercise the
+Desktop and Mobile workflow locally without a League installation.
+
 ### Building project
 
 Run `flutter build windows` or `flutter build macos` to compile the application for the target platform.

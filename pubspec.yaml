@@ -8,6 +8,7 @@ environment:
 workspace:
   - apps/mobile
   - apps/desktop
+  - apps/league_client_simulator
   - packages/api
   - packages/core
   - packages/logging

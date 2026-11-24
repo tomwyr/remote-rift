@@ -42,7 +42,10 @@ class Dependencies {
     settingsStore: _settingsStore,
     logger: _logger,
     runner: RemoteRiftApiServiceRunner(
-      service: RemoteRiftApiService(onFailure: _logger.connectorOperationFailed),
+      service: RemoteRiftApiService(
+        createConnector: () => RemoteRiftConnector(lcuConnection: _connection),
+        onFailure: _logger.connectorOperationFailed,
+      ),
       registry: .remoteRift(),
       logger: _logger,
     ),

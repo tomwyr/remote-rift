@@ -9,10 +9,17 @@ import 'handlers.dart';
 
 part 'route_registration.dart';
 
-class ConnectorRoutes(final Router _router, final ConnectorFailureObserver? _onFailure) {
-  static Router configure(ConnectorFailureObserver? onFailure) {
+class ConnectorRoutes(
+  final Router _router,
+  final RemoteRiftConnector Function() _createConnector,
+  final ConnectorFailureObserver? _onFailure,
+) {
+  static Router configure(
+    RemoteRiftConnector Function() createConnector,
+    ConnectorFailureObserver? onFailure,
+  ) {
     final router = Router();
-    ConnectorRoutes(router, onFailure)
+    ConnectorRoutes(router, createConnector, onFailure)
       ..configureService()
       ..configureGameClient()
       ..configureStatus()
@@ -34,7 +41,7 @@ class ConnectorRoutes(final Router _router, final ConnectorFailureObserver? _onF
 
   void configureGameClient() {
     _post('/game-client/launch', (request) async {
-      await RemoteRiftConnector().launchGameClient();
+      await _createConnector().launchGameClient();
       return .noContent();
     });
   }
@@ -43,10 +50,9 @@ class ConnectorRoutes(final Router _router, final ConnectorFailureObserver? _onF
     String route(String value) => '/status/$value';
 
     _mountWs(route('watch'), (webSocket) async {
-      await for (var status in RemoteRiftConnector().getStatusStream()) {
-        if (webSocket.status == .closed) break;
-        webSocket.sink.addJson(status.sealedToJson());
-      }
+      final statuses = _createConnector().getStatusStream();
+      final updates = statuses.map((status) => status.sealedToJson());
+      await webSocket.sendJsonUpdates(updates);
     });
   }
 
@@ -54,10 +60,9 @@ class ConnectorRoutes(final Router _router, final ConnectorFailureObserver? _onF
     String route(String value) => '/session/$value';
 
     _mountWs(route('watch'), (webSocket) async {
-      await for (var session in RemoteRiftConnector().getCurrentSessionStream()) {
-        if (webSocket.status == .closed) break;
-        webSocket.sink.addJson(session.toJson());
-      }
+      final sessions = _createConnector().getCurrentSessionStream();
+      final updates = sessions.map((session) => session.toJson());
+      await webSocket.sendJsonUpdates(updates);
     });
   }
 
@@ -68,12 +73,12 @@ class ConnectorRoutes(final Router _router, final ConnectorFailureObserver? _onF
       final queueId = request.intQueryParam('queueId');
       if (queueId == null) return .badRequest();
 
-      await RemoteRiftConnector().createLobby(queueId: queueId);
+      await _createConnector().createLobby(queueId: queueId);
       return .noContent();
     });
 
     _post(route('leave'), (request) async {
-      await RemoteRiftConnector().leaveLobby();
+      await _createConnector().leaveLobby();
       return .noContent();
     });
 
@@ -81,7 +86,7 @@ class ConnectorRoutes(final Router _router, final ConnectorFailureObserver? _onF
       final input = await request.decodeBodyOrNull(RolePreferenceInput.fromJson);
       if (input == null || input.first == input.second) return .badRequest();
 
-      await RemoteRiftConnector().updateLobbyRolePreferences(
+      await _createConnector().updateLobbyRolePreferences(
         first: input.first,
         second: input.second,
       );
@@ -93,22 +98,22 @@ class ConnectorRoutes(final Router _router, final ConnectorFailureObserver? _onF
     String route(String value) => '/queue/$value';
 
     _post(route('start'), (request) async {
-      await RemoteRiftConnector().searchMatch();
+      await _createConnector().searchMatch();
       return .noContent();
     });
 
     _post(route('stop'), (request) async {
-      await RemoteRiftConnector().stopMatchSearch();
+      await _createConnector().stopMatchSearch();
       return .noContent();
     });
 
     _post(route('accept'), (request) async {
-      await RemoteRiftConnector().acceptMatch();
+      await _createConnector().acceptMatch();
       return .noContent();
     });
 
     _post(route('decline'), (request) async {
-      await RemoteRiftConnector().declineMatch();
+      await _createConnector().declineMatch();
       return .noContent();
     });
   }
@@ -117,7 +122,7 @@ class ConnectorRoutes(final Router _router, final ConnectorFailureObserver? _onF
     String route(String value) => '/champ-select/$value';
 
     _get(route('catalog'), (request) async {
-      final catalog = await RemoteRiftConnector().getChampionSelectCatalog();
+      final catalog = await _createConnector().getChampionSelectCatalog();
       return .ok(catalog.toJson());
     });
 
@@ -126,7 +131,7 @@ class ConnectorRoutes(final Router _router, final ConnectorFailureObserver? _onF
       if (input == null || input.championId <= 0) {
         return .badRequest();
       }
-      final connector = RemoteRiftConnector();
+      final connector = _createConnector();
       await switch (input.action) {
         .pick => connector.pickChampion(championId: input.championId),
         .ban => connector.banChampion(championId: input.championId),
@@ -135,12 +140,12 @@ class ConnectorRoutes(final Router _router, final ConnectorFailureObserver? _onF
     });
 
     _post(route('ban-none'), (request) async {
-      await RemoteRiftConnector().banNoChampion();
+      await _createConnector().banNoChampion();
       return .noContent();
     });
 
     _post(route('lock-in'), (request) async {
-      await RemoteRiftConnector().lockInChampion();
+      await _createConnector().lockInChampion();
       return .noContent();
     });
 
@@ -149,7 +154,7 @@ class ConnectorRoutes(final Router _router, final ConnectorFailureObserver? _onF
       if (input == null || input.spellId <= 0) {
         return .badRequest();
       }
-      await RemoteRiftConnector().changeSummonerSpell(
+      await _createConnector().changeSummonerSpell(
         spellId: input.spellId,
         slot: input.slot,
       );

@@ -7,6 +7,8 @@ import 'package:time/time.dart';
 
 import 'lcu_connection.dart';
 import 'lcu_models.dart';
+import 'lcu_routes.dart';
+import 'lcu_simulator_protocol.dart';
 
 class LcuApiClient({
   required final LcuConnection _lcuConnection,
@@ -14,10 +16,14 @@ class LcuApiClient({
 }) {
   static final _requestTimeout = 5.seconds;
 
+  Future<void> launchSimulator() async {
+    await _request(.post, LcuSimulatorProtocol.launchPath);
+  }
+
   Future<HeartbeatConnection> getHeartbeatConnection() async {
     return _requestJson(
       .post,
-      'lol-heartbeat/v1/connection-status',
+      LcuRoutes.heartbeat,
       decode: (json) => .fromJson(json),
     );
   }
@@ -25,7 +31,7 @@ class LcuApiClient({
   Future<GameflowPhase> getGameflowPhase() async {
     return _requestJson(
       .get,
-      'lol-gameflow/v1/gameflow-phase',
+      LcuRoutes.gameflowPhase,
       decode: (json) => .fromJson(json),
     );
   }
@@ -33,7 +39,7 @@ class LcuApiClient({
   Future<GameflowSession> getGameflowSession() async {
     return _requestJson(
       .get,
-      'lol-gameflow/v1/session',
+      LcuRoutes.gameflowSession,
       decode: (json) => .fromJson(json),
     );
   }
@@ -41,7 +47,7 @@ class LcuApiClient({
   Future<List<GameQueue>> getGameQueues() async {
     return _requestJsonList(
       .get,
-      'lol-game-queues/v1/queues',
+      LcuRoutes.queues,
       decode: (json) => .fromJson(json),
     );
   }
@@ -49,7 +55,7 @@ class LcuApiClient({
   Future<LobbyDetails?> getLobby() async {
     return _requestJson(
       .get,
-      'lol-lobby/v2/lobby',
+      LcuRoutes.lobby,
       decode: (json) => .fromJson(json),
     );
   }
@@ -57,7 +63,7 @@ class LcuApiClient({
   Future<LobbyPositionPreferences> getLocalMemberPositionPreferences() async {
     return _requestJson(
       .get,
-      'lol-lobby/v2/lobby/members/localMember/position-preferences',
+      LcuRoutes.lobbyPositionPreferences,
       decode: (json) => .fromJson(json),
     );
   }
@@ -65,55 +71,56 @@ class LcuApiClient({
   Future<void> updateLocalMemberPositionPreferences(LobbyPositionPreferences preferences) async {
     await _request(
       .put,
-      'lol-lobby/v2/lobby/members/localMember/position-preferences',
+      LcuRoutes.lobbyPositionPreferences,
       preferences.toJson(),
     );
   }
 
   Future<void> createLobby({required int queueId}) async {
-    await _request(.post, 'lol-lobby/v2/lobby', {'queueId': queueId});
+    final request = LobbyCreateRequest(queueId: queueId);
+    await _request(.post, LcuRoutes.lobby, request.toJson());
   }
 
   Future<void> deleteLobby() async {
-    await _request(.delete, 'lol-lobby/v2/lobby');
+    await _request(.delete, LcuRoutes.lobby);
   }
 
   Future<MatchmakingSearch> getMatchmakingSearch() async {
     return _requestJson(
       .get,
-      'lol-lobby/v2/lobby/matchmaking/search-state',
+      LcuRoutes.matchmakingSearchState,
       decode: (json) => .fromJson(json),
     );
   }
 
   Future<void> startMatchmakingSearch() async {
-    await _request(.post, 'lol-lobby/v2/lobby/matchmaking/search');
+    await _request(.post, LcuRoutes.matchmakingSearch);
   }
 
   Future<void> stopMatchmakingSearch() async {
-    await _request(.delete, 'lol-lobby/v2/lobby/matchmaking/search');
+    await _request(.delete, LcuRoutes.matchmakingSearch);
   }
 
   Future<ReadyCheck> getReadyCheck() async {
     return _requestJson(
       .get,
-      'lol-matchmaking/v1/ready-check',
+      LcuRoutes.readyCheck,
       decode: (json) => .fromJson(json),
     );
   }
 
   Future<void> acceptReadyCheck() async {
-    await _request(.post, 'lol-matchmaking/v1/ready-check/accept');
+    await _request(.post, LcuRoutes.acceptReadyCheck);
   }
 
   Future<void> declineReadyCheck() async {
-    await _request(.post, 'lol-matchmaking/v1/ready-check/decline');
+    await _request(.post, LcuRoutes.declineReadyCheck);
   }
 
   Future<ChampSelectSession> getChampSelectSession() async {
     return _requestJson(
       .get,
-      'lol-champ-select/v1/session',
+      LcuRoutes.championSelectSession,
       decode: (json) => .fromJson(json),
     );
   }
@@ -121,7 +128,7 @@ class LcuApiClient({
   Future<List<ChampGridChampion>> getChampGridChampions() async {
     return _requestJsonList(
       .get,
-      'lol-champ-select/v1/all-grid-champions',
+      LcuRoutes.championGrid,
       decode: (json) => .fromJson(json),
     );
   }
@@ -129,7 +136,7 @@ class LcuApiClient({
   Future<List<SummonerSpell>> getSummonerSpells() async {
     return _requestJsonList(
       .get,
-      'lol-game-data/assets/v1/summoner-spells.json',
+      LcuRoutes.summonerSpells,
       decode: (json) => .fromJson(json),
     );
   }
@@ -140,7 +147,7 @@ class LcuApiClient({
   }) async {
     await _request(
       .patch,
-      'lol-champ-select/v1/session/actions/$actionId',
+      '${LcuRoutes.championSelectActions}/$actionId',
       update.toJson(),
     );
   }
@@ -148,7 +155,7 @@ class LcuApiClient({
   Future<void> updateMyChampSelectSelection(ChampSelectMySelectionUpdate update) async {
     await _request(
       .patch,
-      'lol-champ-select/v1/session/my-selection',
+      LcuRoutes.championSelectLocalSelection,
       update.toJson(),
     );
   }
@@ -196,15 +203,21 @@ class LcuApiClient({
     String path, [
     Map<String, dynamic>? body,
   ]) async {
+    final revision = _lcuConnection.lockfilePathRevision;
+
     Future<Response> execute() async {
       final lockfileData = await _lcuConnection.getLockfileData();
-      return await _runRequest(method, path, body, lockfileData);
+      _lcuConnection.requireLockfilePathRevision(revision);
+      final response = await _runRequest(method, path, body, lockfileData);
+      _lcuConnection.requireLockfilePathRevision(revision);
+      return response;
     }
 
     try {
       return await execute();
     } on SocketException catch (_) {
       // Retry once in case the error was caused by a stale lockfile.
+      _lcuConnection.requireLockfilePathRevision(revision);
       await _lcuConnection.refreshLockfileData();
       try {
         return await execute();
@@ -225,8 +238,7 @@ class LcuApiClient({
     Map<String, dynamic>? body,
     LcuLockfileData lockfileData,
   ) async {
-    final baseUrl = 'https://127.0.0.1:${lockfileData.port}';
-    final url = Uri.parse('$baseUrl/$path');
+    final url = Uri.https('127.0.0.1:${lockfileData.port}', path);
 
     final credentials = 'riot:${lockfileData.password}';
     final authorization = base64Encode(utf8.encode(credentials));

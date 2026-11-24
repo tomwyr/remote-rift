@@ -21,9 +21,22 @@ extension RouterHandlers on Router {
   }
 }
 
-extension SinkHandlers on Sink {
-  void addJson(Map<String, dynamic> json) {
-    add(jsonEncode(json));
+extension WebSocketJsonUpdates on WebSocketChannel {
+  /// Sends updates until either the producer finishes or the client disconnects.
+  Future<void> sendJsonUpdates(Stream<Map<String, dynamic>> updates) async {
+    final incoming = stream.listen(null);
+    final outgoing = updates.listen((json) {
+      if (closeCode == null) {
+        sink.add(jsonEncode(json));
+      }
+    });
+
+    try {
+      await Future.any([incoming.asFuture<void>(), outgoing.asFuture<void>()]);
+    } finally {
+      await (incoming.cancel(), outgoing.cancel()).wait;
+      await sink.close();
+    }
   }
 }
 
@@ -35,12 +48,6 @@ class JsonResponse extends Response {
 
 typedef JsonRequestHandler = FutureOr<JsonResponse> Function(Request request);
 typedef WebSocketHandler = void Function(WebSocketChannel webSocket);
-
-enum WebSocketStatus { open, closed }
-
-extension WebSocketChannelStatus on WebSocketChannel {
-  WebSocketStatus get status => closeCode == null ? .open : .closed;
-}
 
 extension RequestParsers on Request {
   Future<T?> decodeBodyOrNull<T>(T Function(Map<String, dynamic> json) fromJson) async {
