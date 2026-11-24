@@ -1,8 +1,8 @@
 # Diagnostic logging in three phases
 
-Implement the shared logger, integrate it into Mobile and Desktop, and verify a connection
-failure across both apps' snapshots. Each app uses a persisted opt-in that defaults to off.
-Logs stay on the device until the user shares or exports them.
+Mobile and Desktop use the same local logger and can export snapshots for comparing a connection
+failure across both devices. Fresh installs start with capture off. The opt-in is stored by each
+app, and logs stay on the device until the user shares or exports them.
 
 ## Phase 1 — Shared logging
 
@@ -12,10 +12,15 @@ Logs stay on the device until the user shares or exports them.
   session identifier.
 - Define one versioned UTF-8 NDJSON record format with UTC timestamps, app identifiers and
   versions, per-launch session identifiers, severity, an event name, and optional details. Each app
-  defines its stable event names and allowlisted detail properties. Use consistent operation names
-  and failure categories where both apps observe the same behavior. Use timestamps to compare
-  timelines.
-- Store records in one local file. Serialize asynchronous writes, pruning, snapshots, and clearing. Default to **7 days and 2 MiB per installation** and let the caller configure both limits when opening the logger. Drop the oldest records first. Prune on startup, during capture, and before export, including while capture is off. Surface write failures through diagnostic status while allowing app operations to continue.
+  defines its stable event names and allowlisted detail properties. Both apps use the same
+  operation names for shared routes. Failure categories reflect each app's observation. A rejected
+  connector command can appear as `http_error` on Mobile and `operation_rejected` on Desktop.
+  Use timestamps to compare timelines.
+- Store records in `log.ndjson`. Serialize asynchronous writes, pruning, snapshots, and clearing.
+  Default to **7 days and 2 MiB per installation**, with both limits configurable when opening the
+  logger. Drop the oldest records first. Prune on startup, during capture, and before taking a
+  snapshot, including when capture is off. Report storage failures in Diagnostics while app
+  operations continue.
 
 ## Phase 2 — Mobile
 
@@ -60,8 +65,10 @@ Logs stay on the device until the user shares or exports them.
   startup.
 - Show storage status and provide **Clear logs** independently of capture. Localize the toggle,
   privacy copy, actions, and status messages.
-- Treat a missing logging preference in existing Desktop settings as off and preserve the other
-  saved values.
+- Fresh settings default to off. A saved `settings.json` without `diagnosticLoggingEnabled`
+  currently fails to decode. The service leaves capture off, and settings reads or updates can
+  report the document as unavailable. Compatibility with those files is outstanding. The expected
+  upgrade behavior is to default the missing preference to off and preserve the other values.
 
 ### 3.3 — Log export
 
@@ -76,10 +83,12 @@ Logs stay on the device until the user shares or exports them.
   and connector start and stop. Confirm repeated snapshots produce no additional status records.
   Trigger a failed connector request and confirm Desktop records the registered operation, HTTP
   status, and a safe failure category.
-- Confirm capture defaults to off on fresh installs and upgrades. Confirm it survives restart
-  after opt-in and records startup. Confirm upgrades preserve existing settings. Clear logs while
-  capture is enabled and confirm subsequent events can still be recorded. Confirm a storage
-  failure appears in Settings while connection and matchmaking continue to work.
+- Confirm capture defaults to off on fresh installs, survives restart after opt-in, and records
+  startup. Clear logs during capture and confirm that later events can still be recorded. Confirm
+  a storage failure appears in Settings while connection and matchmaking continue to work.
+- After upgrade compatibility is implemented, load a Desktop settings document saved before the
+  logging preference existed. Confirm capture starts off and existing values remain readable and
+  survive a subsequent save.
 - Confirm empty logs, cancellation, and retryable failures have distinct outcomes in both apps.
   Verify sharing and export include all retained records after restart or after capture is
   disabled, and cancellation and failures preserve those records. Confirm retention limits still
