@@ -1,3 +1,8 @@
+## [0.14.0] - 2026-11-25
+
+- Added diagnostic logging and log export in Settings
+- Added support for showing favorite champions first in Mobile champion select
+
 ## [0.13.0] - 2026-09-27
 
 - Added champion pick-intent selection

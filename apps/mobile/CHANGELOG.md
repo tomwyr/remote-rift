@@ -1,3 +1,8 @@
+## [0.16.0] - 2026-11-25
+
+- Added diagnostic logging and log sharing in Settings
+- Added release builds for Google Play beta and TestFlight
+
 ## [0.15.1] - 2026-09-28
 
 - Improved status layout spacing
