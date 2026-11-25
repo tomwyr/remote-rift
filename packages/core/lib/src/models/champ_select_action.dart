@@ -81,19 +81,23 @@ class const ChampionSelectActionAvailability({
   required final bool lockInChampion,
   required final bool changeSummonerSpells,
 }) extends Equatable {
-  static const pick = ChampionSelectActionAvailability(
-    pickChampion: true,
-    banChampion: false,
-    lockInChampion: true,
-    changeSummonerSpells: true,
-  );
+  factory pick({required bool lockInChampion}) {
+    return ChampionSelectActionAvailability(
+      pickChampion: true,
+      banChampion: false,
+      lockInChampion: lockInChampion,
+      changeSummonerSpells: true,
+    );
+  }
 
-  static const ban = ChampionSelectActionAvailability(
-    pickChampion: false,
-    banChampion: true,
-    lockInChampion: true,
-    changeSummonerSpells: true,
-  );
+  factory ban({required bool lockInChampion}) {
+    return ChampionSelectActionAvailability(
+      pickChampion: false,
+      banChampion: true,
+      lockInChampion: lockInChampion,
+      changeSummonerSpells: true,
+    );
+  }
 
   static const planning = ChampionSelectActionAvailability(
     pickChampion: true,

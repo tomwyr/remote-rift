@@ -14,12 +14,8 @@ class LcuApiClient({
 }) {
   static final _requestTimeout = 5.seconds;
 
-  Future<HeartbeatConnection> getHeartbeatConnection() async {
-    return _requestJson(
-      .post,
-      'lol-heartbeat/v1/connection-status',
-      decode: (json) => .fromJson(json),
-    );
+  Future<String> getApplicationName() async {
+    return await _requestJson(.get, 'riotclient/app-name', decode: (json) => json);
   }
 
   Future<GameflowPhase> getGameflowPhase() async {

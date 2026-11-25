@@ -7,9 +7,7 @@ part 'champion_select_state.g.dart';
 sealed class const ChampionSelectState({
   required final ChampionSelect championSelect,
 }) extends Equatable {
-  bool get canLockIn {
-    return championSelect.actionAvailability.lockInChampion && championSelect.champion != null;
-  }
+  bool get canLockIn => championSelect.actionAvailability.lockInChampion;
 
   ChampionSelectActionStatus statusOf(ChampionSelectAction action) => .idle;
 

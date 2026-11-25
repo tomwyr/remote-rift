@@ -155,8 +155,6 @@ const _$ChampSelectAssignedPositionEnumMap = {
 ChampSelectMySelectionUpdate _$ChampSelectMySelectionUpdateFromJson(
   Map<String, dynamic> json,
 ) => ChampSelectMySelectionUpdate(
-  championId: (json['championId'] as num?)?.toInt(),
-  championPickIntent: (json['championPickIntent'] as num?)?.toInt(),
   spell1Id: (json['spell1Id'] as num?)?.toInt(),
   spell2Id: (json['spell2Id'] as num?)?.toInt(),
 );
@@ -164,8 +162,6 @@ ChampSelectMySelectionUpdate _$ChampSelectMySelectionUpdateFromJson(
 Map<String, dynamic> _$ChampSelectMySelectionUpdateToJson(
   ChampSelectMySelectionUpdate instance,
 ) => <String, dynamic>{
-  'championId': ?instance.championId,
-  'championPickIntent': ?instance.championPickIntent,
   'spell1Id': ?instance.spell1Id,
   'spell2Id': ?instance.spell2Id,
 };
@@ -367,13 +363,6 @@ const _$ReadyCheckResponseEnumMap = {
   ReadyCheckResponse.accepted: 'Accepted',
   ReadyCheckResponse.declined: 'Declined',
 };
-
-HeartbeatConnection _$HeartbeatConnectionFromJson(Map<String, dynamic> json) =>
-    HeartbeatConnection(stableConnection: json['stableConnection'] as bool);
-
-Map<String, dynamic> _$HeartbeatConnectionToJson(
-  HeartbeatConnection instance,
-) => <String, dynamic>{'stableConnection': instance.stableConnection};
 
 const _$GameflowPhaseEnumMap = {
   GameflowPhase.none: 'None',

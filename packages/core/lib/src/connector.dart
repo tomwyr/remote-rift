@@ -42,16 +42,13 @@ class RemoteRiftConnector._init({
 
   Stream<RemoteRiftResponse<RemoteRiftStatus>> getStatusStream() async* {
     await for (var _ in _tickStream(seconds: 1)) {
-      yield await _runCatching(() async {
-        final connection = await _lcuApi.getHeartbeatConnection();
-        return connection.stableConnection ? .ready : .unavailable;
-      });
+      yield await _runCatching(getStatus);
     }
   }
 
   Future<RemoteRiftStatus> getStatus() async {
-    final connection = await _lcuApi.getHeartbeatConnection();
-    return connection.stableConnection ? .ready : .unavailable;
+    await _lcuApi.getApplicationName();
+    return .ready;
   }
 
   Future<void> launchGameClient() async {
@@ -152,18 +149,11 @@ class RemoteRiftConnector._init({
   }
 
   Future<void> pickChampion({required int championId}) async {
-    await _runChampionSelectAction(.pickChampion, (session, player) async {
-      if (session.timer?.phase == .planning) {
-        await _setChampionPickIntent(championId: championId);
-      } else {
-        await _selectChampionInAction(
-          session: session,
-          championId: championId,
-          actionType: .pickChampion,
-          lcuActionType: .pick,
-        );
-      }
-    });
+    await _selectChampion(
+      championId: championId,
+      actionType: .pickChampion,
+      lcuActionType: .pick,
+    );
   }
 
   Future<void> banChampion({required int championId}) async {
@@ -380,10 +370,9 @@ class RemoteRiftConnector._init({
 
     final player = session.localPlayer;
     final position = player?.assignedPosition?.toChampionSelectPosition();
-    final (championId, championAction) = switch (timer?.phase) {
-      .planning => (player?.preferredChampionId, ChampionSelectChampionAction.pick),
-      _ => (session.localChampionId, session.localChampionAction),
-    };
+    final (championId, championAction) = session.isPlanning
+        ? (player?.preferredChampionId, ChampionSelectChampionAction.pick)
+        : (session.localChampionId, session.localChampionAction);
     final actionAvailability = session.toChampionSelectActionAvailability();
 
     final (champion, spell1, spell2) = await (
@@ -445,7 +434,10 @@ class RemoteRiftConnector._init({
     if (championId <= 0 && !isNoChampionBan) {
       throw RemoteRiftStateError.championSelectActionUnavailable;
     }
-    final actionAssignment = session.activeLocalAction;
+    final isPlanningPick = session.isPlanning && lcuActionType == .pick;
+    final actionAssignment = isPlanningPick
+        ? session.pendingLocalPickAction
+        : session.activeLocalAction;
     if (actionAssignment == null || actionAssignment.type != lcuActionType) {
       throw RemoteRiftStateError.championSelectActionUnavailable;
     }
@@ -453,25 +445,11 @@ class RemoteRiftConnector._init({
     if (actionId == null) {
       throw RemoteRiftStateError.championSelectActionUnavailable;
     }
-    final update = lcu.ChampSelectActionUpdate(championId: championId);
+    final update = lcu.ChampSelectActionUpdate(championId: championId, completed: false);
     await _lcuApi.updateChampSelectAction(actionId: actionId, update: update);
 
     final updatedSession = await _lcuApi.getChampSelectSession();
     if (updatedSession.actionWithId(actionId)?.championId != championId) {
-      throw RemoteRiftStateError.championSelectActionRejected;
-    }
-  }
-
-  Future<void> _setChampionPickIntent({required int championId}) async {
-    if (championId <= 0) {
-      throw RemoteRiftStateError.championSelectActionUnavailable;
-    }
-    await _lcuApi.updateMyChampSelectSelection(
-      lcu.ChampSelectMySelectionUpdate(championPickIntent: championId),
-    );
-
-    final updatedSession = await _lcuApi.getChampSelectSession();
-    if (updatedSession.localPlayer?.preferredChampionId != championId) {
       throw RemoteRiftStateError.championSelectActionRejected;
     }
   }
@@ -481,7 +459,8 @@ class RemoteRiftConnector._init({
     _ChampionSelectAction execute,
   ) async {
     try {
-      if (await _lcuApi.getGameflowPhase() != .champSelect) {
+      final phase = await _lcuApi.getGameflowPhase();
+      if (phase != .champSelect) {
         throw RemoteRiftStateError.notChampionSelect;
       }
 
