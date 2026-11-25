@@ -1,5 +1,5 @@
 class LcuRoutes {
-  static const heartbeat = '/lol-heartbeat/v1/connection-status';
+  static const applicationName = '/riotclient/app-name';
   static const gameflowPhase = '/lol-gameflow/v1/gameflow-phase';
   static const gameflowSession = '/lol-gameflow/v1/session';
   static const queues = '/lol-game-queues/v1/queues';

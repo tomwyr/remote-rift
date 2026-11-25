@@ -20,12 +20,8 @@ class LcuApiClient({
     await _request(.post, LcuSimulatorProtocol.launchPath);
   }
 
-  Future<HeartbeatConnection> getHeartbeatConnection() async {
-    return _requestJson(
-      .post,
-      LcuRoutes.heartbeat,
-      decode: (json) => .fromJson(json),
-    );
+  Future<String> getApplicationName() async {
+    return await _requestJson(.get, LcuRoutes.applicationName, decode: (json) => json);
   }
 
   Future<GameflowPhase> getGameflowPhase() async {

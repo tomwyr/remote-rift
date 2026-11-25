@@ -13,7 +13,7 @@ import '../simulation/simulator_queue.dart';
 class SimulatorRoutes(final Simulator _simulator, final String _authorization) {
   Handler get handler {
     final router = Router()
-      ..post(LcuRoutes.heartbeat, _connectionStatus)
+      ..get(LcuRoutes.applicationName, (_) => _json('LeagueClient'))
       ..post(LcuSimulatorProtocol.launchPath, (_) => _perform(() => _simulator.setOnline(true)))
       ..get(LcuRoutes.gameflowPhase, (_) => _json(_simulator.gameflowPhase))
       ..get(LcuRoutes.gameflowSession, _gameflowSession)
@@ -50,9 +50,7 @@ class SimulatorRoutes(final Simulator _simulator, final String _authorization) {
       }
 
       final path = '/${request.url.path}';
-      if (!_simulator.isOnline &&
-          path != LcuRoutes.heartbeat &&
-          path != LcuSimulatorProtocol.launchPath) {
+      if (!_simulator.isOnline && path != LcuSimulatorProtocol.launchPath) {
         return Response(HttpStatus.serviceUnavailable);
       }
 
@@ -65,10 +63,6 @@ class SimulatorRoutes(final Simulator _simulator, final String _authorization) {
         };
       }
     };
-  }
-
-  Response _connectionStatus(Request request) {
-    return _json(HeartbeatConnection(stableConnection: _simulator.isOnline));
   }
 
   Response _gameflowSession(Request request) {

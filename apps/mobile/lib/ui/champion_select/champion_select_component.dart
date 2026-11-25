@@ -69,9 +69,14 @@ class const ChampionSelectComponent({
     ChampionSelectState current,
   ) {
     ChampionSelectAction? requiredAction(ChampionSelectState state) {
-      return switch (state.championSelect.actionAvailability) {
-        .pick => .pickChampion,
-        .ban => .banChampion,
+      final championSelect = state.championSelect;
+      if (championSelect.phase == .planning) {
+        return null;
+      }
+
+      return switch (championSelect.actionAvailability) {
+        ChampionSelectActionAvailability(pickChampion: true) => .pickChampion,
+        ChampionSelectActionAvailability(banChampion: true) => .banChampion,
         _ => null,
       };
     }

@@ -3,6 +3,8 @@ import '../models/champ_select_action.dart';
 import '../models/state.dart';
 
 extension ChampSelectSessionExtensions on lcu.ChampSelectSession {
+  bool get isPlanning => timer?.phase == .planning;
+
   lcu.ChampSelectPlayer? get localPlayer {
     final cellId = localPlayerCellId;
     if (cellId == null) return null;
@@ -22,6 +24,20 @@ extension ChampSelectSessionExtensions on lcu.ChampSelectSession {
         if (action.actorCellId == cellId &&
             action.isInProgress == true &&
             action.completed != true) {
+          return action;
+        }
+      }
+    }
+    return null;
+  }
+
+  lcu.ChampSelectActionAssignment? get pendingLocalPickAction {
+    final cellId = localPlayerCellId;
+    if (cellId == null) return null;
+
+    for (var actionTurn in actions) {
+      for (var action in actionTurn) {
+        if (action.actorCellId == cellId && action.type == .pick && action.completed != true) {
           return action;
         }
       }
@@ -133,6 +149,19 @@ extension ChampSelectSessionExtensions on lcu.ChampSelectSession {
 }
 
 extension ChampSelectActionAssignmentExtensions on lcu.ChampSelectActionAssignment {
+  bool get canLockIn {
+    final championId = this.championId;
+    if (id == null || championId == null) {
+      return false;
+    }
+
+    return switch ((type, championId)) {
+      (.ban, -1 || > 0) => true,
+      (.pick, > 0) => true,
+      _ => false,
+    };
+  }
+
   int? get bannedChampionId {
     if (type != .ban || completed != true) {
       return null;
@@ -174,12 +203,17 @@ extension ChampSelectSessionAvailabilityMapper on lcu.ChampSelectSession {
     if (localPlayer == null || timeLeft == null || timeLeft <= 0) {
       return .unavailable;
     }
-    if (timer?.phase == .planning) {
+    if (isPlanning) {
       return .planning;
     }
-    return switch (activeLocalAction?.type) {
-      .pick => .pick,
-      .ban => .ban,
+
+    final action = activeLocalAction;
+    if (action == null) return .spells;
+    final canLockIn = action.canLockIn;
+
+    return switch (action.type) {
+      .pick => .pick(lockInChampion: canLockIn),
+      .ban => .ban(lockInChampion: canLockIn),
       _ => .spells,
     };
   }

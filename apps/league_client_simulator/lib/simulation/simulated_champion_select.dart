@@ -48,42 +48,42 @@ class SimulatedChampionSelect(SimulatorQueue queue, LobbyPositionPreferences pre
   }
 
   void enterPick() {
-    if (_isAvailable(_intendedChampionId)) {
-      _actionsByStage[SimulatorStage.localPick]?.championId = _intendedChampionId;
-    }
+    _actionsByStage[SimulatorStage.localPick]?.championId = _isAvailable(_intendedChampionId)
+        ? _intendedChampionId
+        : 0;
   }
 
   bool updateAction(SimulatorStage stage, int id, ChampSelectActionUpdate update) {
-    final action = _actionsByStage[stage];
+    final isPlanning = stage == .planning;
+    final actionStage = isPlanning ? SimulatorStage.localPick : stage;
+    final action = _actionsByStage[actionStage];
     if (action == null || action.actorCellId != 0 || action.id != id || action.completed) {
       return false;
     }
+    if (isPlanning && update.completed == true) return false;
 
     final championId = update.championId ?? action.championId;
     final isNoBan = action.type == .ban && championId == -1;
     if (!isNoBan && !_isAvailable(championId)) return false;
 
+    if (isPlanning) {
+      _intendedChampionId = championId;
+    }
     action.championId = championId;
     action.completed = update.completed ?? false;
     return true;
   }
 
-  bool updateSelection(SimulatorStage stage, ChampSelectMySelectionUpdate update) {
-    final intent = update.championPickIntent;
+  bool updateSelection(ChampSelectMySelectionUpdate update) {
     final firstSpell = update.spell1Id ?? _spell1Id;
     final secondSpell = update.spell2Id ?? _spell2Id;
-    if (intent != null && (stage != .planning || !_isAvailable(intent))) return false;
-    if (update.championId != null ||
-        (intent == null && update.spell1Id == null && update.spell2Id == null)) {
-      return false;
-    }
+    if (update.spell1Id == null && update.spell2Id == null) return false;
     if (firstSpell == secondSpell ||
         !_isSpellAvailable(firstSpell) ||
         !_isSpellAvailable(secondSpell)) {
       return false;
     }
 
-    _intendedChampionId = intent ?? _intendedChampionId;
     _spell1Id = firstSpell;
     _spell2Id = secondSpell;
     return true;

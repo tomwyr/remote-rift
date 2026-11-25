@@ -1,3 +1,7 @@
+## [0.16.2] - 2026-11-25
+
+- Mobile releases now go to the Google Play Internal testing track for Android testers.
+
 ## [0.16.1] - 2026-11-25
 
 - Updated iOS builds to use the iOS 27 SDK

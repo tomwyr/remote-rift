@@ -66,7 +66,7 @@ jobs:
         working-directory: apps/mobile/build/app/intermediates/merged_native_libs/release/mergeReleaseNativeLibs/out/lib
         run: zip -q "$RUNNER_TEMP/native-debug-symbols.zip" */*.so
 
-      - name: Upload bundle and native symbols to Google Play beta
+      - name: Upload to Google Play
         working-directory: apps/mobile
         env:
           ANDROID_APPLICATION_ID: ${{ vars.MOBILE_APPLICATION_ID }}

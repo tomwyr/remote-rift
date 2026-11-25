@@ -111,8 +111,6 @@ class ChampSelectPlayer({
 
 @JsonSerializable(includeIfNull: false)
 class ChampSelectMySelectionUpdate({
-  final int? championId,
-  final int? championPickIntent,
   final int? spell1Id,
   final int? spell2Id,
 }) {
@@ -284,12 +282,3 @@ enum ReadyCheckState { invalid, inProgress }
 
 @JsonEnum(fieldRename: .pascal)
 enum ReadyCheckResponse { none, accepted, declined }
-
-@JsonSerializable()
-class HeartbeatConnection({
-  required final bool stableConnection,
-}) {
-  factory fromJson(Map<String, dynamic> json) => _$HeartbeatConnectionFromJson(json);
-
-  Map<String, dynamic> toJson() => _$HeartbeatConnectionToJson(this);
-}

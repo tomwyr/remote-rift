@@ -192,7 +192,7 @@ class Simulator {
 
   void updateChampionSelection(ChampSelectMySelectionUpdate update) {
     final (championSelect, _) = _activeChampionSelect();
-    if (!championSelect.updateSelection(_stage, update)) {
+    if (!championSelect.updateSelection(update)) {
       throw SimulatorRequestError.invalidInput;
     }
   }
