@@ -1,8 +1,9 @@
 # Diagnostic logging in three phases
 
-Mobile and Desktop use the same local logger and can export snapshots for comparing a connection
-failure across both devices. Fresh installs start with capture off. The opt-in is stored by each
-app, and logs stay on the device until the user shares or exports them.
+Implement the [diagnostic logging PRD](../prds/diagnostic-logging.md) with a shared local logger
+and export snapshots for comparing a connection failure across Mobile and Desktop. Fresh and
+upgraded installs default to capture off. Each app stores its opt-in locally and makes logs
+available for sharing or export.
 
 ## Phase 1 — Shared logging
 
@@ -16,6 +17,9 @@ app, and logs stay on the device until the user shares or exports them.
   operation names for shared routes. Failure categories reflect each app's observation. A rejected
   connector command can appear as `http_error` on Mobile and `operation_rejected` on Desktop.
   Use timestamps to compare timelines.
+- Exclude credentials, authorization headers, raw request and response bodies, full URLs, IP
+  addresses, user identifiers, and local paths from both stored records and exports. Classify
+  failures before serialization and export snapshots of the sanitized records.
 - Store records in `log.ndjson`. Serialize asynchronous writes, pruning, snapshots, and clearing.
   Default to **7 days and 2 MiB per installation**, with both limits configurable when opening the
   logger. Drop the oldest records first. Prune on startup, during capture, and before taking a
@@ -35,7 +39,7 @@ app, and logs stay on the device until the user shares or exports them.
 
 - Open Settings from the Home app bar and show a Diagnostics card with its own Cubit. Persist the
   opt-in in a typed local settings store. Default to off and load the preference before feature
-  startup.
+  startup. Apply capture changes after saving the preference.
 - Show storage status and provide **Clear logs** independently of capture. Localize the toggle,
   privacy copy, actions, and status messages.
 
@@ -62,7 +66,7 @@ app, and logs stay on the device until the user shares or exports them.
 
 - Add a Diagnostics card to the existing Settings page with its own Cubit.
   Persist the opt-in in `AppSettingsStore`. Default to off and load the preference before connector
-  startup.
+  startup. Apply capture changes after saving the preference.
 - Show storage status and provide **Clear logs** independently of capture. Localize the toggle,
   privacy copy, actions, and status messages.
 - Fresh settings default to off. A saved `settings.json` without `diagnosticLoggingEnabled`
@@ -83,9 +87,10 @@ app, and logs stay on the device until the user shares or exports them.
   and connector start and stop. Confirm repeated snapshots produce no additional status records.
   Trigger a failed connector request and confirm Desktop records the registered operation, HTTP
   status, and a safe failure category.
-- Confirm capture defaults to off on fresh installs, survives restart after opt-in, and records
-  startup. Clear logs during capture and confirm that later events can still be recorded. Confirm
-  a storage failure appears in Settings while connection and matchmaking continue to work.
+- Confirm capture defaults to off on fresh installs, changes without restart after the preference
+  saves, and survives restart. Confirm startup is recorded while enabled. Clear logs during
+  capture and confirm that later events can still be recorded. Confirm a storage failure appears
+  in Settings while connection and matchmaking continue to work.
 - After upgrade compatibility is implemented, load a Desktop settings document saved before the
   logging preference existed. Confirm capture starts off and existing values remain readable and
   survive a subsequent save.
@@ -95,4 +100,5 @@ app, and logs stay on the device until the user shares or exports them.
   apply after restart.
 - Reproduce a connection failure with both apps opted in.
   Compare the snapshots for the shared schema, installed versions, distinct sessions, UTC
-  timestamps, and allowlisted details.
+  timestamps, and allowlisted details. Confirm sensitive inputs are absent from both local files
+  and exported snapshots.
