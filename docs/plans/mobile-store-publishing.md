@@ -5,9 +5,9 @@ accounts or release signing keys. To ship an official release, a maintainer upda
 build number in [the mobile pubspec](../../apps/mobile/pubspec.yaml), adds the matching
 [changelog entry](../../apps/mobile/CHANGELOG.md), and pushes a `mobile-<version>` tag. The tag
 starts three independent release paths after validation. GitHub Releases publishes the changelog,
-signed APK ZIP, and iOS IPA signed for App Store Connect. In parallel, Fastlane uploads the signed
-Android App Bundle and native debug symbols to Google Play `beta` and a separately built iOS IPA
-to TestFlight.
+signed APK ZIP, and iOS IPA signed for App Store Connect. In parallel, the store jobs submit the
+signed Android App Bundle and native debug symbols to Google Play Internal testing and upload a
+separately built iOS IPA to TestFlight for internal distribution.
 Promote builds to production in each store console.
 
 ## 1. Release workflow
@@ -48,16 +48,15 @@ Promote builds to production in each store console.
 - Restore the existing Android upload keystore with
   [the signing script](../../scripts/release/restore-android-signing-key.sh). Pass the Play
   service-account JSON to Fastlane through the upload step's environment. Grant the service
-  account permission to release to the beta track for the registered Android app.
+  account permission to release to testing tracks for the registered Android app.
 - Run `flutter build appbundle --release` in the Play job. Package the matching native debug
   symbols from the release bundle build as `native-debug-symbols.zip`. Use the
   unstripped libraries from the release build and preserve the ABI directories at the root of the
   ZIP.
-- Implement `android deploy` with `upload_to_play_store`. Read the expected application ID from
-  `ANDROID_APPLICATION_ID` injected by CI. Use the service-account JSON to upload the release AAB
-  and native symbols ZIP. Google Play validates the bundle against that ID. Target the
-  `beta` track and restrict the upload to the bundle and symbols. Store listing metadata stays in
-  Play Console.
+- The `android deploy` lane submits the release AAB and native symbols ZIP to Internal testing.
+  Google Play validates the bundle against `ANDROID_APPLICATION_ID`, which CI sets from
+  `MOBILE_APPLICATION_ID`. To include Open testing, enable the promotion snippet in the Fastfile.
+  Store listing metadata stays in Play Console.
 
 ## 3. iOS signing, build, and upload
 
@@ -77,8 +76,9 @@ Promote builds to production in each store console.
 - Both jobs run `flutter build ipa --release --export-options-plist=<path>` independently. The
   GitHub job packages its IPA. In the TestFlight job, `ios deploy` selects the single IPA in
   `build/ios/ipa` and uploads it with `upload_to_testflight`, using `IOS_BUNDLE_ID` and the key
-  from `app_store_connect_api_key`. The lane skips waiting for build processing. Manage testers
-  and distribution in App Store Connect after processing.
+  from `app_store_connect_api_key`. The lane skips waiting for build processing. Enable Automatic
+  Distribution for the internal tester group in App Store Connect. To include external testers,
+  use the external group options in the Fastfile and configure the group in App Store Connect.
 - In App Store Connect, open **Users and Access → Integrations → App Store Connect API → Team
   Keys** and create a key with the **Developer** role. Add its Key ID and Issuer ID as repository
   Actions variables `APP_STORE_CONNECT_KEY_ID` and `APP_STORE_CONNECT_ISSUER_ID`. Add the raw,

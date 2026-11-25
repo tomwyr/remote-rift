@@ -9,19 +9,35 @@ end
 
 platform :android do
   lane :deploy do
-    upload_to_play_store(
+    play_options = {
       package_name: required_env("ANDROID_APPLICATION_ID"),
       json_key_data: required_env("GOOGLE_PLAY_SERVICE_ACCOUNT_JSON"),
-      aab: File.expand_path("../build/app/outputs/bundle/release/app-release.aab"),
-      mapping: File.join(ENV.fetch("RUNNER_TEMP"), "native-debug-symbols.zip"),
-      track: "beta",
-      release_status: "draft",
+      track: "internal",
+      release_status: "completed",
       skip_upload_apk: true,
       skip_upload_metadata: true,
       skip_upload_changelogs: true,
       skip_upload_images: true,
       skip_upload_screenshots: true
+    }
+
+    upload_to_play_store(
+      **play_options,
+      aab: File.expand_path("../build/app/outputs/bundle/release/app-release.aab"),
+      mapping: File.join(ENV.fetch("RUNNER_TEMP"), "native-debug-symbols.zip")
     )
+
+    # To include Open testing, uncomment this promotion of the uploaded build.
+    # require "yaml"
+    # version = YAML.load_file("../pubspec.yaml").fetch("version")
+    # version_code = Integer(version.split("+").fetch(1), 10)
+    # upload_to_play_store(
+    #   **play_options,
+    #   skip_upload_aab: true,
+    #   version_code: version_code,
+    #   track_promote_to: "beta",
+    #   track_promote_release_status: "completed"
+    # )
   end
 end
 
@@ -73,6 +89,12 @@ platform :ios do
       ipa: File.expand_path(ipas.first),
       app_identifier: required_env("IOS_BUNDLE_ID"),
       skip_waiting_for_build_processing: true
+      # To include external testers, replace the option above with these options and use the
+      # actual external group name. The App Store Connect API key needs App Manager or Admin.
+      # skip_waiting_for_build_processing: false,
+      # distribute_external: true,
+      # groups: ["Public Beta"],
+      # submit_beta_review: true
     )
   end
 end
