@@ -18,13 +18,9 @@ on:
         required: false
       IOS_PROVISIONING_PROFILE_BASE64:
         required: false
-      IOS_EXPORT_OPTIONS_PLIST_BASE64:
-        required: false
       IOS_CERTIFICATE_PASSWORD:
         required: false
-      APP_STORE_CONNECT_USERNAME:
-        required: false
-      FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD:
+      APP_STORE_CONNECT_PRIVATE_KEY:
         required: false
 
 permissions:
@@ -73,7 +69,7 @@ jobs:
       - name: Upload bundle and native symbols to Google Play beta
         working-directory: apps/mobile
         env:
-          ANDROID_APPLICATION_ID: ${{ vars.ANDROID_APPLICATION_ID }}
+          ANDROID_APPLICATION_ID: ${{ vars.MOBILE_APPLICATION_ID }}
           GOOGLE_PLAY_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
         run: fastlane android deploy
 
@@ -95,7 +91,6 @@ jobs:
           certificate-p12-base64: ${{ secrets.IOS_CERTIFICATE_P12_BASE64 }}
           certificate-password: ${{ secrets.IOS_CERTIFICATE_PASSWORD }}
           provisioning-profile-base64: ${{ secrets.IOS_PROVISIONING_PROFILE_BASE64 }}
-          export-options-plist-base64: ${{ secrets.IOS_EXPORT_OPTIONS_PLIST_BASE64 }}
 
       - name: Build signed IPA
         working-directory: apps/mobile
@@ -104,9 +99,8 @@ jobs:
       - name: Upload signed IPA to TestFlight
         working-directory: apps/mobile
         env:
-          IOS_BUNDLE_ID: ${{ vars.IOS_BUNDLE_ID }}
-          APP_STORE_CONNECT_APP_ID: ${{ vars.APP_STORE_CONNECT_APP_ID }}
-          APP_STORE_CONNECT_PROVIDER_ID: ${{ vars.APP_STORE_CONNECT_PROVIDER_ID }}
-          APP_STORE_CONNECT_USERNAME: ${{ secrets.APP_STORE_CONNECT_USERNAME }}
-          FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
+          IOS_BUNDLE_ID: ${{ vars.MOBILE_APPLICATION_ID }}
+          APP_STORE_CONNECT_KEY_ID: ${{ vars.APP_STORE_CONNECT_KEY_ID }}
+          APP_STORE_CONNECT_ISSUER_ID: ${{ vars.APP_STORE_CONNECT_ISSUER_ID }}
+          APP_STORE_CONNECT_PRIVATE_KEY: ${{ secrets.APP_STORE_CONNECT_PRIVATE_KEY }}
         run: fastlane ios deploy

@@ -14,9 +14,6 @@ inputs:
   provisioning-profile-base64:
     description: Base64-encoded App Store Connect provisioning profile
     required: true
-  export-options-plist-base64:
-    description: Base64-encoded Xcode export options plist
-    required: true
 
 runs:
   using: composite
@@ -45,7 +42,6 @@ runs:
       env:
         IOS_CERTIFICATE_P12_BASE64: ${{ inputs.certificate-p12-base64 }}
         IOS_PROVISIONING_PROFILE_BASE64: ${{ inputs.provisioning-profile-base64 }}
-        IOS_EXPORT_OPTIONS_PLIST_BASE64: ${{ inputs.export-options-plist-base64 }}
       run: scripts/release/restore-ios-signing-files.sh
 
     - name: Set up iOS signing

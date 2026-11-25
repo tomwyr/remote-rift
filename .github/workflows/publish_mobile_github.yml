@@ -22,8 +22,6 @@ on:
         required: true
       IOS_PROVISIONING_PROFILE_BASE64:
         required: true
-      IOS_EXPORT_OPTIONS_PLIST_BASE64:
-        required: true
       IOS_CERTIFICATE_PASSWORD:
         required: true
 
@@ -89,7 +87,6 @@ jobs:
           certificate-p12-base64: ${{ secrets.IOS_CERTIFICATE_P12_BASE64 }}
           certificate-password: ${{ secrets.IOS_CERTIFICATE_PASSWORD }}
           provisioning-profile-base64: ${{ secrets.IOS_PROVISIONING_PROFILE_BASE64 }}
-          export-options-plist-base64: ${{ secrets.IOS_EXPORT_OPTIONS_PLIST_BASE64 }}
 
       - name: Build signed IPA
         working-directory: apps/mobile

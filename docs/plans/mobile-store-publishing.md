@@ -27,7 +27,8 @@ Promote builds to production in each store console.
   independent jobs in the app store workflow.
 - In GitHub repository settings, restrict release tag creation to maintainers and protect tags
   from updates and deletion. Use repository Actions variables for non-sensitive identifiers
-  and repository Actions secrets for credentials and signing material. The entry workflow
+  and repository Actions secrets for credentials and signing material. Set the repository
+  variable `MOBILE_APPLICATION_ID` to `com.tomwyr.remoterift` for both store uploads. The entry workflow
   forwards only the named secrets each publishing workflow uses. The store jobs each use their
   own store credentials and fail independently if those credentials are missing. Both Android
   builds use the Android upload keystore, and both iOS builds use the same App Store Connect
@@ -60,24 +61,30 @@ Promote builds to production in each store console.
 
 ## 3. iOS signing, build, and upload
 
-- For both iOS jobs, the preparation action restores the Apple Distribution certificate, App Store
-  Connect provisioning profile, and `ExportOptions.plist` from CI secrets with
-  [restore-ios-signing-files.sh](../../scripts/release/restore-ios-signing-files.sh). Configure the
-  plist for a signed App Store Connect export that produces a local IPA and preserves the pubspec
-  build number.
-  Set the CI bundle and team IDs to match the app, provisioning profile, and export settings.
-  Xcode validates the signing inputs during the build and export.
+- Export the Apple Distribution certificate and private key as a password-protected `.p12` and
+  download the matching App Store Connect provisioning profile for `com.tomwyr.remoterift`.
+  Set `IOS_TEAM_ID` as a repository Actions variable. Set `IOS_CERTIFICATE_PASSWORD` and the
+  base64-encoded files as repository Actions secrets `IOS_CERTIFICATE_P12_BASE64` and
+  `IOS_PROVISIONING_PROFILE_BASE64`. Both iOS jobs restore the files with
+  [restore-ios-signing-files.sh](../../scripts/release/restore-ios-signing-files.sh).
 - Implement `ios setup_signing` to create and unlock a temporary keychain, import the certificate,
   install the provisioning profile, and use it for manual signing in the app target's Release
   configuration. Scope signing changes to the CI checkout so local development stays automatic.
+  The lane fills in the team ID and installed profile UUID for the profile's bundle ID in
+  [the export options template](../../apps/mobile/ios/ExportOptions.template.plist) and writes
+  `$RUNNER_TEMP/ios-signing/ExportOptions.plist`. The template specifies a local App Store
+  Connect export, manual signing, and preservation of the pubspec build number.
 - Both jobs run `flutter build ipa --release --export-options-plist=<path>` independently. The
   GitHub job packages its IPA. In the TestFlight job, `ios deploy` selects the single IPA in
-  `build/ios/ipa` and uploads it with `upload_to_testflight`, using `IOS_BUNDLE_ID`
-  and the numeric `APP_STORE_CONNECT_APP_ID` from the CI environment. Inject `APP_STORE_CONNECT_PROVIDER_ID`
-  when required for an account associated with multiple providers. Inject the upload account and
-  `FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD` from CI secrets.
-  Skip waiting for build processing. Tester assignment and distribution are managed in App Store
-  Connect after processing.
+  `build/ios/ipa` and uploads it with `upload_to_testflight`, using `IOS_BUNDLE_ID` and the key
+  from `app_store_connect_api_key`. The lane skips waiting for build processing. Manage testers
+  and distribution in App Store Connect after processing.
+- In App Store Connect, open **Users and Access → Integrations → App Store Connect API → Team
+  Keys** and create a key with the **Developer** role. Add its Key ID and Issuer ID as repository
+  Actions variables `APP_STORE_CONNECT_KEY_ID` and `APP_STORE_CONNECT_ISSUER_ID`. Add the raw,
+  multiline contents of the downloaded `.p8` file as the repository Actions secret
+  `APP_STORE_CONNECT_PRIVATE_KEY`. Only the TestFlight upload step uses these values.
+  [Create an App Store Connect API key](https://developer.apple.com/help/app-store-connect/get-started/app-store-connect-api)
 
 ## 4. Artifacts and release verification
 

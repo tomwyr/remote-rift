@@ -1,3 +1,4 @@
+require "plist"
 require "securerandom"
 
 def required_env(name)
@@ -26,6 +27,7 @@ end
 platform :ios do
   lane :setup_signing do
     signing_dir = File.join(ENV.fetch("RUNNER_TEMP"), "ios-signing")
+    team_id = required_env("IOS_TEAM_ID")
     keychain = File.join(signing_dir, "signing.keychain-db")
     keychain_password = SecureRandom.hex(32)
 
@@ -37,29 +39,38 @@ platform :ios do
       certificate_password: required_env("IOS_CERTIFICATE_PASSWORD")
     )
     profile = install_provisioning_profile(path: File.join(signing_dir, "distribution.mobileprovision"))
+    profile_id = File.basename(profile, ".mobileprovision")
     update_code_signing_settings(
       path: File.expand_path("../ios/Runner.xcodeproj"),
       targets: ["Runner"],
       build_configurations: ["Release"],
       use_automatic_signing: false,
-      team_id: required_env("IOS_TEAM_ID"),
+      team_id: team_id,
       code_sign_identity: "Apple Distribution",
-      profile_name: File.basename(profile, ".mobileprovision")
+      profile_name: profile_id
     )
+
+    export_options = Plist.parse_xml("../ios/ExportOptions.template.plist")
+    export_options["teamID"] = team_id
+    bundle_id = FastlaneCore::ProvisioningProfile.bundle_id(profile)
+    export_options["provisioningProfiles"] = { bundle_id => profile_id }
+    File.write(File.join(signing_dir, "ExportOptions.plist"), Plist::Emit.dump(export_options))
   end
 
   lane :deploy do
-    required_env("FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD")
-    provider = ENV["APP_STORE_CONNECT_PROVIDER_ID"]
     ipas = Dir["../build/ios/ipa/*.ipa"]
     UI.user_error!("Expected exactly one IPA in build/ios/ipa.") unless ipas.one?
 
+    api_key = app_store_connect_api_key(
+      key_id: required_env("APP_STORE_CONNECT_KEY_ID"),
+      issuer_id: required_env("APP_STORE_CONNECT_ISSUER_ID"),
+      key_content: required_env("APP_STORE_CONNECT_PRIVATE_KEY")
+    )
+
     upload_to_testflight(
+      api_key: api_key,
       ipa: File.expand_path(ipas.first),
       app_identifier: required_env("IOS_BUNDLE_ID"),
-      apple_id: required_env("APP_STORE_CONNECT_APP_ID"),
-      username: required_env("APP_STORE_CONNECT_USERNAME"),
-      provider_public_id: provider.to_s.empty? ? nil : provider,
       skip_waiting_for_build_processing: true
     )
   end
