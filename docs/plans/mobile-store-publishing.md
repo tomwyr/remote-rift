@@ -36,7 +36,7 @@ Promote builds to production in each store console.
 - The [Android](../../.github/actions/prepare-android-build/action.yml) and
   [iOS](../../.github/actions/prepare-ios-build/action.yml) preparation actions each set up Flutter
   and resolve dependencies from the workspace root. The Android action sets up Java 17 and
-  restores the upload keystore on Ubuntu. The iOS action prepares signing on macOS 26.
+  restores the upload keystore on Ubuntu. Both iOS builds use the `xcode-27` runner.
   The iOS action and the Play job set up Ruby and install Fastlane with `gem install fastlane`.
   The workflows call the lanes in [Fastfile](../../apps/mobile/fastlane/Fastfile) from `apps/mobile`.
 - All artifacts use Flutter's release configuration and the version and build number from the
