@@ -63,9 +63,23 @@ The workspace is organized around user-facing applications and the packages that
 
 Remote Rift projects are built and published through GitHub Actions.
 
-Mobile and Desktop builds are available from the [GitHub Releases page](https://github.com/tomwyr/remote-rift/releases). Mobile builds can be downloaded and installed manually until the application is available through app stores.
+### App stores
+
+Mobile beta builds are distributed through Google Play and TestFlight.
+
+Android users can [join the Google Play beta](https://example.com/google-play-beta) and install
+Remote Rift from Google Play. iOS users can [join the TestFlight beta](https://example.com/testflight-invite)
+and install Remote Rift in TestFlight.
+
+### GitHub Releases
+
+Mobile and Desktop builds are available from the [GitHub Releases page](https://github.com/tomwyr/remote-rift/releases).
+Mobile builds can be downloaded and installed manually as an alternative to installing through app stores.
 
 > [!NOTE]
-> iOS builds are unsigned and require an appropriate Apple distribution method before they can be installed.
+> The iOS IPA is signed for App Store Connect. Manual installation requires re-signing
+> it with a certificate and provisioning profile that covers your device.
+
+### GitHub Pages
 
 Website releases are published to GitHub Pages. The current website version is available at [tomwyr.github.io/remote-rift](https://tomwyr.github.io/remote-rift/).

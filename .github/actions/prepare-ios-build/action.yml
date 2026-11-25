@@ -1,0 +1,57 @@
+name: Prepare signed iOS build
+description: Set up Flutter and Fastlane and configure App Store Connect signing
+
+inputs:
+  team-id:
+    description: Apple Developer team ID
+    required: true
+  certificate-p12-base64:
+    description: Base64-encoded Apple Distribution certificate and private key
+    required: true
+  certificate-password:
+    description: Password for the Apple Distribution certificate file
+    required: true
+  provisioning-profile-base64:
+    description: Base64-encoded App Store Connect provisioning profile
+    required: true
+  export-options-plist-base64:
+    description: Base64-encoded Xcode export options plist
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: 3.47.0
+        cache: true
+
+    - name: Install dependencies
+      shell: bash
+      run: flutter pub get
+
+    - name: Setup Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: '3.4'
+
+    - name: Install Fastlane
+      shell: bash
+      run: gem install fastlane
+
+    - name: Restore iOS signing files
+      shell: bash
+      env:
+        IOS_CERTIFICATE_P12_BASE64: ${{ inputs.certificate-p12-base64 }}
+        IOS_PROVISIONING_PROFILE_BASE64: ${{ inputs.provisioning-profile-base64 }}
+        IOS_EXPORT_OPTIONS_PLIST_BASE64: ${{ inputs.export-options-plist-base64 }}
+      run: scripts/release/restore-ios-signing-files.sh
+
+    - name: Set up iOS signing
+      shell: bash
+      working-directory: apps/mobile
+      env:
+        IOS_TEAM_ID: ${{ inputs.team-id }}
+        IOS_CERTIFICATE_PASSWORD: ${{ inputs.certificate-password }}
+      run: fastlane ios setup_signing

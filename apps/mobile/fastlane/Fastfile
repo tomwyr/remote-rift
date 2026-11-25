@@ -1,0 +1,66 @@
+require "securerandom"
+
+def required_env(name)
+  value = ENV[name]
+  UI.user_error!("Set #{name}.") if value.to_s.empty?
+  value
+end
+
+platform :android do
+  lane :deploy do
+    upload_to_play_store(
+      package_name: required_env("ANDROID_APPLICATION_ID"),
+      json_key_data: required_env("GOOGLE_PLAY_SERVICE_ACCOUNT_JSON"),
+      aab: File.expand_path("../build/app/outputs/bundle/release/app-release.aab"),
+      mapping: File.join(ENV.fetch("RUNNER_TEMP"), "native-debug-symbols.zip"),
+      track: "beta",
+      skip_upload_apk: true,
+      skip_upload_metadata: true,
+      skip_upload_changelogs: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true
+    )
+  end
+end
+
+platform :ios do
+  lane :setup_signing do
+    signing_dir = File.join(ENV.fetch("RUNNER_TEMP"), "ios-signing")
+    keychain = File.join(signing_dir, "signing.keychain-db")
+    keychain_password = SecureRandom.hex(32)
+
+    create_keychain(path: keychain, password: keychain_password, unlock: true)
+    import_certificate(
+      keychain_path: keychain,
+      keychain_password: keychain_password,
+      certificate_path: File.join(signing_dir, "distribution.p12"),
+      certificate_password: required_env("IOS_CERTIFICATE_PASSWORD")
+    )
+    profile = install_provisioning_profile(path: File.join(signing_dir, "distribution.mobileprovision"))
+    update_code_signing_settings(
+      path: File.expand_path("../ios/Runner.xcodeproj"),
+      targets: ["Runner"],
+      build_configurations: ["Release"],
+      use_automatic_signing: false,
+      team_id: required_env("IOS_TEAM_ID"),
+      code_sign_identity: "Apple Distribution",
+      profile_name: File.basename(profile, ".mobileprovision")
+    )
+  end
+
+  lane :deploy do
+    required_env("FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD")
+    provider = ENV["APP_STORE_CONNECT_PROVIDER_ID"]
+    ipas = Dir["../build/ios/ipa/*.ipa"]
+    UI.user_error!("Expected exactly one IPA in build/ios/ipa.") unless ipas.one?
+
+    upload_to_testflight(
+      ipa: File.expand_path(ipas.first),
+      app_identifier: required_env("IOS_BUNDLE_ID"),
+      apple_id: required_env("APP_STORE_CONNECT_APP_ID"),
+      username: required_env("APP_STORE_CONNECT_USERNAME"),
+      provider_public_id: provider.to_s.empty? ? nil : provider,
+      skip_waiting_for_build_processing: true
+    )
+  end
+end

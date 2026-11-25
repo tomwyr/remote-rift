@@ -1,0 +1,42 @@
+name: Prepare mobile release
+
+on:
+  workflow_call:
+    outputs:
+      version:
+        description: Validated mobile version
+        value: ${{ jobs.prepare.outputs.version }}
+      title:
+        description: GitHub release title
+        value: ${{ jobs.prepare.outputs.title }}
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  prepare:
+    name: Verify release tag and metadata
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.release.outputs.version }}
+      title: ${{ steps.release.outputs.title }}
+
+    steps:
+      - name: Checkout tagged commit
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+
+      - name: Validate release
+        id: release
+        run: scripts/release/validate-release.sh "$GITHUB_REF_NAME" mobile
+
+  validate:
+    name: Validate code
+    needs: prepare
+    uses: ./.github/workflows/validate_code.yml

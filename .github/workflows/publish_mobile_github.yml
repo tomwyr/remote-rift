@@ -1,0 +1,151 @@
+name: Publish mobile to GitHub Releases
+
+on:
+  workflow_call:
+    inputs:
+      version:
+        required: true
+        type: string
+      title:
+        required: true
+        type: string
+    secrets:
+      ANDROID_KEYSTORE_BASE64:
+        required: true
+      ANDROID_KEYSTORE_PASSWORD:
+        required: true
+      ANDROID_KEY_ALIAS:
+        required: true
+      ANDROID_KEY_PASSWORD:
+        required: true
+      IOS_CERTIFICATE_P12_BASE64:
+        required: true
+      IOS_PROVISIONING_PROFILE_BASE64:
+        required: true
+      IOS_EXPORT_OPTIONS_PLIST_BASE64:
+        required: true
+      IOS_CERTIFICATE_PASSWORD:
+        required: true
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build-android:
+    name: Build signed Android APK ZIP
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout tagged commit
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+
+      - name: Prepare signed Android build
+        uses: ./.github/actions/prepare-android-build
+        with:
+          keystore-base64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          keystore-password: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          key-alias: ${{ secrets.ANDROID_KEY_ALIAS }}
+          key-password: ${{ secrets.ANDROID_KEY_PASSWORD }}
+
+      - name: Build signed Android APK
+        working-directory: apps/mobile
+        run: flutter build apk --release
+
+      - name: Package Android asset
+        env:
+          RELEASE_VERSION: ${{ inputs.version }}
+        run: scripts/release/package-release.sh android "$RELEASE_VERSION"
+
+      - name: Upload Android release asset
+        uses: actions/upload-artifact@v4
+        with:
+          name: mobile-android
+          path: dist/remoterift-${{ inputs.version }}.apk.zip
+          if-no-files-found: error
+          overwrite: true
+
+  build-ios:
+    name: Build signed iOS IPA
+    runs-on: macos-26
+
+    steps:
+      - name: Checkout tagged commit
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+
+      - name: Prepare signed iOS build
+        uses: ./.github/actions/prepare-ios-build
+        with:
+          team-id: ${{ vars.IOS_TEAM_ID }}
+          certificate-p12-base64: ${{ secrets.IOS_CERTIFICATE_P12_BASE64 }}
+          certificate-password: ${{ secrets.IOS_CERTIFICATE_PASSWORD }}
+          provisioning-profile-base64: ${{ secrets.IOS_PROVISIONING_PROFILE_BASE64 }}
+          export-options-plist-base64: ${{ secrets.IOS_EXPORT_OPTIONS_PLIST_BASE64 }}
+
+      - name: Build signed IPA
+        working-directory: apps/mobile
+        run: flutter build ipa --release --export-options-plist="${RUNNER_TEMP:?}/ios-signing/ExportOptions.plist"
+
+      - name: Package iOS asset
+        env:
+          RELEASE_VERSION: ${{ inputs.version }}
+        run: scripts/release/package-release.sh ios "$RELEASE_VERSION"
+
+      - name: Upload iOS release asset
+        uses: actions/upload-artifact@v4
+        with:
+          name: mobile-ios
+          path: dist/remoterift-${{ inputs.version }}.ipa
+          if-no-files-found: error
+          overwrite: true
+
+  publish:
+    name: Publish release and assets
+    needs:
+      - build-android
+      - build-ios
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout tagged commit
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+
+      - name: Download Android release asset
+        uses: actions/download-artifact@v4
+        with:
+          name: mobile-android
+          path: release-assets
+
+      - name: Download iOS release asset
+        uses: actions/download-artifact@v4
+        with:
+          name: mobile-ios
+          path: release-assets
+
+      - name: Extract release notes
+        run: scripts/release/extract-notes.sh "$GITHUB_REF_NAME" dist/release-notes.md
+
+      - name: Publish GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: ${{ inputs.title }}
+          body_path: dist/release-notes.md
+          files: |
+            release-assets/remoterift-${{ inputs.version }}.apk.zip
+            release-assets/remoterift-${{ inputs.version }}.ipa
+          fail_on_unmatched_files: true

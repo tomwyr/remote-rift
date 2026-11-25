@@ -1,0 +1,44 @@
+name: Prepare signed Android build
+description: Set up Java and Flutter and restore the Android upload keystore
+
+inputs:
+  keystore-base64:
+    description: Base64-encoded Android upload keystore
+    required: true
+  keystore-password:
+    description: Android upload keystore password
+    required: true
+  key-alias:
+    description: Android upload key alias
+    required: true
+  key-password:
+    description: Android upload key password
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: temurin
+        java-version: '17'
+
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: 3.47.0
+        cache: true
+
+    - name: Install dependencies
+      shell: bash
+      run: flutter pub get
+
+    - name: Restore Android signing key
+      shell: bash
+      env:
+        ANDROID_KEYSTORE_BASE64: ${{ inputs.keystore-base64 }}
+        ANDROID_KEYSTORE_PASSWORD: ${{ inputs.keystore-password }}
+        ANDROID_KEY_ALIAS: ${{ inputs.key-alias }}
+        ANDROID_KEY_PASSWORD: ${{ inputs.key-password }}
+      run: scripts/release/restore-android-signing-key.sh

@@ -3,6 +3,13 @@
 set -euo pipefail
 
 tag="${1:?Expected a release tag.}"
+expected_product="${2:-}"
+
+if [[ -n "$expected_product" ]] &&
+   [[ "${GITHUB_REF_TYPE:-}" != tag || "$tag" != "$expected_product"-* ]]; then
+  echo "Run the $expected_product release workflow against a $expected_product-<version> tag." >&2
+  exit 1
+fi
 
 case "$tag" in
   mobile-*)
@@ -33,6 +40,11 @@ fi
 pubspec_version=$(sed -nE 's/^version:[[:space:]]*([^+[:space:]]+).*/\1/p' "$pubspec")
 if [[ "$pubspec_version" != "$version" ]]; then
   echo "Tag version $version does not match $pubspec version $pubspec_version" >&2
+  exit 1
+fi
+
+if [[ "$product" == mobile ]] && ! grep -Eq '^version:[[:space:]]*[^+[:space:]]+\+[^+[:space:]#]' "$pubspec"; then
+  echo "Set a build number after + in $pubspec." >&2
   exit 1
 fi
 

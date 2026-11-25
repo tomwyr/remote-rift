@@ -13,9 +13,7 @@ case "$platform" in
       apps/mobile/build/app/outputs/flutter-apk/app-release.apk
     ;;
   ios)
-    bundle_name="remoterift-$version.app"
-    ditto apps/mobile/build/ios/iphoneos/Runner.app "dist/$bundle_name"
-    ditto -c -k --keepParent "dist/$bundle_name" "dist/$bundle_name.zip"
+    cp apps/mobile/build/ios/ipa/*.ipa "dist/remoterift-$version.ipa"
     ;;
   windows)
     powershell.exe -NoProfile -Command \
