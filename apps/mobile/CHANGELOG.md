@@ -1,3 +1,9 @@
+## [0.16.1] - 2026-11-25
+
+- Updated iOS builds to use the iOS 27 SDK
+- Changed automated Google Play beta uploads to create drafts
+- Updated the Android APK signing key. Uninstall the previous GitHub APK before installing this version.
+
 ## [0.16.0] - 2026-11-25
 
 - Added diagnostic logging and log sharing in Settings
