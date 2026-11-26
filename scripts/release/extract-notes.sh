@@ -37,15 +37,3 @@ if [[ ! -s "$output_path" ]]; then
   echo "No release notes found for $version in $changelog" >&2
   exit 1
 fi
-
-if [[ "$tag" == mobile-* ]]; then
-  cat >> "$output_path" <<'NOTES'
-
-### Installation
-
-- **Android:** Download the APK ZIP below to sideload. If Google Play and the sideload
-  build use different signing keys, uninstall the installed build before switching channels.
-- **iOS:** The IPA is signed for App Store Connect. To install it manually, re-sign it
-  with an Apple signing certificate and a provisioning profile that covers your device.
-NOTES
-fi
