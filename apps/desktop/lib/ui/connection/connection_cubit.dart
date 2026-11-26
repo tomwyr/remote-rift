@@ -81,6 +81,7 @@ class ConnectionCubit({
   void _listenStatus(Stream<RemoteRiftStatusResponse> statusStream) async {
     try {
       await for (var response in statusStream) {
+        _logger.statusQueried(response);
         if (state is ConnectionError) {
           _reconnectScheduler?.reset();
         }
