@@ -1,6 +1,6 @@
 name: remote_rift_desktop
 description: Desktop application exposing connection to the League Client.
-version: 0.14.0
+version: 0.14.1
 publish_to: none
 
 resolution: workspace

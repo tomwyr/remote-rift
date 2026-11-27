@@ -1,3 +1,8 @@
+## [0.16.3] - 2026-11-27
+
+- Fixed champion-select prompts so the app waits until planning ends to prompt for a pick or ban.
+- Fixed the lock-in button for bans where no champion is selected.
+
 ## [0.16.2] - 2026-11-25
 
 - Mobile releases now go to the Google Play Internal testing track for Android testers.

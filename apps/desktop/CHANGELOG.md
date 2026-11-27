@@ -1,3 +1,9 @@
+## [0.14.1] - 2026-11-27
+
+- Improved how Desktop detects whether the League Client is reachable.
+- Fixed champion pick intent and lock-in availability for connected Mobile clients.
+- Added League Client status queries to diagnostic logs.
+
 ## [0.14.0] - 2026-11-25
 
 - Added diagnostic logging and log export in Settings
