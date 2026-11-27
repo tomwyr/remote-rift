@@ -1,0 +1,54 @@
+appTitle: Remote Rift Simulator
+connection:
+  title: Connect Remote Rift Desktop
+  instructions(rich): In Remote Rift Desktop, open $navigationPath and choose this file.
+  navigationPath: Settings → Lockfile location
+  starting: Starting the local League Client API…
+  lockfileUnavailable: Couldn't write the lockfile. Check that the simulator can write to its application support folder, then retry.
+  listenerUnavailable: Couldn't start the local League Client API. Retry to open a new local HTTPS port.
+  retry: Retry
+  copyPath: Copy path
+  copied: Lockfile path copied
+queues:
+  draft: Normal Draft Pick
+  aram: ARAM
+session:
+  title: Game session
+  standby: Client offline
+  noQueue: Choose a queue to create a lobby.
+  countdown: $seconds s remaining
+  readyAccepted: Waiting for other players to accept.
+  readyDeclined: Returning to the lobby.
+  stages:
+    home: Home
+    lobby: In lobby
+    searching: Searching for a match
+    readyCheck: Ready check
+    planning: Choose a champion to hover
+    localBan: Your ban
+    enemyBan: Opponent is banning
+    teammatePick: Teammate is picking
+    enemyPick: Opponent is picking
+    localPick: Your pick
+    finalization: Finalize your spells
+    gameStarting: Game starting
+    inGame: In game
+    waitingForStats: Waiting for stats
+    preEndOfGame: Finishing game
+    endOfGame: Game ended
+actions:
+  startSearch: Find match
+  stopSearch: Cancel search
+  findNow: Trigger ready check
+  leaveLobby: Leave lobby
+  accept: Accept
+  decline: Decline
+  skipPhase: Advance phase
+  endGame: End game
+  resetSession: Reset session
+scenarios:
+  title: Scenarios
+  online: Client online
+  onlineDescription: Turn off to simulate an unavailable League Client.
+  declineNextMatch: Another player declines
+  declineNextMatchDescription: Return to the lobby after the next local acceptance.

@@ -21,6 +21,10 @@ connector-run-custom-address host port="8080":
 desktop-run:
     cd apps/desktop && flutter run
 
+# Runs Remote Rift Simulator on macOS or Windows.
+simulator-run device:
+    cd apps/simulator && flutter run -d {{device}}
+
 # Runs the desktop application in debug mode with a custom Connector address.
 desktop-run-custom-address host port="8080":
     cd apps/desktop && flutter run --dart-define=API_HOST={{host}} --dart-define=API_PORT={{port}}

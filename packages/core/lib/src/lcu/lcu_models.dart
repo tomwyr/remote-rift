@@ -19,6 +19,10 @@ enum GameflowPhase {
   factory fromJson(String json) {
     return $enumDecode(_$GameflowPhaseEnumMap, json);
   }
+
+  String toJson() {
+    return _$GameflowPhaseEnumMap[this]!;
+  }
 }
 
 @JsonSerializable()
@@ -173,6 +177,15 @@ class GameQueue({
   factory fromJson(Map<String, dynamic> json) => _$GameQueueFromJson(json);
 
   Map<String, dynamic> toJson() => _$GameQueueToJson(this);
+}
+
+@JsonSerializable()
+class LobbyCreateRequest({
+  required final int queueId,
+}) {
+  factory fromJson(Map<String, dynamic> json) => _$LobbyCreateRequestFromJson(json);
+
+  Map<String, dynamic> toJson() => _$LobbyCreateRequestToJson(this);
 }
 
 @JsonSerializable()

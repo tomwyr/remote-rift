@@ -6,8 +6,6 @@ import 'package:remote_rift_ui/remote_rift_ui.dart';
 import '../../dependencies.dart';
 import '../../i18n/strings.g.dart';
 import '../app/app_notifications.dart';
-import '../widgets/app_switch.dart';
-import '../widgets/app_value_box.dart';
 import '../widgets/layout.dart';
 import 'diagnostics_cubit.dart';
 import 'diagnostics_state.dart';

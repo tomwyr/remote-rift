@@ -8,7 +8,6 @@ import '../../i18n/strings.g.dart';
 import '../diagnostics/diagnostics_settings_card.dart';
 import '../widgets/app_shell.dart';
 import '../widgets/app_icon_button.dart';
-import '../widgets/app_value_box.dart';
 import '../widgets/layout.dart';
 import '../mcp/mcp_settings_card.dart';
 import 'settings_cubit.dart';

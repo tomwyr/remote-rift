@@ -47,6 +47,7 @@ The workspace is organized around user-facing applications and the packages that
 
 - [Mobile](apps/mobile) - Mobile application allowing remote interaction with the League client.
 - [Desktop](apps/desktop) - Desktop application exposing connection to the League Client.
+- [Simulator](apps/simulator) - Local desktop simulator for developing against the League Client API.
 - [Website](apps/website) - Landing page showcasing the application and guiding users on getting started.
 
 ### Packages

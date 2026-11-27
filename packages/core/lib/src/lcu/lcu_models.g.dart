@@ -240,6 +240,12 @@ Map<String, dynamic> _$GameQueueToJson(GameQueue instance) => <String, dynamic>{
   'isCustom': instance.isCustom,
 };
 
+LobbyCreateRequest _$LobbyCreateRequestFromJson(Map<String, dynamic> json) =>
+    LobbyCreateRequest(queueId: (json['queueId'] as num).toInt());
+
+Map<String, dynamic> _$LobbyCreateRequestToJson(LobbyCreateRequest instance) =>
+    <String, dynamic>{'queueId': instance.queueId};
+
 LobbyDetails _$LobbyDetailsFromJson(Map<String, dynamic> json) => LobbyDetails(
   gameConfig: LobbyGameConfig.fromJson(
     json['gameConfig'] as Map<String, dynamic>,

@@ -8,6 +8,7 @@ environment:
 workspace:
   - apps/mobile
   - apps/desktop
+  - apps/simulator
   - packages/api
   - packages/core
   - packages/logging

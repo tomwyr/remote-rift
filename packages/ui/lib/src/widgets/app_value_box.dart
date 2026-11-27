@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:remote_rift_ui/remote_rift_ui.dart';
+
+import '../theme/theme_extension.dart';
 
 class const AppValueBox({super.key, required final Widget child}) extends StatelessWidget {
   @override

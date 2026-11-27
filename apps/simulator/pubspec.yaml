@@ -1,0 +1,29 @@
+name: remote_rift_simulator
+description: Local League Client simulator for Remote Rift development.
+publish_to: none
+version: 0.1.0
+
+resolution: workspace
+
+environment:
+  sdk: ^3.13.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  basic_utils: ^5.8.2
+  equatable: ^2.0.8
+  flutter_bloc: ^9.1.1
+  path: ^1.9.1
+  path_provider: ^2.1.6
+  remote_rift_core: any
+  remote_rift_ui: any
+  remote_rift_utils: any
+  shelf: ^1.4.2
+  shelf_router: ^1.1.4
+  slang: ^4.8.1
+  slang_flutter: ^4.8.0
+  time: ^2.1.6
+
+flutter:
+  uses-material-design: true
