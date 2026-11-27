@@ -2,7 +2,7 @@
 
 Desktop application for **Remote Rift** that simulates the League Client.
 
-<img width="390" alt="Remote Rift Simulator home screen with Normal Draft Pick and ARAM queue options" src="docs/images/home.png" />
+![Remote Rift Simulator home screen with Normal Draft Pick and ARAM queue options](docs/images/home.png)
 
 ## Overview
 
