@@ -2,11 +2,7 @@
 
 Desktop application for **Remote Rift** that simulates the League Client.
 
-<img width="390" alt="Remote Rift Simulator home screen with Normal Draft Pick and ARAM queue options" src="docs/images/home.png" />&nbsp;&nbsp;
-<img width="390" alt="Remote Rift Simulator in a Normal Draft Pick lobby with Find match and Leave lobby controls" src="docs/images/lobby.png" />
-
-<img width="390" alt="Remote Rift Simulator ready check with seven seconds remaining and Accept and Decline controls" src="docs/images/ready-check.png" />&nbsp;&nbsp;
-<img width="390" alt="Remote Rift Simulator showing a match in progress with an End game control" src="docs/images/in-game.png" />
+<img width="390" alt="Remote Rift Simulator home screen with Normal Draft Pick and ARAM queue options" src="docs/images/home.png" />
 
 ## Overview
 
