@@ -138,6 +138,8 @@ home:
 
 settings:
   title: "Settings"
+  privacyPolicy: "Privacy policy"
+  privacyPolicyOpenFailed: "Couldn't open the privacy policy."
 
 diagnostics:
   title: "Diagnostics"

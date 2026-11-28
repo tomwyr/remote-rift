@@ -2,6 +2,10 @@ import '../models/footer_link.dart';
 
 const footerLinks = [
   FooterLink(
+    title: "Privacy policy",
+    url: "privacy.html",
+  ),
+  FooterLink(
     title: "Source code",
     url: "https://github.com/tomwyr/remote-rift",
   ),

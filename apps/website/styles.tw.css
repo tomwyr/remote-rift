@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @source "./lib/**/*.dart";
+@source "./web/privacy.html";
 
 @theme {
   --color-canvas: #ffffff;

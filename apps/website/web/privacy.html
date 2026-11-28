@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Privacy Policy | Remote Rift</title>
+    <link rel="icon" href="images/branding/logo.png" type="image/png">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body class="flex min-h-screen flex-col">
+    <header class="border-b border-gold/70">
+      <nav class="mx-auto flex max-w-304 items-center px-6 py-[1.2rem] max-[800px]:py-4">
+        <a href="./" class="inline-flex items-center gap-[.6rem] font-medium tracking-[.06em] no-underline transition-colors hover:text-rift-blue">
+          <img src="images/branding/logo.png" alt="" class="size-9 object-contain">
+          Remote Rift
+        </a>
+      </nav>
+    </header>
+    <main class="mx-auto w-full max-w-[48rem] grow px-6 pt-12 pb-16 sm:pt-16 sm:pb-20">
+      <h1 class="font-serif text-[clamp(2.25rem,6vw,3.25rem)] leading-[1.06] font-bold tracking-[-.035em] text-balance">
+        Remote Rift Privacy Policy
+      </h1>
+      <p class="mt-5 text-[1.15rem]">
+        This policy covers the Remote Rift mobile app, developed by Tomasz Wyrowiński.
+      </p>
+
+      <h2 class="mt-10 border-t border-gold/70 pt-8 font-serif text-2xl leading-tight font-bold">
+        Desktop connection and game data
+      </h2>
+      <p class="mt-3">
+        The mobile app uses local network discovery to find your Remote Rift Desktop companion.
+        It uses the companion's network address and service information to connect. The companion
+        sends League of Legends client status and matchmaking data to the phone, including lobby
+        and queue status, role preferences, ready checks, and champion select activity. The phone
+        sends your actions and selections back to the companion, which applies them through your
+        signed-in League client. Riot Games handles gameplay and account data through its client
+        and services. The mobile app does not ask for your Riot credentials or create a Remote
+        Rift account.
+      </p>
+      <p class="mt-4">
+        The phone and desktop companion exchange this data directly using HTTP and WebSocket
+        connections without transport encryption. Use a trusted private network for this
+        connection. The mobile app uses matchmaking data for the active connection and does not
+        send it to a Remote Rift cloud service.
+      </p>
+
+      <h2 class="mt-10 border-t border-gold/70 pt-8 font-serif text-2xl leading-tight font-bold">
+        Diagnostics, storage, and deletion
+      </h2>
+      <p class="mt-3">
+        Diagnostic logging is off by default. If enabled, the mobile app stores logs in its app
+        storage on your device. Logs include timestamps, the app version, a randomly generated
+        session identifier, and events and outcomes related to app startup, discovery, connection,
+        and matchmaking actions. The app applies retention limits of seven days and 2 MiB. You can
+        turn off future logging or clear existing logs in Settings. Clearing the app's storage
+        removes its local settings and logs.
+      </p>
+      <p class="mt-4">
+        The app does not automatically upload logs or send app data to advertising or analytics
+        providers. If you choose to share a log, the app passes a copy to the app or recipient you
+        select in your device's share sheet. Clearing Remote Rift's logs does not delete copies
+        you already shared.
+      </p>
+
+      <h2 class="mt-10 border-t border-gold/70 pt-8 font-serif text-2xl leading-tight font-bold">
+        Privacy questions
+      </h2>
+      <p class="mt-3">
+        Use the support email on Remote Rift's Google Play listing for private questions or
+        deletion requests. For general questions, you can also use the
+        <a href="https://github.com/tomwyr/remote-rift/issues" class="font-semibold text-rift-blue underline decoration-gold underline-offset-4 transition-colors hover:text-navy">Remote Rift issue tracker</a>.
+        Issues are public. Keep personal information and diagnostic logs out of public issues.
+      </p>
+    </main>
+    <footer class="bg-footer px-6 py-10 text-center text-[.85rem] text-on-footer">
+      <small class="text-on-footer-muted">© 2025 Tomasz Wyrowiński</small>
+    </footer>
+  </body>
+</html>

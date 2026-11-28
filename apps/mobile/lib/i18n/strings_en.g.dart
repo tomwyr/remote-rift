@@ -424,6 +424,12 @@ class Translations$settings$en {
 
 	/// en: 'Settings'
 	String get title => 'Settings';
+
+	/// en: 'Privacy policy'
+	String get privacyPolicy => 'Privacy policy';
+
+	/// en: 'Couldn't open the privacy policy.'
+	String get privacyPolicyOpenFailed => 'Couldn\'t open the privacy policy.';
 }
 
 // Path: diagnostics
@@ -718,6 +724,8 @@ extension on Translations {
 			'home.acceptGameButton' => 'Accept Game',
 			'home.declineGameButton' => 'Decline Game',
 			'settings.title' => 'Settings',
+			'settings.privacyPolicy' => 'Privacy policy',
+			'settings.privacyPolicyOpenFailed' => 'Couldn\'t open the privacy policy.',
 			'diagnostics.title' => 'Diagnostics',
 			'diagnostics.logging' => 'Diagnostic logging',
 			'diagnostics.privacy' => 'Logs stay on this device until you share them. Turning logging off keeps existing logs within the retention limits.',

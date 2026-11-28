@@ -25,6 +25,7 @@ dependencies:
   slang: ^4.8.1
   slang_flutter: ^4.8.0
   time: ^2.1.6
+  url_launcher: ^6.3.3
   uuid: ^4.6.0
   vibration: ^3.1.5
   web_socket_channel: ^3.0.3
